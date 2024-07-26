@@ -16,9 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Box2D.h"
+#include <Box2D/Box2D.h>
 
 #include <cstdio>
+
+#include <nds.h>
 
 // This is a simple example of building and running a simulation
 // using Box2D. Here we create a large ground box and a small dynamic
@@ -27,6 +29,8 @@ int main(int argc, char** argv)
 {
 	B2_NOT_USED(argc);
 	B2_NOT_USED(argv);
+
+	consoleDemoInit();
 
 	// Define the size of the world. Simulation will still work
 	// if bodies reach the end of the world, but it will be slower.
@@ -100,11 +104,14 @@ int main(int argc, char** argv)
 		b2Vec2 position = body->GetPosition();
 		float32 angle = body->GetAngle();
 
-		printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
+		printf("%4.2f %4.2f %4.2f\n", float(position.x), float(position.y), float(angle));
 	}
 
 	// When the world destructor is called, all bodies and joints are freed. This can
 	// create orphaned pointers, so be careful about your world management.
+
+	while (1)
+		swiWaitForVBlank();
 
 	return 0;
 }
