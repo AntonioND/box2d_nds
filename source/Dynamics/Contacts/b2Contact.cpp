@@ -16,16 +16,16 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2Contact.h"
-#include "b2CircleContact.h"
-#include "b2PolyAndCircleContact.h"
-#include "b2PolyContact.h"
-#include "b2ContactSolver.h"
-#include "../../Collision/b2Collision.h"
-#include "../../Collision/Shapes/b2Shape.h"
-#include "../../Common/b2BlockAllocator.h"
-#include "../../Dynamics/b2World.h"
-#include "../../Dynamics/b2Body.h"
+#include <Box2D/Dynamics/Contacts/b2Contact.h>
+#include <Box2D/Dynamics/Contacts/b2CircleContact.h>
+#include <Box2D/Dynamics/Contacts/b2PolyAndCircleContact.h>
+#include <Box2D/Dynamics/Contacts/b2PolyContact.h>
+#include <Box2D/Dynamics/Contacts/b2ContactSolver.h>
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Collision/Shapes/b2Shape.h>
+#include <Box2D/Common/b2BlockAllocator.h>
+#include <Box2D/Dynamics/b2World.h>
+#include <Box2D/Dynamics/b2Body.h>
 
 b2ContactRegister b2Contact::s_registers[e_shapeTypeCount][e_shapeTypeCount];
 bool b2Contact::s_initialized = false;

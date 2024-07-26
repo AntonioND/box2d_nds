@@ -19,9 +19,9 @@
 #ifndef CONTACT_H
 #define CONTACT_H
 
-#include "../../Common/b2Math.h"
-#include "../../Collision/b2Collision.h"
-#include "../../Collision/Shapes/b2Shape.h"
+#include <Box2D/Common/b2Math.h>
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 class b2Body;
 class b2Contact;

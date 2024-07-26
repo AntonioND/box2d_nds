@@ -19,8 +19,8 @@
 #ifndef B2_TRIANGLE_H
 #define B2_TRIANGLE_H
 
-#include "../Common/b2Math.h"
-#include "../Collision/Shapes/b2PolygonShape.h"
+#include <Box2D/Common/b2Math.h>
+#include <Box2D/Collision/Shapes/b2PolygonShape.h>
 
 class b2Triangle{
 public:

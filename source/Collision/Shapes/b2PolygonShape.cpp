@@ -17,7 +17,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2PolygonShape.h"
+#include <Box2D/Collision/Shapes/b2PolygonShape.h>
 
 void b2PolygonDef::SetAsBox(float32 hx, float32 hy)
 {

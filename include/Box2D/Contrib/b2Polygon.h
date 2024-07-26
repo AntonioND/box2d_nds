@@ -19,9 +19,9 @@
 #ifndef B2_POLYGON_H
 #define B2_POLYGON_H
 
-#include "../Common/b2Math.h"
-#include "b2Triangle.h"
-#include "../Dynamics/b2World.h" 
+#include <Box2D/Common/b2Math.h>
+#include <Box2D/Contrib/b2Triangle.h>
+#include <Box2D/Dynamics/b2World.h>
 
 class b2Polygon;
 

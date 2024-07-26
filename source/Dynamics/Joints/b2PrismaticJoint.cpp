@@ -16,9 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2PrismaticJoint.h"
-#include "../b2Body.h"
-#include "../b2World.h"
+#include <Box2D/Dynamics/Joints/b2PrismaticJoint.h>
+#include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Dynamics/b2World.h>
 
 // Linear constraint (point-to-line)
 // d = p2 - p1 = x2 + r2 - x1 - r1

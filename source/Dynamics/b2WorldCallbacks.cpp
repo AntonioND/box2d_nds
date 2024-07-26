@@ -16,8 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2WorldCallbacks.h"
-#include "../Collision/Shapes/b2Shape.h"
+#include <Box2D/Dynamics/b2WorldCallbacks.h>
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 b2ContactFilter b2_defaultFilter;
 

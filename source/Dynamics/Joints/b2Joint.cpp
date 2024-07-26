@@ -16,17 +16,17 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2Joint.h"
-#include "b2DistanceJoint.h"
-#include "b2MouseJoint.h"
-#include "b2RevoluteJoint.h"
-#include "b2PrismaticJoint.h"
-#include "b2PulleyJoint.h"
-#include "b2GearJoint.h"
-#include "../b2Body.h"
-#include "../b2World.h"
-#include "../../Common/b2BlockAllocator.h"
-#include "../../Collision/b2BroadPhase.h"
+#include <Box2D/Dynamics/Joints/b2Joint.h>
+#include <Box2D/Dynamics/Joints/b2DistanceJoint.h>
+#include <Box2D/Dynamics/Joints/b2MouseJoint.h>
+#include <Box2D/Dynamics/Joints/b2RevoluteJoint.h>
+#include <Box2D/Dynamics/Joints/b2PrismaticJoint.h>
+#include <Box2D/Dynamics/Joints/b2PulleyJoint.h>
+#include <Box2D/Dynamics/Joints/b2GearJoint.h>
+#include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Dynamics/b2World.h>
+#include <Box2D/Common/b2BlockAllocator.h>
+#include <Box2D/Collision/b2BroadPhase.h>
 
 #include <new>
 

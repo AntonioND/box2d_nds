@@ -19,7 +19,7 @@
 #ifndef B2_POLYGON_SHAPE_H
 #define B2_POLYGON_SHAPE_H
 
-#include "b2Shape.h"
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 /// Convex polygon. The vertices must be in CCW order for a right-handed
 /// coordinate system with the z-axis coming out of the screen.

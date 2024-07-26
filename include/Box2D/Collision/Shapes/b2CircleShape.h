@@ -19,7 +19,7 @@
 #ifndef B2_CIRCLE_SHAPE_H
 #define B2_CIRCLE_SHAPE_H
 
-#include "b2Shape.h"
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 /// This structure is used to build circle shapes.
 struct b2CircleDef : public b2ShapeDef

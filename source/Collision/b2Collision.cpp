@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2Collision.h"
+#include <Box2D/Collision/b2Collision.h>
 
 // Collision Detection in Interactive 3D Environments by Gino van den Bergen
 // From Section 3.4.1

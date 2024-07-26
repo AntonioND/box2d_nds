@@ -16,12 +16,12 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "../Common/b2Math.h"
-#include "../Common/b2Settings.h"
-#include "../Collision/Shapes/b2Shape.h"
-#include "../Dynamics/b2Body.h"
-#include "b2Triangle.h"
-#include "b2Polygon.h"
+#include <Box2D/Common/b2Math.h>
+#include <Box2D/Common/b2Settings.h>
+#include <Box2D/Collision/Shapes/b2Shape.h>
+#include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Contrib/b2Triangle.h>
+#include <Box2D/Contrib/b2Polygon.h>
 
 #include <cmath>
 #include <climits>

@@ -16,9 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2DistanceJoint.h"
-#include "../b2Body.h"
-#include "../b2World.h"
+#include <Box2D/Dynamics/Joints/b2DistanceJoint.h>
+#include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Dynamics/b2World.h>
 
 // C = norm(p2 - p1) - L
 // u = (p2 - p1) / norm(p2 - p1)

@@ -16,7 +16,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "b2Triangle.h"
+#include <Box2D/Contrib/b2Triangle.h>
 
 //Constructor automatically fixes orientation to ccw
 b2Triangle::b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x3, float32 y3){

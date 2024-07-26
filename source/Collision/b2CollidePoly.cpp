@@ -16,8 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2Collision.h"
-#include "Shapes/b2PolygonShape.h"
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Collision/Shapes/b2PolygonShape.h>
 
 struct ClipVertex
 {

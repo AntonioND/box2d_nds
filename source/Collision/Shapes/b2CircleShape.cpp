@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2CircleShape.h"
+#include <Box2D/Collision/Shapes/b2CircleShape.h>
 
 b2CircleShape::b2CircleShape(const b2ShapeDef* def)
 : b2Shape(def)

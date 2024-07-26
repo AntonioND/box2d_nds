@@ -19,7 +19,7 @@
 #ifndef JOINT_H
 #define JOINT_H
 
-#include "../../Common/b2Math.h"
+#include <Box2D/Common/b2Math.h>
 
 class b2Body;
 class b2Joint;

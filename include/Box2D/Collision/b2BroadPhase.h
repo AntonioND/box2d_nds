@@ -26,9 +26,9 @@ Also, some ideas, such as using integral values for fast compares comes from
 Bullet (http:/www.bulletphysics.com).
 */
 
-#include "../Common/b2Settings.h"
-#include "b2Collision.h"
-#include "b2PairManager.h"
+#include <Box2D/Common/b2Settings.h>
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Collision/b2PairManager.h>
 #include <climits>
 
 #ifdef TARGET_FLOAT32_IS_FIXED

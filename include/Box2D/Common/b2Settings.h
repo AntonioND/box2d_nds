@@ -45,7 +45,7 @@ typedef unsigned int uint32;
 
 #ifdef	TARGET_FLOAT32_IS_FIXED
 
-#include "Fixed.h"
+#include <Box2D/Common/Fixed.h>
 
 typedef Fixed float32;
 #define	FLOAT32_MAX	FIXED_MAX

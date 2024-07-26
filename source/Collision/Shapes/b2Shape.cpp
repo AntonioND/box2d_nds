@@ -16,12 +16,12 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2Shape.h"
-#include "b2CircleShape.h"
-#include "b2PolygonShape.h"
-#include "../b2Collision.h"
-#include "../b2BroadPhase.h"
-#include "../../Common/b2BlockAllocator.h"
+#include <Box2D/Collision/Shapes/b2Shape.h>
+#include <Box2D/Collision/Shapes/b2CircleShape.h>
+#include <Box2D/Collision/Shapes/b2PolygonShape.h>
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Collision/b2BroadPhase.h>
+#include <Box2D/Common/b2BlockAllocator.h>
 
 #include <new>
 

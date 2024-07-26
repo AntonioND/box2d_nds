@@ -16,8 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2Collision.h"
-#include "Shapes/b2Shape.h"
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 // This algorithm uses conservative advancement to compute the time of
 // impact (TOI) of two shapes.

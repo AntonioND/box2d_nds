@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "b2Settings.h"
+#include <Box2D/Common/b2Settings.h>
 #include <cstdlib>
 
 b2Version b2_version = {2, 0, 0};
