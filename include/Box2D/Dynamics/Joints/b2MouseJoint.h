@@ -42,16 +42,16 @@ struct b2MouseJointDef : public b2JointDef
 	/// The maximum constraint force that can be exerted
 	/// to move the candidate body. Usually you will express
 	/// as some multiple of the weight (multiplier * mass * gravity).
-	float32 maxForce;
+	b2float32 maxForce;
 
 	/// The response speed.
-	float32 frequencyHz;
+	b2float32 frequencyHz;
 
 	/// The damping ratio. 0 = no damping, 1 = critical damping.
-	float32 dampingRatio;
+	b2float32 dampingRatio;
 
 	/// The time step used in the simulation.
-	float32 timeStep;
+	b2float32 timeStep;
 };
 
 /// A mouse joint is used to make a point on a body track a
@@ -72,7 +72,7 @@ public:
 	b2Vec2 GetReactionForce() const;
 
 	/// Implements b2Joint.
-	float32 GetReactionTorque() const;
+	b2float32 GetReactionTorque() const;
 
 	/// Use this to update the target point.
 	void SetTarget(const b2Vec2& target);
@@ -94,9 +94,9 @@ public:
 
 	b2Mat22 m_mass;		// effective mass for point-to-point constraint.
 	b2Vec2 m_C;				// position error
-	float32 m_maxForce;
-	float32 m_beta;			// bias factor
-	float32 m_gamma;		// softness
+	b2float32 m_maxForce;
+	b2float32 m_beta;			// bias factor
+	b2float32 m_gamma;		// softness
 };
 
 #endif

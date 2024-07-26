@@ -24,12 +24,12 @@
 
 class b2Triangle{
 public:
-	float32* x;
-    float32* y;
+	b2float32* x;
+    b2float32* y;
 	b2Triangle();
-	b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x3, float32 y3);
+	b2Triangle(b2float32 x1, b2float32 y1, b2float32 x2, b2float32 y2, b2float32 x3, b2float32 y3);
     ~b2Triangle();
-	bool IsInside(float32 _x, float32 _y);
+	bool IsInside(b2float32 _x, b2float32 _y);
 	void Set(const b2Triangle& toMe);
 
 };

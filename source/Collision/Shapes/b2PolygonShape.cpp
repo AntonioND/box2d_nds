@@ -19,7 +19,7 @@
 
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 
-void b2PolygonDef::SetAsBox(float32 hx, float32 hy)
+void b2PolygonDef::SetAsBox(b2float32 hx, b2float32 hy)
 {
 	vertexCount = 4;
 	vertices[0].Set(-hx, -hy);
@@ -28,7 +28,7 @@ void b2PolygonDef::SetAsBox(float32 hx, float32 hy)
 	vertices[3].Set(-hx,  hy);
 }
 
-void b2PolygonDef::SetAsBox(float32 hx, float32 hy, const b2Vec2& center, float32 angle)
+void b2PolygonDef::SetAsBox(b2float32 hx, b2float32 hy, const b2Vec2& center, b2float32 angle)
 {
 	SetAsBox(hx, hy);
 	b2XForm xf;
@@ -46,7 +46,7 @@ static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32_t count)
 	b2Assert(count >= 3);
 
 	b2Vec2 c; c.Set(0.0f, 0.0f);
-	float32 area = 0.0f;
+	b2float32 area = 0.0f;
 
 	// pRef is the reference point for forming triangles.
 	// It's location doesn't change the result (except for rounding error).
@@ -60,7 +60,7 @@ static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32_t count)
 	pRef *= 1.0f / count;
 #endif
 
-	const float32 inv3 = 1.0f / 3.0f;
+	const b2float32 inv3 = 1.0f / 3.0f;
 
 	for (int32_t i = 0; i < count; ++i)
 	{
@@ -72,9 +72,9 @@ static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32_t count)
 		b2Vec2 e1 = p2 - p1;
 		b2Vec2 e2 = p3 - p1;
 
-		float32 D = b2Cross(e1, e2);
+		b2float32 D = b2Cross(e1, e2);
 
-		float32 triangleArea = 0.5f * D;
+		b2float32 triangleArea = 0.5f * D;
 		area += triangleArea;
 
 		// Area weighted centroid
@@ -98,13 +98,13 @@ static void ComputeOBB(b2OBB* obb, const b2Vec2* vs, int32_t count)
 	}
 	p[count] = p[0];
 
-	float32 minArea = FLOAT32_MAX;
+	b2float32 minArea = FLOAT32_MAX;
 	
 	for (int32_t i = 1; i <= count; ++i)
 	{
 		b2Vec2 root = p[i-1];
 		b2Vec2 ux = p[i] - root;
-		float32 length = ux.Normalize();
+		b2float32 length = ux.Normalize();
 		b2Assert(length > FLOAT32_EPSILON);
 		b2Vec2 uy(-ux.y, ux.x);
 		b2Vec2 lower(FLOAT32_MAX, FLOAT32_MAX);
@@ -120,7 +120,7 @@ static void ComputeOBB(b2OBB* obb, const b2Vec2* vs, int32_t count)
 			upper = b2Max(upper, r);
 		}
 
-		float32 area = (upper.x - lower.x) * (upper.y - lower.y);
+		b2float32 area = (upper.x - lower.x) * (upper.y - lower.y);
 		if (area < 0.95f * minArea)
 		{
 			minArea = area;
@@ -177,7 +177,7 @@ b2PolygonShape::b2PolygonShape(const b2ShapeDef* def)
 			
 			// Your polygon is non-convex (it has an indentation).
 			// Or your polygon is too skinny.
-			float32 s = b2Dot(m_normals[i], m_vertices[j] - m_vertices[i]);
+			b2float32 s = b2Dot(m_normals[i], m_vertices[j] - m_vertices[i]);
 			b2Assert(s < -b2_linearSlop);
 		}
 	}
@@ -185,13 +185,13 @@ b2PolygonShape::b2PolygonShape(const b2ShapeDef* def)
 	// Ensure the polygon is counter-clockwise.
 	for (int32_t i = 1; i < m_vertexCount; ++i)
 	{
-		float32 cross = b2Cross(m_normals[i-1], m_normals[i]);
+		b2float32 cross = b2Cross(m_normals[i-1], m_normals[i]);
 
 		// Keep asinf happy.
 		cross = b2Clamp(cross, -1.0f, 1.0f);
 
 		// You have consecutive edges that are almost parallel on your polygon.
-		float32 angle = asinf(cross);
+		b2float32 angle = asinf(cross);
 		b2Assert(angle > b2_angularSlop);
 	}
 #endif
@@ -248,7 +248,7 @@ bool b2PolygonShape::TestPoint(const b2XForm& xf, const b2Vec2& p) const
 
 	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
-		float32 dot = b2Dot(m_normals[i], pLocal - m_vertices[i]);
+		b2float32 dot = b2Dot(m_normals[i], pLocal - m_vertices[i]);
 		if (dot > 0.0f)
 		{
 			return false;
@@ -260,12 +260,12 @@ bool b2PolygonShape::TestPoint(const b2XForm& xf, const b2Vec2& p) const
 
 bool b2PolygonShape::TestSegment(
 	const b2XForm& xf,
-	float32* lambda,
+	b2float32* lambda,
 	b2Vec2* normal,
 	const b2Segment& segment,
-	float32 maxLambda) const
+	b2float32 maxLambda) const
 {
-	float32 lower = 0.0f, upper = maxLambda;
+	b2float32 lower = 0.0f, upper = maxLambda;
 
 	b2Vec2 p1 = b2MulT(xf.R, segment.p1 - xf.position);
 	b2Vec2 p2 = b2MulT(xf.R, segment.p2 - xf.position);
@@ -277,8 +277,8 @@ bool b2PolygonShape::TestSegment(
 		// p = p1 + a * d
 		// dot(normal, p - v) = 0
 		// dot(normal, p1 - v) + a * dot(normal, d) = 0
-		float32 numerator = b2Dot(m_normals[i], m_vertices[i] - p1);
-		float32 denominator = b2Dot(m_normals[i], d);
+		b2float32 numerator = b2Dot(m_normals[i], m_vertices[i] - p1);
+		b2float32 denominator = b2Dot(m_normals[i], d);
 
 		if (denominator < 0.0f && numerator > lower * denominator)
 		{
@@ -360,8 +360,8 @@ void b2PolygonShape::ComputeMass(b2MassData* massData) const
 	b2Assert(m_vertexCount >= 3);
 
 	b2Vec2 center; center.Set(0.0f, 0.0f);
-	float32 area = 0.0f;
-	float32 I = 0.0f;
+	b2float32 area = 0.0f;
+	b2float32 I = 0.0f;
 
 	// pRef is the reference point for forming triangles.
 	// It's location doesn't change the result (except for rounding error).
@@ -375,7 +375,7 @@ void b2PolygonShape::ComputeMass(b2MassData* massData) const
 	pRef *= 1.0f / count;
 #endif
 
-	const float32 k_inv3 = 1.0f / 3.0f;
+	const b2float32 k_inv3 = 1.0f / 3.0f;
 
 	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
@@ -387,20 +387,20 @@ void b2PolygonShape::ComputeMass(b2MassData* massData) const
 		b2Vec2 e1 = p2 - p1;
 		b2Vec2 e2 = p3 - p1;
 
-		float32 D = b2Cross(e1, e2);
+		b2float32 D = b2Cross(e1, e2);
 
-		float32 triangleArea = 0.5f * D;
+		b2float32 triangleArea = 0.5f * D;
 		area += triangleArea;
 
 		// Area weighted centroid
 		center += triangleArea * k_inv3 * (p1 + p2 + p3);
 
-		float32 px = p1.x, py = p1.y;
-		float32 ex1 = e1.x, ey1 = e1.y;
-		float32 ex2 = e2.x, ey2 = e2.y;
+		b2float32 px = p1.x, py = p1.y;
+		b2float32 ex1 = e1.x, ey1 = e1.y;
+		b2float32 ex2 = e2.x, ey2 = e2.y;
 
-		float32 intx2 = k_inv3 * (0.25f * (ex1*ex1 + ex2*ex1 + ex2*ex2) + (px*ex1 + px*ex2)) + 0.5f*px*px;
-		float32 inty2 = k_inv3 * (0.25f * (ey1*ey1 + ey2*ey1 + ey2*ey2) + (py*ey1 + py*ey2)) + 0.5f*py*py;
+		b2float32 intx2 = k_inv3 * (0.25f * (ex1*ex1 + ex2*ex1 + ex2*ex2) + (px*ex1 + px*ex2)) + 0.5f*px*px;
+		b2float32 inty2 = k_inv3 * (0.25f * (ey1*ey1 + ey2*ey1 + ey2*ey2) + (py*ey1 + py*ey2)) + 0.5f*py*py;
 
 		I += D * (intx2 + inty2);
 	}
@@ -427,10 +427,10 @@ b2Vec2 b2PolygonShape::Support(const b2XForm& xf, const b2Vec2& d) const
 	b2Vec2 dLocal = b2MulT(xf.R, d);
 
 	int32_t bestIndex = 0;
-	float32 bestValue = b2Dot(m_coreVertices[0], dLocal);
+	b2float32 bestValue = b2Dot(m_coreVertices[0], dLocal);
 	for (int32_t i = 1; i < m_vertexCount; ++i)
 	{
-		float32 value = b2Dot(m_coreVertices[i], dLocal);
+		b2float32 value = b2Dot(m_coreVertices[i], dLocal);
 		if (value > bestValue)
 		{
 			bestIndex = i;

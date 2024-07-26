@@ -30,13 +30,13 @@ class b2BroadPhase;
 struct b2MassData
 {
 	/// The mass of the shape, usually in kilograms.
-	float32 mass;
+	b2float32 mass;
 
 	/// The position of the shape's centroid relative to the shape's origin.
 	b2Vec2 center;
 
 	/// The rotational inertia of the shape.
-	float32 I;
+	b2float32 I;
 };
 
 /// The various collision shape types supported by Box2D.
@@ -75,13 +75,13 @@ struct b2ShapeDef
 	void* userData;
 
 	/// The shape's friction coefficient, usually in the range [0,1].
-	float32 friction;
+	b2float32 friction;
 
 	/// The shape's restitution (elasticity) usually in the range [0,1].
-	float32 restitution;
+	b2float32 restitution;
 
 	/// The shape's density, usually in kg/m^2.
-	float32 density;
+	b2float32 density;
 
 	/// The collision category bits. Normally you would just set one bit.
 	uint16_t categoryBits;
@@ -141,10 +141,10 @@ public:
 	/// @param maxLambda a number typically in the range [0,1].
 	/// @return true if there was an intersection.
 	virtual bool TestSegment(	const b2XForm& xf,
-								float32* lambda,
+								b2float32* lambda,
 								b2Vec2* normal,
 								const b2Segment& segment,
-								float32 maxLambda) const = 0;
+								b2float32 maxLambda) const = 0;
 
 	/// Given a transform, compute the associated axis aligned bounding box for this shape.
 	/// @param aabb returns the axis aligned box.
@@ -179,7 +179,7 @@ public:
 
 	virtual void UpdateSweepRadius(const b2Vec2& center) = 0;
 
-	float32 GetSweepRadius() const;
+	b2float32 GetSweepRadius() const;
 
 	b2ShapeType m_type;
 
@@ -188,11 +188,11 @@ public:
 	b2Body* m_body;
 
 	// Sweep radius relative to the parent body's center of mass.
-	float32 m_sweepRadius;
+	b2float32 m_sweepRadius;
 
-	float32 m_density;
-	float32 m_friction;
-	float32 m_restitution;
+	b2float32 m_density;
+	b2float32 m_friction;
+	b2float32 m_restitution;
 
 	uint16_t m_proxyId;
 	uint16_t m_categoryBits;
@@ -229,7 +229,7 @@ inline b2Shape* b2Shape::GetNext()
 	return m_next;
 }
 
-inline float32 b2Shape::GetSweepRadius() const
+inline b2float32 b2Shape::GetSweepRadius() const
 {
 	return m_sweepRadius;
 }

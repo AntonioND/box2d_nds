@@ -65,17 +65,17 @@ struct b2BodyDef
 	b2Vec2 position;
 
 	/// The world angle of the body in radians.
-	float32 angle;
+	b2float32 angle;
 
 	/// Linear damping is use to reduce the linear velocity. The damping parameter
 	/// can be larger than 1.0f but the damping effect becomes sensitive to the
 	/// time step when the damping parameter is large.
-	float32 linearDamping;
+	b2float32 linearDamping;
 
 	/// Angular damping is use to reduce the angular velocity. The damping parameter
 	/// can be larger than 1.0f but the damping effect becomes sensitive to the
 	/// time step when the damping parameter is large.
-	float32 angularDamping;
+	b2float32 angularDamping;
 
 	/// Set this flag to false if this body should never fall asleep. Note that
 	/// this increases CPU usage.
@@ -128,7 +128,7 @@ public:
 	/// @param angle the new world rotation angle of the body in radians.
 	/// @return false if the movement put a shape outside the world. In this case the
 	/// body is automatically frozen.
-	bool SetXForm(const b2Vec2& position, float32 angle);
+	bool SetXForm(const b2Vec2& position, b2float32 angle);
 
 	/// Get the body transform for the body's origin.
 	/// @return the world transform of the body's origin.
@@ -140,7 +140,7 @@ public:
 
 	/// Get the angle in radians.
 	/// @return the current world rotation angle in radians.
-	float32 GetAngle() const;
+	b2float32 GetAngle() const;
 
 	/// Get the world position of the center of mass.
 	const b2Vec2& GetWorldCenter() const;
@@ -158,11 +158,11 @@ public:
 
 	/// Set the angular velocity.
 	/// @param omega the new angular velocity in radians/second.
-	void SetAngularVelocity(float32 omega);
+	void SetAngularVelocity(b2float32 omega);
 
 	/// Get the angular velocity.
 	/// @return the angular velocity in radians/second.
-	float32 GetAngularVelocity() const;
+	b2float32 GetAngularVelocity() const;
 
 	/// Apply a force at a world point. If the force is not
 	/// applied at the center of mass, it will generate a torque and
@@ -175,7 +175,7 @@ public:
 	/// without affecting the linear velocity of the center of mass.
 	/// This wakes up the body.
 	/// @param torque about the z-axis (out of the screen), usually in N-m.
-	void ApplyTorque(float32 torque);
+	void ApplyTorque(b2float32 torque);
 
 	/// Apply an impulse at a point. This immediately modifies the velocity.
 	/// It also modifies the angular velocity if the point of application
@@ -186,11 +186,11 @@ public:
 
 	/// Get the total mass of the body.
 	/// @return the mass, usually in kilograms (kg).
-	float32 GetMass() const;
+	b2float32 GetMass() const;
 
 	/// Get the central rotational inertia of the body.
 	/// @return the rotational inertia, usually in kg-m^2.
-	float32 GetInertia() const;
+	b2float32 GetInertia() const;
 
 	/// Get the world coordinates of a point given the local coordinates.
 	/// @param localPoint a point on the body measured relative the the body's origin.
@@ -285,7 +285,7 @@ public:
 	// It may lie, depending on the collideConnected flag.
 	bool IsConnected(const b2Body* other) const;
 
-	void Advance(float32 t);
+	void Advance(b2float32 t);
 
 	uint16_t m_flags;
 	uint16_t m_type;
@@ -295,10 +295,10 @@ public:
 	b2Sweep m_sweep;	// the swept motion for CCD
 
 	b2Vec2 m_linearVelocity;
-	float32 m_angularVelocity;
+	b2float32 m_angularVelocity;
 
 	b2Vec2 m_force;
-	float32 m_torque;
+	b2float32 m_torque;
 
 	b2World* m_world;
 	b2Body* m_prev;
@@ -310,13 +310,13 @@ public:
 	b2JointEdge* m_jointList;
 	b2ContactEdge* m_contactList;
 
-	float32 m_mass, m_invMass;
-	float32 m_I, m_invI;
+	b2float32 m_mass, m_invMass;
+	b2float32 m_I, m_invI;
 
-	float32 m_linearDamping;
-	float32 m_angularDamping;
+	b2float32 m_linearDamping;
+	b2float32 m_angularDamping;
 
-	float32 m_sleepTime;
+	b2float32 m_sleepTime;
 
 	void* m_userData;
 };
@@ -331,7 +331,7 @@ inline const b2Vec2& b2Body::GetPosition() const
 	return m_xf.position;
 }
 
-inline float32 b2Body::GetAngle() const
+inline b2float32 b2Body::GetAngle() const
 {
 	return m_sweep.a;
 }
@@ -356,22 +356,22 @@ inline b2Vec2 b2Body::GetLinearVelocity() const
 	return m_linearVelocity;
 }
 
-inline void b2Body::SetAngularVelocity(float32 w)
+inline void b2Body::SetAngularVelocity(b2float32 w)
 {
 	m_angularVelocity = w;
 }
 
-inline float32 b2Body::GetAngularVelocity() const
+inline b2float32 b2Body::GetAngularVelocity() const
 {
 	return m_angularVelocity;
 }
 
-inline float32 b2Body::GetMass() const
+inline b2float32 b2Body::GetMass() const
 {
 	return m_mass;
 }
 
-inline float32 b2Body::GetInertia() const
+inline b2float32 b2Body::GetInertia() const
 {
 	return m_I;
 }
@@ -498,7 +498,7 @@ inline void b2Body::ApplyForce(const b2Vec2& force, const b2Vec2& point)
 	m_torque += b2Cross(point - m_sweep.c, force);
 }
 
-inline void b2Body::ApplyTorque(float32 torque)
+inline void b2Body::ApplyTorque(b2float32 torque)
 {
 	if (IsSleeping())
 	{
@@ -523,7 +523,7 @@ inline void b2Body::SynchronizeTransform()
 	m_xf.position = m_sweep.c - b2Mul(m_xf.R, m_sweep.localCenter);
 }
 
-inline void b2Body::Advance(float32 t)
+inline void b2Body::Advance(b2float32 t)
 {
 	// Advance to the new safe time.
 	m_sweep.Advance(t);

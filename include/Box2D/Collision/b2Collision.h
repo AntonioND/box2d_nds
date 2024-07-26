@@ -57,9 +57,9 @@ struct b2ManifoldPoint
 {
 	b2Vec2 localPoint1;		///< local position of the contact point in body1
 	b2Vec2 localPoint2;		///< local position of the contact point in body2
-	float32 separation;		///< the separation of the shapes along the normal vector
-	float32 normalForce;	///< the non-penetration force
-	float32 tangentForce;	///< the friction force
+	b2float32 separation;		///< the separation of the shapes along the normal vector
+	b2float32 normalForce;	///< the non-penetration force
+	b2float32 tangentForce;	///< the friction force
 	b2ContactID id;			///< uniquely identifies a contact point between two shapes
 };
 
@@ -75,7 +75,7 @@ struct b2Manifold
 struct b2Segment
 {
 	/// Ray cast against this segment with another segment.
-	bool TestSegment(float32* lambda, b2Vec2* normal, const b2Segment& segment, float32 maxLambda) const;
+	bool TestSegment(b2float32* lambda, b2Vec2* normal, const b2Segment& segment, b2float32 maxLambda) const;
 
 	b2Vec2 p1;	///< the starting point
 	b2Vec2 p2;	///< the ending point
@@ -116,7 +116,7 @@ void b2CollidePolygons(b2Manifold* manifold,
 
 /// Compute the distance between two shapes and the closest points.
 /// @return the distance between the shapes or zero if they are overlapped/touching.
-float32 b2Distance(b2Vec2* x1, b2Vec2* x2,
+b2float32 b2Distance(b2Vec2* x1, b2Vec2* x2,
 				   const b2Shape* shape1, const b2XForm& xf1,
 				   const b2Shape* shape2, const b2XForm& xf2);
 
@@ -124,7 +124,7 @@ float32 b2Distance(b2Vec2* x1, b2Vec2* x2,
 /// @warning the sweeps must have the same time interval.
 /// @return the fraction between [0,1] in which the shapes first touch.
 /// fraction=0 means the shapes begin touching/overlapped, and fraction=1 means the shapes don't touch.
-float32 b2TimeOfImpact(const b2Shape* shape1, const b2Sweep& sweep1,
+b2float32 b2TimeOfImpact(const b2Shape* shape1, const b2Sweep& sweep1,
 					   const b2Shape* shape2, const b2Sweep& sweep2);
 
 

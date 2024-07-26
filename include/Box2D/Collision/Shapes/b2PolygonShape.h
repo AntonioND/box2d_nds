@@ -34,14 +34,14 @@ struct b2PolygonDef : public b2ShapeDef
 	/// Build vertices to represent an axis-aligned box.
 	/// @param hx the half-width.
 	/// @param hy the half-height.
-	void SetAsBox(float32 hx, float32 hy);
+	void SetAsBox(b2float32 hx, b2float32 hy);
 
 	/// Build vertices to represent an oriented box.
 	/// @param hx the half-width.
 	/// @param hy the half-height.
 	/// @param center the center of the box in local coordinates.
 	/// @param angle the rotation of the box in local coordinates.
-	void SetAsBox(float32 hx, float32 hy, const b2Vec2& center, float32 angle);
+	void SetAsBox(b2float32 hx, b2float32 hy, const b2Vec2& center, b2float32 angle);
 
 	/// The polygon vertices in local coordinates.
 	b2Vec2 vertices[b2_maxPolygonVertices];
@@ -60,10 +60,10 @@ public:
 
 	/// @see b2Shape::TestSegment
 	bool TestSegment(	const b2XForm& transform,
-		float32* lambda,
+		b2float32* lambda,
 		b2Vec2* normal,
 		const b2Segment& segment,
-		float32 maxLambda) const;
+		b2float32 maxLambda) const;
 
 	/// @see b2Shape::ComputeAABB
 	void ComputeAABB(b2AABB* aabb, const b2XForm& transform) const;

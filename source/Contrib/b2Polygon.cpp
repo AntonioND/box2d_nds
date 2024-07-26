@@ -29,7 +29,7 @@
 static bool B2_POLYGON_REPORT_ERRORS = false;
 
 //If you're using 1.4.3, b2_toiSlop won't exist, so set this equal to 0
-static const float32 toiSlop = b2_toiSlop;//0.0f;
+static const b2float32 toiSlop = b2_toiSlop;//0.0f;
 
 /*
  * Check if the lines a0->a1 and b0->b1 cross.
@@ -42,14 +42,14 @@ bool intersect(const b2Vec2& a0, const b2Vec2& a1,
 			   const b2Vec2& b0, const b2Vec2& b1, 
 			   b2Vec2& intersectionPoint) {
 
-	float32 x1 = a0.x; float32 y1 = a0.y;
-	float32 x2 = a1.x; float32 y2 = a1.y;
-	float32 x3 = b0.x; float32 y3 = b0.y;
-	float32 x4 = b1.x; float32 y4 = b1.y;
+	b2float32 x1 = a0.x; b2float32 y1 = a0.y;
+	b2float32 x2 = a1.x; b2float32 y2 = a1.y;
+	b2float32 x3 = b0.x; b2float32 y3 = b0.y;
+	b2float32 x4 = b1.x; b2float32 y4 = b1.y;
 	
-	float32 ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3));
-	float32 ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3));
-	float32 denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+	b2float32 ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3));
+	b2float32 ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3));
+	b2float32 denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
 	if (b2Abs(denom) < FLOAT32_EPSILON) {
 		//Lines are too close to parallel to call
 		return false;
@@ -78,10 +78,10 @@ bool intersect(const b2Vec2& a0, const b2Vec2& a1,
 	return intersect(a0, a1, b0, b1, myVec);
 }
 
-b2Polygon::b2Polygon(float32* _x, float32* _y, int32_t nVert) {
+b2Polygon::b2Polygon(b2float32* _x, b2float32* _y, int32_t nVert) {
         nVertices = nVert;
-        x = new float32[nVertices];
-        y = new float32[nVertices];
+        x = new b2float32[nVertices];
+        y = new b2float32[nVertices];
         for (int32_t i = 0; i < nVertices; ++i) {
             x[i] = _x[i];
             y[i] = _y[i];
@@ -91,8 +91,8 @@ b2Polygon::b2Polygon(float32* _x, float32* _y, int32_t nVert) {
 	
 b2Polygon::b2Polygon(b2Vec2* v, int32_t nVert) {
         nVertices = nVert;
-        x = new float32[nVertices];
-        y = new float32[nVertices];
+        x = new b2float32[nVertices];
+        y = new b2float32[nVertices];
         for (int32_t i = 0; i < nVertices; ++i) {
             x[i] = v[i].x;
             y[i] = v[i].y;
@@ -113,7 +113,7 @@ b2Polygon::~b2Polygon() {
 	delete[] y;
 }
 
-float32 b2Polygon::GetArea() {
+b2float32 b2Polygon::GetArea() {
 	if (areaIsSet) return area;
 	area = 0.0f;
 	
@@ -131,7 +131,7 @@ bool b2Polygon::IsCCW() {
 	return (GetArea() > 0.0f);
 }
 	
-void b2Polygon::MergeParallelEdges(float32 tolerance) {
+void b2Polygon::MergeParallelEdges(b2float32 tolerance) {
 	if (nVertices <= 3) return; //Can't do anything useful here to a triangle
 	bool* mergeMe = new bool[nVertices];
 	int32_t newNVertices = nVertices;
@@ -139,12 +139,12 @@ void b2Polygon::MergeParallelEdges(float32 tolerance) {
 		int32_t lower = (i == 0) ? (nVertices - 1) : (i - 1);
 		int32_t middle = i;
 		int32_t upper = (i == nVertices - 1) ? (0) : (i + 1);
-		float32 dx0 = x[middle] - x[lower];
-		float32 dy0 = y[middle] - y[lower];
-		float32 dx1 = x[upper] - x[middle];
-		float32 dy1 = y[upper] - y[middle];
-		float32 norm0 = b2Sqrt(dx0*dx0+dy0*dy0);
-		float32 norm1 = b2Sqrt(dx1*dx1+dy1*dy1);
+		b2float32 dx0 = x[middle] - x[lower];
+		b2float32 dy0 = y[middle] - y[lower];
+		b2float32 dx1 = x[upper] - x[middle];
+		b2float32 dy1 = y[upper] - y[middle];
+		b2float32 norm0 = b2Sqrt(dx0*dx0+dy0*dy0);
+		b2float32 norm1 = b2Sqrt(dx1*dx1+dy1*dy1);
 		if ( !(norm0 > 0.0f && norm1 > 0.0f) && newNVertices > 3 ) {
 			//Merge identical points
 			mergeMe[i] = true;
@@ -152,8 +152,8 @@ void b2Polygon::MergeParallelEdges(float32 tolerance) {
 		}
 		dx0 /= norm0; dy0 /= norm0;
 		dx1 /= norm1; dy1 /= norm1;
-		float32 cross = dx0 * dy1 - dx1 * dy0;
-		float32 dot = dx0 * dx1 + dy0 * dy1;
+		b2float32 cross = dx0 * dy1 - dx1 * dy0;
+		b2float32 dot = dx0 * dx1 + dy0 * dy1;
 		if (b2Abs(cross) < tolerance && dot > 0 && newNVertices > 3) {
 			mergeMe[i] = true;
 			--newNVertices;
@@ -165,8 +165,8 @@ void b2Polygon::MergeParallelEdges(float32 tolerance) {
 		delete[] mergeMe;
 		return;
 	}
-	float32* newx = new float32[newNVertices];
-	float32* newy = new float32[newNVertices];
+	b2float32* newx = new b2float32[newNVertices];
+	b2float32* newy = new b2float32[newNVertices];
 	int32_t currIndex = 0;
 	for (int32_t i=0; i < nVertices; ++i) {
 		if (mergeMe[i] || newNVertices == 0 || currIndex == newNVertices) continue;
@@ -197,8 +197,8 @@ b2Vec2* b2Polygon::GetVertexVecs() {
 	
 b2Polygon::b2Polygon(b2Triangle& t) {
 	nVertices = 3;
-	x = new float32[nVertices];
-	y = new float32[nVertices];
+	x = new b2float32[nVertices];
+	y = new b2float32[nVertices];
 	for (int32_t i = 0; i < nVertices; ++i) {
 		x[i] = t.x[i];
 		y[i] = t.y[i];
@@ -210,8 +210,8 @@ void b2Polygon::Set(const b2Polygon& p) {
 			nVertices = p.nVertices;
 			if (x) delete[] x;
 			if (y) delete[] y;
-			x = new float32[nVertices];
-			y = new float32[nVertices];
+			x = new b2float32[nVertices];
+			y = new b2float32[nVertices];
         }
 		
         for (int32_t i = 0; i < nVertices; ++i) {
@@ -230,11 +230,11 @@ bool b2Polygon::IsConvex() {
             int32_t lower = (i == 0) ? (nVertices - 1) : (i - 1);
             int32_t middle = i;
             int32_t upper = (i == nVertices - 1) ? (0) : (i + 1);
-            float32 dx0 = x[middle] - x[lower];
-            float32 dy0 = y[middle] - y[lower];
-            float32 dx1 = x[upper] - x[middle];
-            float32 dy1 = y[upper] - y[middle];
-            float32 cross = dx0 * dy1 - dx1 * dy0;
+            b2float32 dx0 = x[middle] - x[lower];
+            b2float32 dy0 = y[middle] - y[lower];
+            b2float32 dx1 = x[upper] - x[middle];
+            b2float32 dy1 = y[upper] - y[middle];
+            b2float32 cross = dx0 * dy1 - dx1 * dy0;
             // Cross product should have same sign
             // for each vertex if poly is convex.
             bool newIsP = (cross >= 0) ? true : false;
@@ -254,9 +254,9 @@ bool b2Polygon::IsConvex() {
 static b2Vec2 PolyCentroid(const b2Vec2* vs, int32_t count)
 {
 	b2Vec2 c; c.Set(0.0f, 0.0f);
-	float32 area = 0.0f;
+	b2float32 area = 0.0f;
 
-	const float32 inv3 = 1.0f / 3.0f;
+	const b2float32 inv3 = 1.0f / 3.0f;
 	b2Vec2 pRef(0.0f, 0.0f);
 	for (int32_t i = 0; i < count; ++i)
 	{
@@ -268,9 +268,9 @@ static b2Vec2 PolyCentroid(const b2Vec2* vs, int32_t count)
 		b2Vec2 e1 = p2 - p1;
 		b2Vec2 e2 = p3 - p1;
 
-		float32 D = b2Cross(e1, e2);
+		b2float32 D = b2Cross(e1, e2);
 
-		float32 triangleArea = 0.5f * D;
+		b2float32 triangleArea = 0.5f * D;
 		area += triangleArea;
 
 		// Area weighted centroid
@@ -319,9 +319,9 @@ bool b2Polygon::IsUsable(bool printErrors){
 		//int32_t iplus = (i==nVertices-1)?0:i+1;
 
 		//Parallel sides check
-		float32 cross = b2Cross(normals[iminus], normals[i]);
+		b2float32 cross = b2Cross(normals[iminus], normals[i]);
 		cross = b2Clamp(cross, -1.0f, 1.0f);
-		float32 angle = asinf(cross);
+		b2float32 angle = asinf(cross);
 		if(angle <= b2_angularSlop){
 			noError = false;
 			error = 4;
@@ -333,7 +333,7 @@ bool b2Polygon::IsUsable(bool printErrors){
 			if (j == i || j == (i + 1) % nVertices){
 				continue;
 			}
-			float32 s = b2Dot(normals[i], vertices[j] - vertices[i]);
+			b2float32 s = b2Dot(normals[i], vertices[j] - vertices[i]);
 			if (s >= -b2_linearSlop){
 				noError = false;
 				error = 5;
@@ -483,8 +483,8 @@ b2Polygon* b2Polygon::Add(b2Triangle& t) {
         if (tipT == firstT || tipT == secondT)
             tipT = 2;
 		
-        float32* newx = new float32[nVertices + 1];
-        float32* newy = new float32[nVertices + 1];
+        b2float32* newx = new b2float32[nVertices + 1];
+        b2float32* newy = new b2float32[nVertices + 1];
         int32_t currOut = 0;
         for (int32_t i = 0; i < nVertices; i++) {
             newx[currOut] = x[i];
@@ -539,7 +539,7 @@ void b2Polygon::AddTo(b2PolygonDef& pd) {
 	 */
 bool ResolvePinchPoint(const b2Polygon& pin, b2Polygon& poutA, b2Polygon& poutB){
 	if (pin.nVertices < 3) return false;
-	float32 tol = .001f;
+	b2float32 tol = .001f;
 	bool hasPinchPoint = false;
 	int32_t pinchIndexA = -1;
 	int32_t pinchIndexB = -1;
@@ -562,8 +562,8 @@ bool ResolvePinchPoint(const b2Polygon& pin, b2Polygon& poutA, b2Polygon& poutB)
 		//printf("Found pinch point\n");
 		int32_t sizeA = pinchIndexB - pinchIndexA;
 		if (sizeA == pin.nVertices) return false;//has dupe points at wraparound, not a problem here
-		float32* xA = new float32[sizeA];
-		float32* yA = new float32[sizeA];
+		b2float32* xA = new b2float32[sizeA];
+		b2float32* yA = new b2float32[sizeA];
 		for (int32_t i=0; i < sizeA; ++i){
 			int32_t ind = remainder(pinchIndexA+i,pin.nVertices);
 			xA[i] = pin.x[ind];
@@ -575,8 +575,8 @@ bool ResolvePinchPoint(const b2Polygon& pin, b2Polygon& poutA, b2Polygon& poutB)
 		delete[] yA;
 		
 		int32_t sizeB = pin.nVertices - sizeA;
-		float32* xB = new float32[sizeB];
-		float32* yB = new float32[sizeB];
+		b2float32* xB = new b2float32[sizeB];
+		b2float32* yB = new b2float32[sizeB];
 		for (int32_t i=0; i<sizeB; ++i){
 			int32_t ind = remainder(pinchIndexB+i,pin.nVertices);
 			xB[i] = pin.x[ind];
@@ -616,7 +616,7 @@ bool ResolvePinchPoint(const b2Polygon& pin, b2Polygon& poutA, b2Polygon& poutB)
 	 * this size.
      */
 	
-int32_t TriangulatePolygon(float32* xv, float32* yv, int32_t vNum, b2Triangle* results) {
+int32_t TriangulatePolygon(b2float32* xv, b2float32* yv, int32_t vNum, b2Triangle* results) {
         if (vNum < 3)
             return 0;
 
@@ -646,8 +646,8 @@ int32_t TriangulatePolygon(float32* xv, float32* yv, int32_t vNum, b2Triangle* r
 
         b2Triangle* buffer = new b2Triangle[vNum-2];
         int32_t bufferSize = 0;
-        float32* xrem = new float32[vNum];
-        float32* yrem = new float32[vNum];
+        b2float32* xrem = new b2float32[vNum];
+        b2float32* yrem = new b2float32[vNum];
         for (int32_t i = 0; i < vNum; ++i) {
             xrem[i] = xv[i];
             yrem[i] = yv[i];
@@ -658,8 +658,8 @@ int32_t TriangulatePolygon(float32* xv, float32* yv, int32_t vNum, b2Triangle* r
         while (vNum > 3) {
             // Find an ear
             int32_t earIndex = -1;
-			//float32 earVolume = -1.0f;
-			float32 earMaxMinCross = -10.0f;
+			//b2float32 earVolume = -1.0f;
+			b2float32 earMaxMinCross = -10.0f;
             for (int32_t i = 0; i < vNum; ++i) {
                 if (IsEar(i, xrem, yrem, vNum)) {
 					int32_t lower = remainder(i-1,vNum);
@@ -671,18 +671,18 @@ int32_t TriangulatePolygon(float32* xv, float32* yv, int32_t vNum, b2Triangle* r
 					d1.Normalize();
 					d2.Normalize();
 					d3.Normalize();
-					float32 cross12 = b2Abs( b2Cross(d1,d2) );
-					float32 cross23 = b2Abs( b2Cross(d2,d3) );
-					float32 cross31 = b2Abs( b2Cross(d3,d1) );
+					b2float32 cross12 = b2Abs( b2Cross(d1,d2) );
+					b2float32 cross23 = b2Abs( b2Cross(d2,d3) );
+					b2float32 cross31 = b2Abs( b2Cross(d3,d1) );
 					//Find the minimum angle
-					float32 minCross = b2Min(cross12, b2Min(cross23,cross31));
+					b2float32 minCross = b2Min(cross12, b2Min(cross23,cross31));
 					if (minCross > earMaxMinCross){
 						earIndex = i;
 						earMaxMinCross = minCross;
 					}
 
 					/*//This bit chooses the ear with greatest volume first
-					float32 testVol = b2Abs( d1.x*d2.y-d2.x*d1.y );
+					b2float32 testVol = b2Abs( d1.x*d2.y-d2.x*d1.y );
 					if (testVol > earVolume){
 						earIndex = i;
 						earVolume = testVol;
@@ -708,8 +708,8 @@ int32_t TriangulatePolygon(float32* xv, float32* yv, int32_t vNum, b2Triangle* r
             // - remove the ear tip from the list
 
             --vNum;
-            float32* newx = new float32[vNum];
-            float32* newy = new float32[vNum];
+            b2float32* newx = new b2float32[vNum];
+            b2float32* newy = new b2float32[vNum];
             int32_t currDest = 0;
             for (int32_t i = 0; i < vNum; ++i) {
                 if (currDest == earIndex) ++currDest;
@@ -845,8 +845,8 @@ int32_t PolygonizeTriangles(b2Triangle* triangulated, int32_t triangulatedLength
 	 *
 	 * Assumes clockwise orientation of polygon...ick
      */
-bool IsEar(int32_t i, float32* xv, float32* yv, int32_t xvLength) {
-        float32 dx0, dy0, dx1, dy1;
+bool IsEar(int32_t i, b2float32* xv, b2float32* yv, int32_t xvLength) {
+        b2float32 dx0, dy0, dx1, dy1;
         dx0 = dy0 = dx1 = dy1 = 0;
         if (i >= xvLength || i < 0 || xvLength < 3) {
             return false;
@@ -873,7 +873,7 @@ bool IsEar(int32_t i, float32* xv, float32* yv, int32_t xvLength) {
             dx1 = xv[i + 1] - xv[i];
             dy1 = yv[i + 1] - yv[i];
         }
-        float32 cross = dx0 * dy1 - dx1 * dy0;
+        b2float32 cross = dx0 * dy1 - dx1 * dy0;
         if (cross > 0)
             return false;
         b2Triangle myTri(xv[i], yv[i], xv[upper], yv[upper],
@@ -891,13 +891,13 @@ void ReversePolygon(b2Polygon& p){
 	ReversePolygon(p.x,p.y,p.nVertices);
 }
 	
-void ReversePolygon(float32* x, float32* y, int n) {
+void ReversePolygon(b2float32* x, b2float32* y, int n) {
         if (n == 1)
             return;
         int32_t low = 0;
         int32_t high = n - 1;
         while (low < high) {
-            float32 buffer = x[low];
+            b2float32 buffer = x[low];
             x[low] = x[high];
             x[high] = buffer;
             buffer = y[low];
@@ -991,37 +991,37 @@ b2PolygonDef* DecomposeConvexAndAddTo(b2World *world, b2Polygon* p, b2Body* body
 						int32_t lower = (j == 0) ? (curr.nVertices - 1) : (j - 1);
 						int32_t middle = j;
 						int32_t upper = (j == curr.nVertices - 1) ? (0) : (j + 1);
-						float32 dx0 = curr.x[middle] - curr.x[lower]; float32 dy0 = curr.y[middle] - curr.y[lower];
-						float32 dx1 = curr.x[upper] - curr.x[middle];	float32 dy1 = curr.y[upper] - curr.y[middle];
-						float32 norm0 = b2Sqrt(dx0*dx0+dy0*dy0);	float32 norm1 = b2Sqrt(dx1*dx1+dy1*dy1);
+						b2float32 dx0 = curr.x[middle] - curr.x[lower]; b2float32 dy0 = curr.y[middle] - curr.y[lower];
+						b2float32 dx1 = curr.x[upper] - curr.x[middle];	b2float32 dy1 = curr.y[upper] - curr.y[middle];
+						b2float32 norm0 = b2Sqrt(dx0*dx0+dy0*dy0);	b2float32 norm1 = b2Sqrt(dx1*dx1+dy1*dy1);
 						if ( !(norm0 > 0.0f && norm1 > 0.0f) ) {
 							//Identical points, don't do anything!
 							goto Skip;
 						}
 						dx0 /= norm0; dy0 /= norm0;
 						dx1 /= norm1; dy1 /= norm1;
-						float32 cross = dx0 * dy1 - dx1 * dy0;
-						float32 dot = dx0*dx1 + dy0*dy1;
+						b2float32 cross = dx0 * dy1 - dx1 * dy0;
+						b2float32 dot = dx0*dx1 + dy0*dy1;
 						if (b2Abs(cross) < b2_angularSlop && dot > 0) {
 							//Angle too close, split the triangle across from this point.
 							//This is guaranteed to result in two triangles that satify
 							//the tolerance (one of the angles is 90 degrees)
-							float32 dx2 = curr.x[lower] - curr.x[upper]; float32 dy2 = curr.y[lower] - curr.y[upper];
-							float32 norm2 = b2Sqrt(dx2*dx2+dy2*dy2);
+							b2float32 dx2 = curr.x[lower] - curr.x[upper]; b2float32 dy2 = curr.y[lower] - curr.y[upper];
+							b2float32 norm2 = b2Sqrt(dx2*dx2+dy2*dy2);
 							if (norm2 == 0.0f) {
 								goto Skip;
 							}
 							dx2 /= norm2; dy2 /= norm2;
-							float32 thisArea = curr.GetArea();
-							float32 thisHeight = 2.0f * thisArea / norm2;
-							float32 buffer2 = dx2;
+							b2float32 thisArea = curr.GetArea();
+							b2float32 thisHeight = 2.0f * thisArea / norm2;
+							b2float32 buffer2 = dx2;
 							dx2 = dy2; dy2 = -buffer2;
 							//Make two new polygons
 							//printf("dx2: %f, dy2: %f, thisHeight: %f, middle: %d\n",dx2,dy2,thisHeight,middle);
-							float32 newX1[3] = { curr.x[middle]+dx2*thisHeight, curr.x[lower], curr.x[middle] };
-							float32 newY1[3] = { curr.y[middle]+dy2*thisHeight, curr.y[lower], curr.y[middle] };
-							float32 newX2[3] = { newX1[0], curr.x[middle], curr.x[upper] };
-							float32 newY2[3] = { newY1[0], curr.y[middle], curr.y[upper] };
+							b2float32 newX1[3] = { curr.x[middle]+dx2*thisHeight, curr.x[lower], curr.x[middle] };
+							b2float32 newY1[3] = { curr.y[middle]+dy2*thisHeight, curr.y[lower], curr.y[middle] };
+							b2float32 newX2[3] = { newX1[0], curr.x[middle], curr.x[upper] };
+							b2float32 newY2[3] = { newY1[0], curr.y[middle], curr.y[upper] };
 							b2Polygon p1(newX1,newY1,3);
 							b2Polygon p2(newX2,newY2,3);
 							if (p1.IsUsable()){
@@ -1090,8 +1090,8 @@ Skip:
      */
 	
 b2Polygon ConvexHull(b2Vec2* v, int nVert) {
-        float32* cloudX = new float32[nVert];
-        float32* cloudY = new float32[nVert];
+        b2float32* cloudX = new b2float32[nVert];
+        b2float32* cloudY = new b2float32[nVert];
         for (int32_t i = 0; i < nVert; ++i) {
             cloudX[i] = v[i].x;
             cloudY[i] = v[i].y;
@@ -1102,12 +1102,12 @@ b2Polygon ConvexHull(b2Vec2* v, int nVert) {
 		return result;
 }
 	
-b2Polygon ConvexHull(float32* cloudX, float32* cloudY, int32_t nVert) {
+b2Polygon ConvexHull(b2float32* cloudX, b2float32* cloudY, int32_t nVert) {
 		b2Assert(nVert > 2);
         int32_t* edgeList = new int32_t[nVert];
         int32_t numEdges = 0;
 		
-        float32 minY = FLOAT32_MAX;
+        b2float32 minY = FLOAT32_MAX;
         int32_t minYIndex = nVert;
         for (int32_t i = 0; i < nVert; ++i) {
             if (cloudY[i] < minY) {
@@ -1118,27 +1118,27 @@ b2Polygon ConvexHull(float32* cloudX, float32* cloudY, int32_t nVert) {
 		
         int32_t startIndex = minYIndex;
         int32_t winIndex = -1;
-        float32 dx = -1.0f;
-        float32 dy = 0.0f;
+        b2float32 dx = -1.0f;
+        b2float32 dy = 0.0f;
         while (winIndex != minYIndex) {
-            float32 newdx = 0.0f;
-            float32 newdy = 0.0f;
-            float32 maxDot = -2.0f;
+            b2float32 newdx = 0.0f;
+            b2float32 newdy = 0.0f;
+            b2float32 maxDot = -2.0f;
             for (int32_t i = 0; i < nVert; ++i) {
                 if (i == startIndex)
                     continue;
                 newdx = cloudX[i] - cloudX[startIndex];
                 newdy = cloudY[i] - cloudY[startIndex];
-                float32 nrm = b2Sqrt(newdx * newdx + newdy * newdy);
-                nrm = (nrm == float32(0)) ? float32(1) : nrm;
+                b2float32 nrm = b2Sqrt(newdx * newdx + newdy * newdy);
+                nrm = (nrm == b2float32(0)) ? b2float32(1) : nrm;
                 newdx /= nrm;
                 newdy /= nrm;
                 
                 //Cross and dot products act as proxy for angle
                 //without requiring inverse trig.
                 //FIXED: don't need cross test
-                //float32 newCross = newdx * dy - newdy * dx;
-                float32 newDot = newdx * dx + newdy * dy;
+                //b2float32 newCross = newdx * dy - newdy * dx;
+                b2float32 newDot = newdx * dx + newdy * dy;
                 if (newDot > maxDot) {//newCross >= 0.0f && newDot > maxDot) {
                     maxDot = newDot;
                     winIndex = i;
@@ -1147,15 +1147,15 @@ b2Polygon ConvexHull(float32* cloudX, float32* cloudY, int32_t nVert) {
             edgeList[numEdges++] = winIndex;
             dx = cloudX[winIndex] - cloudX[startIndex];
             dy = cloudY[winIndex] - cloudY[startIndex];
-            float32 nrm = b2Sqrt(dx * dx + dy * dy);
-            nrm = (nrm == float32(0)) ? float32(1) : nrm;
+            b2float32 nrm = b2Sqrt(dx * dx + dy * dy);
+            nrm = (nrm == b2float32(0)) ? b2float32(1) : nrm;
             dx /= nrm;
             dy /= nrm;
             startIndex = winIndex;
         }
 		
-        float32* xres = new float32[numEdges];
-        float32* yres = new float32[numEdges];
+        b2float32* xres = new b2float32[numEdges];
+        b2float32* yres = new b2float32[numEdges];
         for (int32_t i = 0; i < numEdges; i++) {
             xres[i] = cloudX[edgeList[i]];
             yres[i] = cloudY[edgeList[i]];
@@ -1176,7 +1176,7 @@ b2Polygon ConvexHull(float32* cloudX, float32* cloudY, int32_t nVert) {
  * Given sines and cosines, tells if A's angle is less than B's on -Pi, Pi
  * (in other words, is A "righter" than B)
  */
-bool IsRighter(float32 sinA, float32 cosA, float32 sinB, float32 cosB){
+bool IsRighter(b2float32 sinA, b2float32 cosA, b2float32 sinB, b2float32 cosB){
 	if (sinA < 0){
 		if (sinB > 0 || cosA <= cosB) return true;
 		else return false;
@@ -1214,11 +1214,11 @@ We check the seg from current vertex to next vertex for intersections
 
 /*b2Polygon TraceEdge(b2Polygon* p, bool debug) {
 	//Intersections closer than this will be considered the same point
-	const float32 EPS_TOL = .001f;//FLOAT32_EPSILON;//.0001f;
+	const b2float32 EPS_TOL = .001f;//FLOAT32_EPSILON;//.0001f;
 
 	//Find vertex with minimum y value
-	float32 minY = FLOAT32_MAX;
-	float32 maxX = -FLOAT32_MAX;
+	b2float32 minY = FLOAT32_MAX;
+	b2float32 maxX = -FLOAT32_MAX;
 	int32_t minYIndex = p->nVertices;
 	for (int32_t i = 0; i < p->nVertices; ++i) {
 		if (p->y[i] < minY) {
@@ -1250,14 +1250,14 @@ We check the seg from current vertex to next vertex for intersections
 	b2Vec2 testPoint(p->x[nextIndex],p->y[nextIndex]);
 	b2Vec2 testDir = testPoint - currentLoc;
 	testDir.Normalize();
-	float32 plusSin = b2Cross(lastDir,testDir);
-	float32 plusCos = b2Dot(lastDir,testDir);
+	b2float32 plusSin = b2Cross(lastDir,testDir);
+	b2float32 plusCos = b2Dot(lastDir,testDir);
 	nextIndex = remainder(currentIndex-1,p->nVertices);//(currentIndex-1)%p->nVertices;
 	b2Vec2 testPoint2(p->x[nextIndex],p->y[nextIndex]);
 	testDir = testPoint2 - currentLoc;
 	testDir.Normalize();
-	float32 minusSin = b2Cross(lastDir,testDir);
-	float32 minusCos = b2Dot(lastDir,testDir);
+	b2float32 minusSin = b2Cross(lastDir,testDir);
+	b2float32 minusCos = b2Dot(lastDir,testDir);
 	if (IsRighter(plusSin,plusCos,minusSin,minusCos)) nextIndex = remainder(currentIndex+1,p->nVertices);//(currentIndex+1)%p->nVertices;
 	bool notDone = true;
 	int32_t counter = 0;
@@ -1313,15 +1313,15 @@ We check the seg from current vertex to next vertex for intersections
 			if ( b2Abs(currentLoc.x-crossingPoint.x) < EPS_TOL && b2Abs(currentLoc.y-crossingPoint.y) < EPS_TOL) continue;
 			if (crosses){
 				b2Vec2 delta = crossingPoint - currentLoc;
-				float32 deltaNorm = delta.Length();
+				b2float32 deltaNorm = delta.Length();
 				if (deltaNorm < EPS_TOL) continue;
 			}
 			if (haveCrossing && crosses){
 				//Need to see if this new crossing point is "better" than current one
 				b2Vec2 newDisp = (crossingPoint - currentLoc);
 				b2Vec2 oldDisp = (savedCrossing - currentLoc);
-				float32 newDist = newDisp.Normalize();
-				float32 oldDist = oldDisp.Normalize();
+				b2float32 newDist = newDisp.Normalize();
+				b2float32 oldDist = oldDisp.Normalize();
 				if (newDist < oldDist - EPS_TOL){
 					//It's closer, so we hit it first
 					crossIndexA = i;
@@ -1331,8 +1331,8 @@ We check the seg from current vertex to next vertex for intersections
 					//do nothing, keep old value
 				} else {
 					//We consider the two points to be identical, and must resolve by angle tests
-					float32 oldCos = b2Dot(oldDisp,testDir);
-					float32 newCos = b2Dot(newDisp,testDir);
+					b2float32 oldCos = b2Dot(oldDisp,testDir);
+					b2float32 newCos = b2Dot(newDisp,testDir);
 					if (newCos < oldCos){
 						crossIndexA = i;
 						crossIndexB = iplus;
@@ -1357,10 +1357,10 @@ We check the seg from current vertex to next vertex for intersections
 			b2Vec2 toB(p->x[crossIndexB]-nextLoc.x,p->y[crossIndexB]-nextLoc.y);
 			toA.Normalize();
 			toB.Normalize();
-			float32 sinA1 = b2Cross(testDir,toA);
-			float32 sinB1 = b2Cross(testDir,toB);
-			float32 cosA1 = b2Dot(testDir, toA);
-			float32 cosB1 = b2Dot(testDir, toB);
+			b2float32 sinA1 = b2Cross(testDir,toA);
+			b2float32 sinB1 = b2Cross(testDir,toB);
+			b2float32 cosA1 = b2Dot(testDir, toA);
+			b2float32 cosB1 = b2Dot(testDir, toB);
 			if (IsRighter(sinA1,cosA1,sinB1,cosB1)){
 				nextIndex = crossIndexA;
 				currentIndex = crossIndexB;
@@ -1370,7 +1370,7 @@ We check the seg from current vertex to next vertex for intersections
 			}
 		}
 		lastDir = nextLoc - currentLoc;
-		float32 norm = lastDir.Normalize();
+		b2float32 norm = lastDir.Normalize();
 		b2Assert(norm > 0.0f);
 		currentLoc = nextLoc;
 	}
@@ -1447,7 +1447,7 @@ b2Polygon *TraceEdge(b2Polygon* p){
 	}
 
 	//Collapse duplicate points
-	const float32 COLLAPSE_DIST = FLOAT32_EPSILON;
+	const b2float32 COLLAPSE_DIST = FLOAT32_EPSILON;
 	for (int32_t i=0; i < nNodes; ++i){
 		for (int32_t j=i+1; j < nNodes; ++j){
 			b2Vec2 diff = nodes[i].position - nodes[j].position;
@@ -1470,8 +1470,8 @@ b2Polygon *TraceEdge(b2Polygon* p){
 	//Now walk the edge of the list
 
 	//Find node with minimum y value
-	float32 minY = FLOAT32_MAX;
-	float32 maxX = -FLOAT32_MAX;
+	b2float32 minY = FLOAT32_MAX;
+	b2float32 maxX = -FLOAT32_MAX;
 	int32_t minYIndex = -1;
 	for (int32_t i = 0; i < nNodes; ++i) {
 		if (nodes[i].position.y < minY && nodes[i].nConnected > 0) {
@@ -1502,8 +1502,8 @@ b2Polygon *TraceEdge(b2Polygon* p){
 		nextNode = currentNode->GetRightestConnection(*oldNode);
 	}
 
-	float32* xres = new float32[nResultVecs];
-	float32* yres = new float32[nResultVecs];
+	b2float32* xres = new b2float32[nResultVecs];
+	b2float32* yres = new b2float32[nResultVecs];
 	for (int32_t i=0; i<nResultVecs; ++i){
 		xres[i] = resultVecs[i].x;
 		yres[i] = resultVecs[i].y;
@@ -1566,22 +1566,22 @@ bool b2PolyNode::IsConnectedTo(b2PolyNode& me){
 b2PolyNode* b2PolyNode::GetRightestConnection(b2PolyNode& incoming){
 	if (nConnected == 0) return NULL;
 	b2Vec2 inDir = position - incoming.position;
-	float32 inLength = inDir.Normalize();
+	b2float32 inLength = inDir.Normalize();
 	b2Assert(inLength > FLOAT32_EPSILON);
 	
 	b2PolyNode* result = NULL;
 	for (int i=0; i<nConnected; ++i){
 		if (connected[i] == &incoming) continue;
 		b2Vec2 testDir = connected[i]->position - position;
-		float32 testLength = testDir.Normalize();
+		b2float32 testLength = testDir.Normalize();
 		b2Assert (testLength > FLOAT32_EPSILON);
-		float32 myCos = b2Dot(inDir,testDir);
-		float32 mySin = b2Cross(inDir,testDir);
+		b2float32 myCos = b2Dot(inDir,testDir);
+		b2float32 mySin = b2Cross(inDir,testDir);
 		if (result){
 			b2Vec2 resultDir = result->position - position;
 			resultDir.Normalize();
-			float32 resCos = b2Dot(inDir,resultDir);
-			float32 resSin = b2Cross(inDir,resultDir);
+			b2float32 resCos = b2Dot(inDir,resultDir);
+			b2float32 resSin = b2Cross(inDir,resultDir);
 			if (IsRighter(mySin,myCos,resSin,resCos)){
 				result = connected[i];
 			}

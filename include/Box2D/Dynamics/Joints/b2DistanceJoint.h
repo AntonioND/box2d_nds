@@ -49,7 +49,7 @@ struct b2DistanceJointDef : public b2JointDef
 	b2Vec2 localAnchor2;
 
 	/// The equilibrium length between the anchor points.
-	float32 length;
+	b2float32 length;
 };
 
 /// A distance joint constrains two points on two bodies
@@ -63,7 +63,7 @@ public:
 	b2Vec2 GetAnchor2() const;
 
 	b2Vec2 GetReactionForce() const;
-	float32 GetReactionTorque() const;
+	b2float32 GetReactionTorque() const;
 
 	//--------------- Internals Below -------------------
 
@@ -76,9 +76,9 @@ public:
 	b2Vec2 m_localAnchor1;
 	b2Vec2 m_localAnchor2;
 	b2Vec2 m_u;
-	float32 m_force;
-	float32 m_mass;		// effective mass for the constraint.
-	float32 m_length;
+	b2float32 m_force;
+	b2float32 m_mass;		// effective mass for the constraint.
+	b2float32 m_length;
 };
 
 #endif

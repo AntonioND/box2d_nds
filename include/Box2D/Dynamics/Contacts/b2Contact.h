@@ -60,9 +60,9 @@ struct b2ContactPoint
 	b2Shape* shape2;		///< the second shape
 	b2Vec2 position;		///< position in world coordinates
 	b2Vec2 normal;			///< points from shape1 to shape2
-	float32 separation;		///< the separation is negative when shapes are touching
-	float32 normalForce;	///< the signed magnitude of the normal force
-	float32 tangentForce;	///< the signed magnitude of the tangent force
+	b2float32 separation;		///< the separation is negative when shapes are touching
+	b2float32 normalForce;	///< the signed magnitude of the normal force
+	b2float32 tangentForce;	///< the signed magnitude of the tangent force
 	b2ContactID id;			///< the contact id identifies the features in contact
 };
 
@@ -136,10 +136,10 @@ public:
 	b2Shape* m_shape2;
 
 	// Combined friction
-	float32 m_friction;
-	float32 m_restitution;
+	b2float32 m_friction;
+	b2float32 m_restitution;
 
-	float32 m_toi;
+	b2float32 m_toi;
 };
 
 inline int32_t b2Contact::GetManifoldCount() const

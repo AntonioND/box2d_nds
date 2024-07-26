@@ -49,14 +49,14 @@ bool b2CircleShape::TestPoint(const b2XForm& transform, const b2Vec2& p) const
 // x = s + a * r
 // norm(x) = radius
 bool b2CircleShape::TestSegment(const b2XForm& transform,
-								float32* lambda,
+								b2float32* lambda,
 								b2Vec2* normal,
 								const b2Segment& segment,
-								float32 maxLambda) const
+								b2float32 maxLambda) const
 {
 	b2Vec2 position = transform.position + b2Mul(transform.R, m_localPosition);
 	b2Vec2 s = segment.p1 - position;
-	float32 b = b2Dot(s, s) - m_radius * m_radius;
+	b2float32 b = b2Dot(s, s) - m_radius * m_radius;
 
 	// Does the segment start inside the circle?
 	if (b < 0.0f)
@@ -66,9 +66,9 @@ bool b2CircleShape::TestSegment(const b2XForm& transform,
 
 	// Solve quadratic equation.
 	b2Vec2 r = segment.p2 - segment.p1;
-	float32 c =  b2Dot(s, r);
-	float32 rr = b2Dot(r, r);
-	float32 sigma = c * c - rr * b;
+	b2float32 c =  b2Dot(s, r);
+	b2float32 rr = b2Dot(r, r);
+	b2float32 sigma = c * c - rr * b;
 
 	// Check for negative discriminant and short segment.
 	if (sigma < 0.0f || rr < FLOAT32_EPSILON)
@@ -77,7 +77,7 @@ bool b2CircleShape::TestSegment(const b2XForm& transform,
 	}
 
 	// Find the point of intersection of the line with the circle.
-	float32 a = -(c + b2Sqrt(sigma));
+	b2float32 a = -(c + b2Sqrt(sigma));
 
 	// Is the intersection point on the segment?
 	if (0.0f <= a && a <= maxLambda * rr)

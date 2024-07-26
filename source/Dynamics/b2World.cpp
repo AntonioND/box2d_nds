@@ -518,7 +518,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 	{
 		// Find the first TOI.
 		b2Contact* minContact = NULL;
-		float32 minTOI = 1.0f;
+		b2float32 minTOI = 1.0f;
 
 		for (b2Contact* c = m_contactList; c; c = c->m_next)
 		{
@@ -529,7 +529,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 
 			// TODO_ERIN keep a counter on the contact, only respond to M TOIs per contact.
 
-			float32 toi = 1.0f;
+			b2float32 toi = 1.0f;
 			if (c->m_flags & b2Contact::e_toiFlag)
 			{
 				// This contact has a valid cached TOI.
@@ -549,7 +549,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 				}
 
 				// Put the sweeps onto the same time interval.
-				float32 t0 = b1->m_sweep.t0;
+				b2float32 t0 = b1->m_sweep.t0;
 				
 				if (b1->m_sweep.t0 < b2->m_sweep.t0)
 				{
@@ -746,7 +746,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 	m_stackAllocator.Free(stack);
 }
 
-void b2World::Step(float32 dt, int32_t iterations)
+void b2World::Step(b2float32 dt, int32_t iterations)
 {
 	m_lock = true;
 
@@ -809,7 +809,7 @@ void b2World::DrawShape(b2Shape* shape, const b2XForm& xf, const b2Color& color,
 			b2CircleShape* circle = (b2CircleShape*)shape;
 
 			b2Vec2 center = b2Mul(xf, circle->GetLocalPosition());
-			float32 radius = circle->GetRadius();
+			b2float32 radius = circle->GetRadius();
 			b2Vec2 axis = xf.R.col1;
 
 			m_debugDraw->DrawSolidCircle(center, radius, axis, color);

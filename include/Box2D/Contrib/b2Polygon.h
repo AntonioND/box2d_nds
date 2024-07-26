@@ -27,14 +27,14 @@
 class b2Polygon;
 
 int32_t remainder(int32_t x, int32_t modulus);
-int32_t TriangulatePolygon(float32* xv, float32* yv, int32_t vNum, b2Triangle* results);
-bool IsEar(int32_t i, float32* xv, float32* yv, int32_t xvLength); //Not for external use
+int32_t TriangulatePolygon(b2float32* xv, b2float32* yv, int32_t vNum, b2Triangle* results);
+bool IsEar(int32_t i, b2float32* xv, b2float32* yv, int32_t xvLength); //Not for external use
 int32_t PolygonizeTriangles(b2Triangle* triangulated, int32_t triangulatedLength, b2Polygon* polys, int32_t polysLength);
 int32_t DecomposeConvex(b2Polygon* p, b2Polygon* results, int32_t maxPolys);
 b2PolygonDef* DecomposeConvexAndAddTo(b2World *world, b2Polygon* p, b2Body* body, b2PolygonDef* prototype);
 b2Polygon ConvexHull(b2Vec2* v, int nVert);
-b2Polygon ConvexHull(float32* cloudX, float32* cloudY, int32_t nVert);
-void ReversePolygon(float32* x, float32* y, int n);
+b2Polygon ConvexHull(b2float32* cloudX, b2float32* cloudY, int32_t nVert);
+void ReversePolygon(b2float32* x, b2float32* y, int n);
 
 b2Polygon *TraceEdge(b2Polygon* p); //For use with self-intersecting polygons, finds outline
 
@@ -43,21 +43,21 @@ class b2Polygon {
 public:
     const static int32_t maxVerticesPerPolygon = b2_maxPolygonVertices;
 
-    float32* x; //vertex arrays
-    float32* y;
+    b2float32* x; //vertex arrays
+    b2float32* y;
     int32_t nVertices;
 	
-	float32 area;
+	b2float32 area;
 	bool areaIsSet;
 	
-    b2Polygon(float32* _x, float32* _y, int32_t nVert);
+    b2Polygon(b2float32* _x, b2float32* _y, int32_t nVert);
     b2Polygon(b2Vec2* v, int32_t nVert);
 	b2Polygon();
     ~b2Polygon();
 	
-	float32 GetArea();
+	b2float32 GetArea();
 	
-	void MergeParallelEdges(float32 tolerance);
+	void MergeParallelEdges(b2float32 tolerance);
     b2Vec2* GetVertexVecs();
     b2Polygon(b2Triangle& t);
     void Set(const b2Polygon& p);
@@ -79,11 +79,11 @@ public:
 
 	void printFormatted(){
 		/*
-		printf("float32 xv[] = {");
+		printf("b2float32 xv[] = {");
 		for (int32_t i=0; i<nVertices; ++i){
 			printf("%ff,",x[i]);
 		}
-		printf("};\nfloat32 yv[] = {");
+		printf("};\nb2float32 yv[] = {");
 		for (int32_t i=0; i<nVertices; ++i){
 			printf("%ff,",y[i]);
 		}
@@ -95,10 +95,10 @@ public:
 		nVertices = p.nVertices;
 		area = p.area;
 		areaIsSet = p.areaIsSet;
-		x = new float32[nVertices];
-		y = new float32[nVertices];
-		memcpy(x, p.x, nVertices * sizeof(float32));
-		memcpy(y, p.y, nVertices * sizeof(float32));
+		x = new b2float32[nVertices];
+		y = new b2float32[nVertices];
+		memcpy(x, p.x, nVertices * sizeof(b2float32));
+		memcpy(y, p.y, nVertices * sizeof(b2float32));
 	}
 
 	

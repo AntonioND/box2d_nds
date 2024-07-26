@@ -29,21 +29,21 @@
 
 #include <Box2D/Common/Fixed.h>
 
-typedef Fixed float32;
+typedef Fixed b2float32;
 #define	FLOAT32_MAX	FIXED_MAX
 #define	FLOAT32_MIN	FIXED_MIN
 #define	FLOAT32_EPSILON	FIXED_EPSILON
 
 #else
 
-typedef float float32;
+typedef float b2float32;
 #define	FLOAT32_MAX	FLT_MAX
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON
 
 #endif
 
-const float32 b2_pi = 3.14159265359f;
+const b2float32 b2_pi = 3.14159265359f;
 
 /// @file
 /// Global tuning constants based on meters-kilograms-seconds (MKS) units.
@@ -59,61 +59,61 @@ const int32_t b2_maxPairs = 8 * b2_maxProxies;	// this must be a power of two
 
 /// A small length used as a collision and constraint tolerance. Usually it is
 /// chosen to be numerically significant, but visually insignificant.
-const float32 b2_linearSlop = 0.005f;	// 0.5 cm
+const b2float32 b2_linearSlop = 0.005f;	// 0.5 cm
 
 /// A small angle used as a collision and constraint tolerance. Usually it is
 /// chosen to be numerically significant, but visually insignificant.
-const float32 b2_angularSlop = 2.0f / 180.0f * b2_pi;			// 2 degrees
+const b2float32 b2_angularSlop = 2.0f / 180.0f * b2_pi;			// 2 degrees
 
 /// Continuous collision detection (CCD) works with core, shrunken shapes. This is the
 /// amount by which shapes are automatically shrunk to work with CCD. This must be
 /// larger than b2_linearSlop.
-const float32 b2_toiSlop = 8.0f * b2_linearSlop;
+const b2float32 b2_toiSlop = 8.0f * b2_linearSlop;
 
 /// Maximum number of contacts to be handled to solve a TOI island.
 const int32_t b2_maxTOIContactsPerIsland = 32;
 
 /// A velocity threshold for elastic collisions. Any collision with a relative linear
 /// velocity below this threshold will be treated as inelastic.
-const float32 b2_velocityThreshold = 1.0f;		// 1 m/s
+const b2float32 b2_velocityThreshold = 1.0f;		// 1 m/s
 
 /// The maximum linear position correction used when solving constraints. This helps to
 /// prevent overshoot.
-const float32 b2_maxLinearCorrection = 0.2f;	// 20 cm
+const b2float32 b2_maxLinearCorrection = 0.2f;	// 20 cm
 
 /// The maximum angular position correction used when solving constraints. This helps to
 /// prevent overshoot.
-const float32 b2_maxAngularCorrection = 8.0f / 180.0f * b2_pi;			// 8 degrees
+const b2float32 b2_maxAngularCorrection = 8.0f / 180.0f * b2_pi;			// 8 degrees
 
 /// The maximum linear velocity of a body. This limit is very large and is used
 /// to prevent numerical problems. You shouldn't need to adjust this.
 #ifdef TARGET_FLOAT32_IS_FIXED
-const float32 b2_maxLinearVelocity = 100.0f;
+const b2float32 b2_maxLinearVelocity = 100.0f;
 #else
-const float32 b2_maxLinearVelocity = 200.0f;
+const b2float32 b2_maxLinearVelocity = 200.0f;
 #endif
-const float32 b2_maxLinearVelocitySquared = b2_maxLinearVelocity * b2_maxLinearVelocity;
+const b2float32 b2_maxLinearVelocitySquared = b2_maxLinearVelocity * b2_maxLinearVelocity;
 
 /// The maximum angular velocity of a body. This limit is very large and is used
 /// to prevent numerical problems. You shouldn't need to adjust this.
-const float32 b2_maxAngularVelocity = 250.0f;
-const float32 b2_maxAngularVelocitySquared = b2_maxAngularVelocity * b2_maxAngularVelocity;
+const b2float32 b2_maxAngularVelocity = 250.0f;
+const b2float32 b2_maxAngularVelocitySquared = b2_maxAngularVelocity * b2_maxAngularVelocity;
 
 /// This scale factor controls how fast overlap is resolved. Ideally this would be 1 so
 /// that overlap is removed in one time step. However using values close to 1 often lead
 /// to overshoot.
-const float32 b2_contactBaumgarte = 0.2f;
+const b2float32 b2_contactBaumgarte = 0.2f;
 
 // Sleep
 
 /// The time that a body must be still before it will go to sleep.
-const float32 b2_timeToSleep = 0.5f;									// half a second
+const b2float32 b2_timeToSleep = 0.5f;									// half a second
 
 /// A body cannot sleep if its linear velocity is above this tolerance.
-const float32 b2_linearSleepTolerance = 0.01f;		// 1 cm/s
+const b2float32 b2_linearSleepTolerance = 0.01f;		// 1 cm/s
 
 /// A body cannot sleep if its angular velocity is above this tolerance.
-const float32 b2_angularSleepTolerance = 2.0f / 180.0f;		// 2 degrees/s
+const b2float32 b2_angularSleepTolerance = 2.0f / 180.0f;		// 2 degrees/s
 
 // Memory Allocation
 

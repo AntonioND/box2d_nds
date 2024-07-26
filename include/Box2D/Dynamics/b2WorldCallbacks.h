@@ -106,8 +106,8 @@ public:
 struct b2Color
 {
 	b2Color() {}
-	b2Color(float32 r, float32 g, float32 b) : r(r), g(g), b(b) {}
-	float32 r, g, b;
+	b2Color(b2float32 r, b2float32 g, b2float32 b) : r(r), g(g), b(b) {}
+	b2float32 r, g, b;
 };
 
 /// Implement and register this class with a b2World to provide debug drawing of physics
@@ -149,10 +149,10 @@ public:
 	virtual void DrawSolidPolygon(const b2Vec2* vertices, int32_t vertexCount, const b2Color& color) = 0;
 
 	/// Draw a circle.
-	virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) = 0;
+	virtual void DrawCircle(const b2Vec2& center, b2float32 radius, const b2Color& color) = 0;
 	
 	/// Draw a solid circle.
-	virtual void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) = 0;
+	virtual void DrawSolidCircle(const b2Vec2& center, b2float32 radius, const b2Vec2& axis, const b2Color& color) = 0;
 	
 	/// Draw a line segment.
 	virtual void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) = 0;

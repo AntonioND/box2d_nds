@@ -21,7 +21,7 @@
 
 #include <Box2D/Dynamics/Joints/b2Joint.h>
 
-const float32 b2_minPulleyLength = 2.0f;
+const b2float32 b2_minPulleyLength = 2.0f;
 
 /// Pulley joint definition. This requires two ground anchors,
 /// two dynamic body anchor points, max lengths for each side,
@@ -47,7 +47,7 @@ struct b2PulleyJointDef : public b2JointDef
 	void Initialize(b2Body* body1, b2Body* body2,
 					const b2Vec2& groundAnchor1, const b2Vec2& groundAnchor2,
 					const b2Vec2& anchor1, const b2Vec2& anchor2,
-					float32 ratio);
+					b2float32 ratio);
 
 	/// The first ground anchor in world coordinates. This point never moves.
 	b2Vec2 groundAnchor1;
@@ -62,19 +62,19 @@ struct b2PulleyJointDef : public b2JointDef
 	b2Vec2 localAnchor2;
 
 	/// The a reference length for the segment attached to body1.
-	float32 length1;
+	b2float32 length1;
 
 	/// The maximum length of the segment attached to body1.
-	float32 maxLength1;
+	b2float32 maxLength1;
 
 	/// The a reference length for the segment attached to body2.
-	float32 length2;
+	b2float32 length2;
 
 	/// The maximum length of the segment attached to body2.
-	float32 maxLength2;
+	b2float32 maxLength2;
 
 	/// The pulley ratio, used to simulate a block-and-tackle.
-	float32 ratio;
+	b2float32 ratio;
 };
 
 /// The pulley joint is connected to two bodies and two fixed ground points.
@@ -90,7 +90,7 @@ public:
 	b2Vec2 GetAnchor2() const;
 
 	b2Vec2 GetReactionForce() const;
-	float32 GetReactionTorque() const;
+	b2float32 GetReactionTorque() const;
 
 	/// Get the first ground anchor.
 	b2Vec2 GetGroundAnchor1() const;
@@ -99,13 +99,13 @@ public:
 	b2Vec2 GetGroundAnchor2() const;
 
 	/// Get the current length of the segment attached to body1.
-	float32 GetLength1() const;
+	b2float32 GetLength1() const;
 
 	/// Get the current length of the segment attached to body2.
-	float32 GetLength2() const;
+	b2float32 GetLength2() const;
 
 	/// Get the pulley ratio.
-	float32 GetRatio() const;
+	b2float32 GetRatio() const;
 
 	//--------------- Internals Below -------------------
 
@@ -124,26 +124,26 @@ public:
 	b2Vec2 m_u1;
 	b2Vec2 m_u2;
 	
-	float32 m_constant;
-	float32 m_ratio;
+	b2float32 m_constant;
+	b2float32 m_ratio;
 	
-	float32 m_maxLength1;
-	float32 m_maxLength2;
+	b2float32 m_maxLength1;
+	b2float32 m_maxLength2;
 
 	// Effective masses
-	float32 m_pulleyMass;
-	float32 m_limitMass1;
-	float32 m_limitMass2;
+	b2float32 m_pulleyMass;
+	b2float32 m_limitMass1;
+	b2float32 m_limitMass2;
 
 	// Impulses for accumulation/warm starting.
-	float32 m_force;
-	float32 m_limitForce1;
-	float32 m_limitForce2;
+	b2float32 m_force;
+	b2float32 m_limitForce1;
+	b2float32 m_limitForce2;
 
 	// Position impulses for accumulation.
-	float32 m_positionImpulse;
-	float32 m_limitPositionImpulse1;
-	float32 m_limitPositionImpulse2;
+	b2float32 m_positionImpulse;
+	b2float32 m_limitPositionImpulse1;
+	b2float32 m_limitPositionImpulse2;
 
 	b2LimitState m_state;
 	b2LimitState m_limitState1;

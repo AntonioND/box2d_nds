@@ -45,7 +45,7 @@ struct b2GearJointDef : public b2JointDef
 
 	/// The gear ratio.
 	/// @see b2GearJoint for explanation.
-	float32 ratio;
+	b2float32 ratio;
 };
 
 /// A gear joint is used to connect two joints together. Either joint
@@ -64,10 +64,10 @@ public:
 	b2Vec2 GetAnchor2() const;
 
 	b2Vec2 GetReactionForce() const;
-	float32 GetReactionTorque() const;
+	b2float32 GetReactionTorque() const;
 
 	/// Get the gear ratio.
-	float32 GetRatio() const;
+	b2float32 GetRatio() const;
 
 	//--------------- Internals Below -------------------
 
@@ -96,14 +96,14 @@ public:
 
 	b2Jacobian m_J;
 
-	float32 m_constant;
-	float32 m_ratio;
+	b2float32 m_constant;
+	b2float32 m_ratio;
 
 	// Effective mass
-	float32 m_mass;
+	b2float32 m_mass;
 
 	// Impulse for accumulation/warm starting.
-	float32 m_force;
+	b2float32 m_force;
 };
 
 #endif

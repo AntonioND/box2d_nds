@@ -267,10 +267,10 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 
 	if (allowSleep)
 	{
-		float32 minSleepTime = FLOAT32_MAX;
+		b2float32 minSleepTime = FLOAT32_MAX;
 
-		const float32 linTolSqr = b2_linearSleepTolerance * b2_linearSleepTolerance;
-		const float32 angTolSqr = b2_angularSleepTolerance * b2_angularSleepTolerance;
+		const b2float32 linTolSqr = b2_linearSleepTolerance * b2_linearSleepTolerance;
+		const b2float32 angTolSqr = b2_angularSleepTolerance * b2_angularSleepTolerance;
 
 		for (int32_t i = 0; i < m_bodyCount; ++i)
 		{
@@ -351,7 +351,7 @@ void b2Island::SolveTOI(const b2TimeStep& subStep)
 	}
 
 	// Solve position constraints.
-	const float32 k_toiBaumgarte = 0.75f;
+	const b2float32 k_toiBaumgarte = 0.75f;
 	for (int32_t i = 0; i < subStep.maxIterations; ++i)
 	{
 		bool contactsOkay = contactSolver.SolvePositionConstraints(k_toiBaumgarte);

@@ -32,14 +32,14 @@ struct b2ContactConstraintPoint
 {
 	b2Vec2 localAnchor1;
 	b2Vec2 localAnchor2;
-	float32 normalForce;
-	float32 tangentForce;
-	float32 positionImpulse;
-	float32 normalMass;
-	float32 tangentMass;
-	float32 equalizedMass;
-	float32 separation;
-	float32 velocityBias;
+	b2float32 normalForce;
+	b2float32 tangentForce;
+	b2float32 positionImpulse;
+	b2float32 normalMass;
+	b2float32 tangentMass;
+	b2float32 equalizedMass;
+	b2float32 separation;
+	b2float32 velocityBias;
 };
 
 struct b2ContactConstraint
@@ -49,8 +49,8 @@ struct b2ContactConstraint
 	b2Manifold* manifold;
 	b2Body* body1;
 	b2Body* body2;
-	float32 friction;
-	float32 restitution;
+	b2float32 friction;
+	b2float32 restitution;
 	int32_t pointCount;
 };
 
@@ -64,7 +64,7 @@ public:
 	void SolveVelocityConstraints();
 	void FinalizeVelocityConstraints();
 
-	bool SolvePositionConstraints(float32 baumgarte);
+	bool SolvePositionConstraints(b2float32 baumgarte);
 
 	b2TimeStep m_step;
 	b2StackAllocator* m_allocator;

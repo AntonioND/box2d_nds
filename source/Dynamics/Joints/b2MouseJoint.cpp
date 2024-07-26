@@ -37,16 +37,16 @@ b2MouseJoint::b2MouseJoint(const b2MouseJointDef* def)
 	m_maxForce = def->maxForce;
 	m_force.SetZero();
 
-	float32 mass = m_body2->m_mass;
+	b2float32 mass = m_body2->m_mass;
 
 	// Frequency
-	float32 omega = 2.0f * b2_pi * def->frequencyHz;
+	b2float32 omega = 2.0f * b2_pi * def->frequencyHz;
 
 	// Damping coefficient
-	float32 d = 2.0f * mass * def->dampingRatio * omega;
+	b2float32 d = 2.0f * mass * def->dampingRatio * omega;
 
 	// Spring stiffness
-	float32 k = mass * omega * omega;
+	b2float32 k = mass * omega * omega;
 
 	// magic formulas
 	m_gamma = 1.0f / (d + def->timeStep * k);
@@ -72,8 +72,8 @@ void b2MouseJoint::InitVelocityConstraints(const b2TimeStep& step)
 	// K    = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
 	//      = [1/m1+1/m2     0    ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y -r1.x*r1.y]
 	//        [    0     1/m1+1/m2]           [-r1.x*r1.y r1.x*r1.x]           [-r1.x*r1.y r1.x*r1.x]
-	float32 invMass = b->m_invMass;
-	float32 invI = b->m_invI;
+	b2float32 invMass = b->m_invMass;
+	b2float32 invI = b->m_invI;
 
 	b2Mat22 K1;
 	K1.col1.x = invMass;	K1.col2.x = 0.0f;
@@ -112,7 +112,7 @@ void b2MouseJoint::SolveVelocityConstraints(const b2TimeStep& step)
 
 	b2Vec2 oldForce = m_force;
 	m_force += force;
-	float32 forceMagnitude = m_force.Length();
+	b2float32 forceMagnitude = m_force.Length();
 	if (forceMagnitude > m_maxForce)
 	{
 		m_force *= m_maxForce / forceMagnitude;
@@ -139,7 +139,7 @@ b2Vec2 b2MouseJoint::GetReactionForce() const
 	return m_force;
 }
 
-float32 b2MouseJoint::GetReactionTorque() const
+b2float32 b2MouseJoint::GetReactionTorque() const
 {
 	return 0.0f;
 }

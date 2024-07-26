@@ -19,14 +19,14 @@
 #include <Box2D/Contrib/b2Triangle.h>
 
 //Constructor automatically fixes orientation to ccw
-b2Triangle::b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x3, float32 y3){
-	x = new float32[3];
-	y = new float32[3];
-	float32 dx1 = x2-x1;
-	float32 dx2 = x3-x1;
-	float32 dy1 = y2-y1;
-	float32 dy2 = y3-y1;
-	float32 cross = dx1*dy2-dx2*dy1;
+b2Triangle::b2Triangle(b2float32 x1, b2float32 y1, b2float32 x2, b2float32 y2, b2float32 x3, b2float32 y3){
+	x = new b2float32[3];
+	y = new b2float32[3];
+	b2float32 dx1 = x2-x1;
+	b2float32 dx2 = x3-x1;
+	b2float32 dy1 = y2-y1;
+	b2float32 dy2 = y3-y1;
+	b2float32 cross = dx1*dy2-dx2*dy1;
 	bool ccw = (cross>0);
 	if (ccw){
 		x[0] = x1; x[1] = x2; x[2] = x3;
@@ -38,8 +38,8 @@ b2Triangle::b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x
 }
     
 b2Triangle::b2Triangle(){
-	x = new float32[3];
-	y = new float32[3];
+	x = new b2float32[3];
+	y = new b2float32[3];
 }
 
 b2Triangle::~b2Triangle(){
@@ -54,24 +54,24 @@ void b2Triangle::Set(const b2Triangle& toMe) {
 	}
 }
 
-bool b2Triangle::IsInside(float32 _x, float32 _y){
+bool b2Triangle::IsInside(b2float32 _x, b2float32 _y){
 	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
 	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
 	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
 	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
 		
-		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
-		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
-		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
+		b2float32 vx2 = _x-x[0]; b2float32 vy2 = _y-y[0];
+		b2float32 vx1 = x[1]-x[0]; b2float32 vy1 = y[1]-y[0];
+		b2float32 vx0 = x[2]-x[0]; b2float32 vy0 = y[2]-y[0];
 		
-		float32 dot00 = vx0*vx0+vy0*vy0;
-		float32 dot01 = vx0*vx1+vy0*vy1;
-		float32 dot02 = vx0*vx2+vy0*vy2;
-		float32 dot11 = vx1*vx1+vy1*vy1;
-		float32 dot12 = vx1*vx2+vy1*vy2;
-		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
-		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
-		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
+		b2float32 dot00 = vx0*vx0+vy0*vy0;
+		b2float32 dot01 = vx0*vx1+vy0*vy1;
+		b2float32 dot02 = vx0*vx2+vy0*vy2;
+		b2float32 dot11 = vx1*vx1+vy1*vy1;
+		b2float32 dot12 = vx1*vx2+vy1*vy2;
+		b2float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
+		b2float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
+		b2float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
 		
 		return ((u>0)&&(v>0)&&(u+v<1));    
 }

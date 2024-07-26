@@ -48,13 +48,13 @@ enum b2LimitState
 struct b2Jacobian
 {
 	b2Vec2 linear1;
-	float32 angular1;
+	b2float32 angular1;
 	b2Vec2 linear2;
-	float32 angular2;
+	b2float32 angular2;
 
 	void SetZero();
-	void Set(const b2Vec2& x1, float32 a1, const b2Vec2& x2, float32 a2);
-	float32 Compute(const b2Vec2& x1, float32 a1, const b2Vec2& x2, float32 a2);
+	void Set(const b2Vec2& x1, b2float32 a1, const b2Vec2& x2, b2float32 a2);
+	b2float32 Compute(const b2Vec2& x1, b2float32 a1, const b2Vec2& x2, b2float32 a2);
 };
 
 /// A joint edge is used to connect bodies and joints together
@@ -123,7 +123,7 @@ public:
 	virtual b2Vec2 GetReactionForce() const = 0;
 
 	/// Get the reaction torque on body2.
-	virtual float32 GetReactionTorque() const = 0;
+	virtual b2float32 GetReactionTorque() const = 0;
 
 	/// Get the next joint the world joint list.
 	b2Joint* GetNext();
@@ -166,13 +166,13 @@ inline void b2Jacobian::SetZero()
 	linear2.SetZero(); angular2 = 0.0f;
 }
 
-inline void b2Jacobian::Set(const b2Vec2& x1, float32 a1, const b2Vec2& x2, float32 a2)
+inline void b2Jacobian::Set(const b2Vec2& x1, b2float32 a1, const b2Vec2& x2, b2float32 a2)
 {
 	linear1 = x1; angular1 = a1;
 	linear2 = x2; angular2 = a2;
 }
 
-inline float32 b2Jacobian::Compute(const b2Vec2& x1, float32 a1, const b2Vec2& x2, float32 a2)
+inline b2float32 b2Jacobian::Compute(const b2Vec2& x1, b2float32 a1, const b2Vec2& x2, b2float32 a2)
 {
 	return b2Dot(linear1, x1) + angular1 * a1 + b2Dot(linear2, x2) + angular2 * a2;
 }

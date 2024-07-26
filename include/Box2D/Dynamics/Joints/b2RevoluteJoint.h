@@ -59,26 +59,26 @@ struct b2RevoluteJointDef : public b2JointDef
 	b2Vec2 localAnchor2;
 
 	/// The body2 angle minus body1 angle in the reference state (radians).
-	float32 referenceAngle;
+	b2float32 referenceAngle;
 
 	/// A flag to enable joint limits.
 	bool enableLimit;
 
 	/// The lower angle for the joint limit (radians).
-	float32 lowerAngle;
+	b2float32 lowerAngle;
 
 	/// The upper angle for the joint limit (radians).
-	float32 upperAngle;
+	b2float32 upperAngle;
 
 	/// A flag to enable the joint motor.
 	bool enableMotor;
 
 	/// The desired motor speed. Usually in radians per second.
-	float32 motorSpeed;
+	b2float32 motorSpeed;
 
 	/// The maximum motor torque used to achieve the desired motor speed.
 	/// Usually in N-m.
-	float32 maxMotorTorque;
+	b2float32 maxMotorTorque;
 };
 
 /// A revolute joint constrains to bodies to share a common point while they
@@ -94,13 +94,13 @@ public:
 	b2Vec2 GetAnchor2() const;
 
 	b2Vec2 GetReactionForce() const;
-	float32 GetReactionTorque() const;
+	b2float32 GetReactionTorque() const;
 
 	/// Get the current joint angle in radians.
-	float32 GetJointAngle() const;
+	b2float32 GetJointAngle() const;
 
 	/// Get the current joint angle speed in radians per second.
-	float32 GetJointSpeed() const;
+	b2float32 GetJointSpeed() const;
 
 	/// Is the joint limit enabled?
 	bool IsLimitEnabled() const;
@@ -109,13 +109,13 @@ public:
 	void EnableLimit(bool flag);
 
 	/// Get the lower joint limit in radians.
-	float32 GetLowerLimit() const;
+	b2float32 GetLowerLimit() const;
 
 	/// Get the upper joint limit in radians.
-	float32 GetUpperLimit() const;
+	b2float32 GetUpperLimit() const;
 
 	/// Set the joint limits in radians.
-	void SetLimits(float32 lower, float32 upper);
+	void SetLimits(b2float32 lower, b2float32 upper);
 
 	/// Is the joint motor enabled?
 	bool IsMotorEnabled() const;
@@ -124,16 +124,16 @@ public:
 	void EnableMotor(bool flag);
 
 	/// Set the motor speed in radians per second.
-	void SetMotorSpeed(float32 speed);
+	void SetMotorSpeed(b2float32 speed);
 
 	/// Get the motor speed in radians per second.
-	float32 GetMotorSpeed() const;
+	b2float32 GetMotorSpeed() const;
 
 	/// Set the maximum motor torque, usually in N-m.
-	void SetMaxMotorTorque(float32 torque);
+	void SetMaxMotorTorque(b2float32 torque);
 
 	/// Get the current motor torque, usually in N-m.
-	float32 GetMotorTorque() const;
+	b2float32 GetMotorTorque() const;
 
 	//--------------- Internals Below -------------------
 
@@ -147,25 +147,25 @@ public:
 	b2Vec2 m_localAnchor1;	// relative
 	b2Vec2 m_localAnchor2;
 	b2Vec2 m_pivotForce;
-	float32 m_motorForce;
-	float32 m_limitForce;
-	float32 m_limitPositionImpulse;
+	b2float32 m_motorForce;
+	b2float32 m_limitForce;
+	b2float32 m_limitPositionImpulse;
 
 	b2Mat22 m_pivotMass;		// effective mass for point-to-point constraint.
-	float32 m_motorMass;	// effective mass for motor/limit angular constraint.
+	b2float32 m_motorMass;	// effective mass for motor/limit angular constraint.
 	
 	bool m_enableMotor;
-	float32 m_maxMotorTorque;
-	float32 m_motorSpeed;
+	b2float32 m_maxMotorTorque;
+	b2float32 m_motorSpeed;
 
 	bool m_enableLimit;
-	float32 m_referenceAngle;
-	float32 m_lowerAngle;
-	float32 m_upperAngle;
+	b2float32 m_referenceAngle;
+	b2float32 m_lowerAngle;
+	b2float32 m_upperAngle;
 	b2LimitState m_limitState;
 };
 
-inline float32 b2RevoluteJoint::GetMotorSpeed() const
+inline b2float32 b2RevoluteJoint::GetMotorSpeed() const
 {
 	return m_motorSpeed;
 }

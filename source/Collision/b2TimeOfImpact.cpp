@@ -22,32 +22,32 @@
 // This algorithm uses conservative advancement to compute the time of
 // impact (TOI) of two shapes.
 // Refs: Bullet, Young Kim
-float32 b2TimeOfImpact(const b2Shape* shape1, const b2Sweep& sweep1,
+b2float32 b2TimeOfImpact(const b2Shape* shape1, const b2Sweep& sweep1,
 					   const b2Shape* shape2, const b2Sweep& sweep2)
 {
-	float32 r1 = shape1->GetSweepRadius();
-	float32 r2 = shape2->GetSweepRadius();
+	b2float32 r1 = shape1->GetSweepRadius();
+	b2float32 r2 = shape2->GetSweepRadius();
 
 	b2Assert(sweep1.t0 == sweep2.t0);
 	b2Assert(1.0f - sweep1.t0 > FLOAT32_EPSILON);
 
-	float32 t0 = sweep1.t0;
+	b2float32 t0 = sweep1.t0;
 	b2Vec2 v1 = sweep1.c - sweep1.c0;
 	b2Vec2 v2 = sweep2.c - sweep2.c0;
-	float32 omega1 = sweep1.a - sweep1.a0;
-	float32 omega2 = sweep2.a - sweep2.a0;
+	b2float32 omega1 = sweep1.a - sweep1.a0;
+	b2float32 omega2 = sweep2.a - sweep2.a0;
 
-	float32 alpha = 0.0f;
+	b2float32 alpha = 0.0f;
 
 	b2Vec2 p1, p2;
 	const int32_t k_maxIterations = 20;	// TODO_ERIN b2Settings
 	int32_t iter = 0;
 	b2Vec2 normal = b2Vec2_zero;
-	float32 distance = 0.0f;
-	float32 targetDistance = 0.0f;
+	b2float32 distance = 0.0f;
+	b2float32 targetDistance = 0.0f;
 	for(;;)
 	{
-		float32 t = (1.0f - alpha) * t0 + alpha;
+		b2float32 t = (1.0f - alpha) * t0 + alpha;
 		b2XForm xf1, xf2;
 		sweep1.GetXForm(&xf1, t);
 		sweep2.GetXForm(&xf2, t);
@@ -78,7 +78,7 @@ float32 b2TimeOfImpact(const b2Shape* shape1, const b2Sweep& sweep1,
 		normal.Normalize();
 
 		// Compute upper bound on remaining movement.
-		float32 approachVelocityBound = b2Dot(normal, v1 - v2) + b2Abs(omega1) * r1 + b2Abs(omega2) * r2;
+		b2float32 approachVelocityBound = b2Dot(normal, v1 - v2) + b2Abs(omega1) * r1 + b2Abs(omega2) * r2;
 		if (b2Abs(approachVelocityBound) < FLOAT32_EPSILON)
 		{
 			alpha = 1.0f;
@@ -86,9 +86,9 @@ float32 b2TimeOfImpact(const b2Shape* shape1, const b2Sweep& sweep1,
 		}
 
 		// Get the conservative time increment. Don't advance all the way.
-		float32 dAlpha = (distance - targetDistance) / approachVelocityBound;
-		//float32 dt = (distance - 0.5f * b2_linearSlop) / approachVelocityBound;
-		float32 newAlpha = alpha + dAlpha;
+		b2float32 dAlpha = (distance - targetDistance) / approachVelocityBound;
+		//b2float32 dt = (distance - 0.5f * b2_linearSlop) / approachVelocityBound;
+		b2float32 newAlpha = alpha + dAlpha;
 
 		// The shapes may be moving apart or a safe distance apart.
 		if (newAlpha < 0.0f || 1.0f < newAlpha)

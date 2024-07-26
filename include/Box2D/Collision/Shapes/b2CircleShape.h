@@ -32,7 +32,7 @@ struct b2CircleDef : public b2ShapeDef
 	}
 
 	b2Vec2 localPosition;
-	float32 radius;
+	b2float32 radius;
 };
 
 /// A circle shape.
@@ -44,10 +44,10 @@ public:
 
 	/// @see b2Shape::TestSegment
 	bool TestSegment(	const b2XForm& transform,
-						float32* lambda,
+						b2float32* lambda,
 						b2Vec2* normal,
 						const b2Segment& segment,
-						float32 maxLambda) const;
+						b2float32 maxLambda) const;
 
 	/// @see b2Shape::ComputeAABB
 	void ComputeAABB(b2AABB* aabb, const b2XForm& transform) const;
@@ -64,7 +64,7 @@ public:
 	const b2Vec2& GetLocalPosition() const;
 
 	/// Get the radius of this circle.
-	float32 GetRadius() const;
+	b2float32 GetRadius() const;
 
 	//--------------- Internals Below -------------------
 
@@ -74,7 +74,7 @@ public:
 
 	// Local position in parent body
 	b2Vec2 m_localPosition;
-	float32 m_radius;
+	b2float32 m_radius;
 };
 
 inline const b2Vec2& b2CircleShape::GetLocalPosition() const
@@ -82,7 +82,7 @@ inline const b2Vec2& b2CircleShape::GetLocalPosition() const
 	return m_localPosition;
 }
 
-inline float32 b2CircleShape::GetRadius() const
+inline b2float32 b2CircleShape::GetRadius() const
 {
 	return m_radius;
 }

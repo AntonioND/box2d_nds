@@ -59,7 +59,7 @@ void b2DistanceJoint::InitVelocityConstraints(const b2TimeStep& step)
 	m_u = b2->m_sweep.c + r2 - b1->m_sweep.c - r1;
 
 	// Handle singularity.
-	float32 length = m_u.Length();
+	b2float32 length = m_u.Length();
 	if (length > b2_linearSlop)
 	{
 		m_u *= 1.0f / length;
@@ -69,8 +69,8 @@ void b2DistanceJoint::InitVelocityConstraints(const b2TimeStep& step)
 		m_u.Set(0.0f, 0.0f);
 	}
 
-	float32 cr1u = b2Cross(r1, m_u);
-	float32 cr2u = b2Cross(r2, m_u);
+	b2float32 cr1u = b2Cross(r1, m_u);
+	b2float32 cr2u = b2Cross(r2, m_u);
 	m_mass = b1->m_invMass + b1->m_invI * cr1u * cr1u + b2->m_invMass + b2->m_invI * cr2u * cr2u;
 	b2Assert(m_mass > FLOAT32_EPSILON);
 	m_mass = 1.0f / m_mass;
@@ -100,8 +100,8 @@ void b2DistanceJoint::SolveVelocityConstraints(const b2TimeStep& step)
 	// Cdot = dot(u, v + cross(w, r))
 	b2Vec2 v1 = b1->m_linearVelocity + b2Cross(b1->m_angularVelocity, r1);
 	b2Vec2 v2 = b2->m_linearVelocity + b2Cross(b2->m_angularVelocity, r2);
-	float32 Cdot = b2Dot(m_u, v2 - v1);
-	float32 force = -step.inv_dt * m_mass * Cdot;
+	b2float32 Cdot = b2Dot(m_u, v2 - v1);
+	b2float32 force = -step.inv_dt * m_mass * Cdot;
 	m_force += force;
 
 	b2Vec2 P = step.dt * force * m_u;
@@ -121,11 +121,11 @@ bool b2DistanceJoint::SolvePositionConstraints()
 
 	b2Vec2 d = b2->m_sweep.c + r2 - b1->m_sweep.c - r1;
 
-	float32 length = d.Normalize();
-	float32 C = length - m_length;
+	b2float32 length = d.Normalize();
+	b2float32 C = length - m_length;
 	C = b2Clamp(C, -b2_maxLinearCorrection, b2_maxLinearCorrection);
 
-	float32 impulse = -m_mass * C;
+	b2float32 impulse = -m_mass * C;
 	m_u = d;
 	b2Vec2 P = impulse * m_u;
 
@@ -156,7 +156,7 @@ b2Vec2 b2DistanceJoint::GetReactionForce() const
 	return F;
 }
 
-float32 b2DistanceJoint::GetReactionTorque() const
+b2float32 b2DistanceJoint::GetReactionTorque() const
 {
 	return 0.0f;
 }

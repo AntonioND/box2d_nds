@@ -42,7 +42,7 @@
 void b2PulleyJointDef::Initialize(b2Body* b1, b2Body* b2,
 				const b2Vec2& ga1, const b2Vec2& ga2,
 				const b2Vec2& anchor1, const b2Vec2& anchor2,
-				float32 r)
+				b2float32 r)
 {
 	body1 = b1;
 	body2 = b2;
@@ -56,7 +56,7 @@ void b2PulleyJointDef::Initialize(b2Body* b1, b2Body* b2,
 	length2 = d2.Length();
 	ratio = r;
 	b2Assert(ratio > FLOAT32_EPSILON);
-	float32 C = length1 + ratio * length2;
+	b2float32 C = length1 + ratio * length2;
 	maxLength1 = C - ratio * b2_minPulleyLength;
 	maxLength2 = (C - b2_minPulleyLength) / ratio;
 }
@@ -101,8 +101,8 @@ void b2PulleyJoint::InitVelocityConstraints(const b2TimeStep& step)
 	m_u1 = p1 - s1;
 	m_u2 = p2 - s2;
 
-	float32 length1 = m_u1.Length();
-	float32 length2 = m_u2.Length();
+	b2float32 length1 = m_u1.Length();
+	b2float32 length2 = m_u2.Length();
 
 	if (length1 > b2_linearSlop)
 	{
@@ -122,7 +122,7 @@ void b2PulleyJoint::InitVelocityConstraints(const b2TimeStep& step)
 		m_u2.SetZero();
 	}
 
-	float32 C = m_constant - length1 - m_ratio * length2;
+	b2float32 C = m_constant - length1 - m_ratio * length2;
 	if (C > 0.0f)
 	{
 		m_state = e_inactiveLimit;
@@ -157,8 +157,8 @@ void b2PulleyJoint::InitVelocityConstraints(const b2TimeStep& step)
 	}
 
 	// Compute effective mass.
-	float32 cr1u1 = b2Cross(r1, m_u1);
-	float32 cr2u2 = b2Cross(r2, m_u2);
+	b2float32 cr1u1 = b2Cross(r1, m_u1);
+	b2float32 cr2u2 = b2Cross(r2, m_u2);
 
 	m_limitMass1 = b1->m_invMass + b1->m_invI * cr1u1 * cr1u1;
 	m_limitMass2 = b2->m_invMass + b2->m_invI * cr2u2 * cr2u2;
@@ -201,9 +201,9 @@ void b2PulleyJoint::SolveVelocityConstraints(const b2TimeStep& step)
 		b2Vec2 v1 = b1->m_linearVelocity + b2Cross(b1->m_angularVelocity, r1);
 		b2Vec2 v2 = b2->m_linearVelocity + b2Cross(b2->m_angularVelocity, r2);
 
-		float32 Cdot = -b2Dot(m_u1, v1) - m_ratio * b2Dot(m_u2, v2);
-		float32 force = -step.inv_dt * m_pulleyMass * Cdot;
-		float32 oldForce = m_force;
+		b2float32 Cdot = -b2Dot(m_u1, v1) - m_ratio * b2Dot(m_u2, v2);
+		b2float32 force = -step.inv_dt * m_pulleyMass * Cdot;
+		b2float32 oldForce = m_force;
 		m_force = b2Max(0.0f, m_force + force);
 		force = m_force - oldForce;
 
@@ -219,9 +219,9 @@ void b2PulleyJoint::SolveVelocityConstraints(const b2TimeStep& step)
 	{
 		b2Vec2 v1 = b1->m_linearVelocity + b2Cross(b1->m_angularVelocity, r1);
 
-		float32 Cdot = -b2Dot(m_u1, v1);
-		float32 force = -step.inv_dt * m_limitMass1 * Cdot;
-		float32 oldForce = m_limitForce1;
+		b2float32 Cdot = -b2Dot(m_u1, v1);
+		b2float32 force = -step.inv_dt * m_limitMass1 * Cdot;
+		b2float32 oldForce = m_limitForce1;
 		m_limitForce1 = b2Max(0.0f, m_limitForce1 + force);
 		force = m_limitForce1 - oldForce;
 
@@ -234,9 +234,9 @@ void b2PulleyJoint::SolveVelocityConstraints(const b2TimeStep& step)
 	{
 		b2Vec2 v2 = b2->m_linearVelocity + b2Cross(b2->m_angularVelocity, r2);
 
-		float32 Cdot = -b2Dot(m_u2, v2);
-		float32 force = -step.inv_dt * m_limitMass2 * Cdot;
-		float32 oldForce = m_limitForce2;
+		b2float32 Cdot = -b2Dot(m_u2, v2);
+		b2float32 force = -step.inv_dt * m_limitMass2 * Cdot;
+		b2float32 oldForce = m_limitForce2;
 		m_limitForce2 = b2Max(0.0f, m_limitForce2 + force);
 		force = m_limitForce2 - oldForce;
 
@@ -254,7 +254,7 @@ bool b2PulleyJoint::SolvePositionConstraints()
 	b2Vec2 s1 = m_ground->m_xf.position + m_groundAnchor1;
 	b2Vec2 s2 = m_ground->m_xf.position + m_groundAnchor2;
 
-	float32 linearError = 0.0f;
+	b2float32 linearError = 0.0f;
 
 	if (m_state == e_atUpperLimit)
 	{
@@ -268,8 +268,8 @@ bool b2PulleyJoint::SolvePositionConstraints()
 		m_u1 = p1 - s1;
 		m_u2 = p2 - s2;
 
-		float32 length1 = m_u1.Length();
-		float32 length2 = m_u2.Length();
+		b2float32 length1 = m_u1.Length();
+		b2float32 length2 = m_u2.Length();
 
 		if (length1 > b2_linearSlop)
 		{
@@ -289,12 +289,12 @@ bool b2PulleyJoint::SolvePositionConstraints()
 			m_u2.SetZero();
 		}
 
-		float32 C = m_constant - length1 - m_ratio * length2;
+		b2float32 C = m_constant - length1 - m_ratio * length2;
 		linearError = b2Max(linearError, -C);
 
 		C = b2Clamp(C + b2_linearSlop, -b2_maxLinearCorrection, 0.0f);
-		float32 impulse = -m_pulleyMass * C;
-		float32 oldImpulse = m_positionImpulse;
+		b2float32 impulse = -m_pulleyMass * C;
+		b2float32 oldImpulse = m_positionImpulse;
 		m_positionImpulse = b2Max(0.0f, m_positionImpulse + impulse);
 		impulse = m_positionImpulse - oldImpulse;
 
@@ -316,7 +316,7 @@ bool b2PulleyJoint::SolvePositionConstraints()
 		b2Vec2 p1 = b1->m_sweep.c + r1;
 
 		m_u1 = p1 - s1;
-		float32 length1 = m_u1.Length();
+		b2float32 length1 = m_u1.Length();
 
 		if (length1 > b2_linearSlop)
 		{
@@ -327,11 +327,11 @@ bool b2PulleyJoint::SolvePositionConstraints()
 			m_u1.SetZero();
 		}
 
-		float32 C = m_maxLength1 - length1;
+		b2float32 C = m_maxLength1 - length1;
 		linearError = b2Max(linearError, -C);
 		C = b2Clamp(C + b2_linearSlop, -b2_maxLinearCorrection, 0.0f);
-		float32 impulse = -m_limitMass1 * C;
-		float32 oldLimitPositionImpulse = m_limitPositionImpulse1;
+		b2float32 impulse = -m_limitMass1 * C;
+		b2float32 oldLimitPositionImpulse = m_limitPositionImpulse1;
 		m_limitPositionImpulse1 = b2Max(0.0f, m_limitPositionImpulse1 + impulse);
 		impulse = m_limitPositionImpulse1 - oldLimitPositionImpulse;
 
@@ -348,7 +348,7 @@ bool b2PulleyJoint::SolvePositionConstraints()
 		b2Vec2 p2 = b2->m_sweep.c + r2;
 
 		m_u2 = p2 - s2;
-		float32 length2 = m_u2.Length();
+		b2float32 length2 = m_u2.Length();
 
 		if (length2 > b2_linearSlop)
 		{
@@ -359,11 +359,11 @@ bool b2PulleyJoint::SolvePositionConstraints()
 			m_u2.SetZero();
 		}
 
-		float32 C = m_maxLength2 - length2;
+		b2float32 C = m_maxLength2 - length2;
 		linearError = b2Max(linearError, -C);
 		C = b2Clamp(C + b2_linearSlop, -b2_maxLinearCorrection, 0.0f);
-		float32 impulse = -m_limitMass2 * C;
-		float32 oldLimitPositionImpulse = m_limitPositionImpulse2;
+		b2float32 impulse = -m_limitMass2 * C;
+		b2float32 oldLimitPositionImpulse = m_limitPositionImpulse2;
 		m_limitPositionImpulse2 = b2Max(0.0f, m_limitPositionImpulse2 + impulse);
 		impulse = m_limitPositionImpulse2 - oldLimitPositionImpulse;
 
@@ -393,7 +393,7 @@ b2Vec2 b2PulleyJoint::GetReactionForce() const
 	return F;
 }
 
-float32 b2PulleyJoint::GetReactionTorque() const
+b2float32 b2PulleyJoint::GetReactionTorque() const
 {
 	return 0.0f;
 }
@@ -408,7 +408,7 @@ b2Vec2 b2PulleyJoint::GetGroundAnchor2() const
 	return m_ground->m_xf.position + m_groundAnchor2;
 }
 
-float32 b2PulleyJoint::GetLength1() const
+b2float32 b2PulleyJoint::GetLength1() const
 {
 	b2Vec2 p = m_body1->GetWorldPoint(m_localAnchor1);
 	b2Vec2 s = m_ground->m_xf.position + m_groundAnchor1;
@@ -416,7 +416,7 @@ float32 b2PulleyJoint::GetLength1() const
 	return d.Length();
 }
 
-float32 b2PulleyJoint::GetLength2() const
+b2float32 b2PulleyJoint::GetLength2() const
 {
 	b2Vec2 p = m_body2->GetWorldPoint(m_localAnchor2);
 	b2Vec2 s = m_ground->m_xf.position + m_groundAnchor2;
@@ -424,7 +424,7 @@ float32 b2PulleyJoint::GetLength2() const
 	return d.Length();
 }
 
-float32 b2PulleyJoint::GetRatio() const
+b2float32 b2PulleyJoint::GetRatio() const
 {
 	return m_ratio;
 }

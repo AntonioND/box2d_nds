@@ -22,14 +22,14 @@ const b2Vec2 b2Vec2_zero(0.0f, 0.0f);
 const b2Mat22 b2Mat22_identity(1.0f, 0.0f, 0.0f, 1.0f);
 const b2XForm b2XForm_identity(b2Vec2_zero, b2Mat22_identity);
 
-void b2Sweep::GetXForm(b2XForm* xf, float32 t) const
+void b2Sweep::GetXForm(b2XForm* xf, b2float32 t) const
 {
 	// center = p + R * localCenter
 	if (1.0f - t0 > FLOAT32_EPSILON)
 	{
-		float32 alpha = (t - t0) / (1.0f - t0);
+		b2float32 alpha = (t - t0) / (1.0f - t0);
 		xf->position = (1.0f - alpha) * c0 + alpha * c;
-		float32 angle = (1.0f - alpha) * a0 + alpha * a;
+		b2float32 angle = (1.0f - alpha) * a0 + alpha * a;
 		xf->R.Set(angle);
 	}
 	else
@@ -42,11 +42,11 @@ void b2Sweep::GetXForm(b2XForm* xf, float32 t) const
 	xf->position -= b2Mul(xf->R, localCenter);
 }
 
-void b2Sweep::Advance(float32 t)
+void b2Sweep::Advance(b2float32 t)
 {
 	if (t0 < t && 1.0f - t0 > FLOAT32_EPSILON)
 	{
-		float32 alpha = (t - t0) / (1.0f - t0);
+		b2float32 alpha = (t - t0) / (1.0f - t0);
 		c0 = (1.0f - alpha) * c0 + alpha * c;
 		a0 = (1.0f - alpha) * a0 + alpha * a;
 		t0 = t;
