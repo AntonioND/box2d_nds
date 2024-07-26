@@ -21,7 +21,7 @@
 #include <Box2D/Dynamics/Joints/b2Joint.h>
 #include <Box2D/Collision/Shapes/b2Shape.h>
 
-b2Body::b2Body(const b2BodyDef* bd, uint16 type, b2World* world)
+b2Body::b2Body(const b2BodyDef* bd, uint16_t type, b2World* world)
 {
 	b2Assert(world->m_lock == false);
 	b2Assert(type < e_maxTypes);

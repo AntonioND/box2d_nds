@@ -62,7 +62,7 @@ void b2PolygonContact::Evaluate(b2ContactListener* listener)
 	{
 		// Match old contact ids to new contact ids and copy the
 		// stored impulses to warm start the solver.
-		for (int32 i = 0; i < m_manifold.pointCount; ++i)
+		for (int32_t i = 0; i < m_manifold.pointCount; ++i)
 		{
 			b2ManifoldPoint* cp = m_manifold.points + i;
 			cp->normalForce = 0.0f;
@@ -70,7 +70,7 @@ void b2PolygonContact::Evaluate(b2ContactListener* listener)
 			bool matched = false;
 			b2ContactID id = cp->id;
 
-			for (int32 j = 0; j < m0.pointCount; ++j)
+			for (int32_t j = 0; j < m0.pointCount; ++j)
 			{
 				if (match[j] == true)
 					continue;
@@ -110,7 +110,7 @@ void b2PolygonContact::Evaluate(b2ContactListener* listener)
 		cp.shape1 = m_shape1;
 		cp.shape2 = m_shape2;
 		cp.normal = m0.normal;
-		for (int32 i = 0; i < m0.pointCount; ++i)
+		for (int32_t i = 0; i < m0.pointCount; ++i)
 		{
 			if (match[i])
 			{

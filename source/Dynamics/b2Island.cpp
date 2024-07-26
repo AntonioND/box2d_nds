@@ -104,9 +104,9 @@ Baumgarte method in performance critical scenarios.
 */
 
 b2Island::b2Island(
-	int32 bodyCapacity,
-	int32 contactCapacity,
-	int32 jointCapacity,
+	int32_t bodyCapacity,
+	int32_t contactCapacity,
+	int32_t jointCapacity,
 	b2StackAllocator* allocator,
 	b2ContactListener* listener)
 {
@@ -138,7 +138,7 @@ b2Island::~b2Island()
 void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correctPositions, bool allowSleep)
 {
 	// Integrate velocities and apply damping.
-	for (int32 i = 0; i < m_bodyCount; ++i)
+	for (int32_t i = 0; i < m_bodyCount; ++i)
 	{
 		b2Body* b = m_bodies[i];
 
@@ -194,17 +194,17 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 	// Initialize velocity constraints.
 	contactSolver.InitVelocityConstraints();
 
-	for (int32 i = 0; i < m_jointCount; ++i)
+	for (int32_t i = 0; i < m_jointCount; ++i)
 	{
 		m_joints[i]->InitVelocityConstraints(step);
 	}
 
 	// Solve velocity constraints.
-	for (int32 i = 0; i < step.maxIterations; ++i)
+	for (int32_t i = 0; i < step.maxIterations; ++i)
 	{
 		contactSolver.SolveVelocityConstraints();
 
-		for (int32 j = 0; j < m_jointCount; ++j)
+		for (int32_t j = 0; j < m_jointCount; ++j)
 		{
 			m_joints[j]->SolveVelocityConstraints(step);
 		}
@@ -214,7 +214,7 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 	contactSolver.FinalizeVelocityConstraints();
 
 	// Integrate positions.
-	for (int32 i = 0; i < m_bodyCount; ++i)
+	for (int32_t i = 0; i < m_bodyCount; ++i)
 	{
 		b2Body* b = m_bodies[i];
 
@@ -239,7 +239,7 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 	{
 		// Initialize position constraints.
 		// Contacts don't need initialization.
-		for (int32 i = 0; i < m_jointCount; ++i)
+		for (int32_t i = 0; i < m_jointCount; ++i)
 		{
 			m_joints[i]->InitPositionConstraints();
 		}
@@ -272,7 +272,7 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 		const float32 linTolSqr = b2_linearSleepTolerance * b2_linearSleepTolerance;
 		const float32 angTolSqr = b2_angularSleepTolerance * b2_angularSleepTolerance;
 
-		for (int32 i = 0; i < m_bodyCount; ++i)
+		for (int32_t i = 0; i < m_bodyCount; ++i)
 		{
 			b2Body* b = m_bodies[i];
 			if (b->m_invMass == 0.0f)
@@ -302,7 +302,7 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 
 		if (minSleepTime >= b2_timeToSleep)
 		{
-			for (int32 i = 0; i < m_bodyCount; ++i)
+			for (int32_t i = 0; i < m_bodyCount; ++i)
 			{
 				b2Body* b = m_bodies[i];
 				b->m_flags |= b2Body::e_sleepFlag;
@@ -320,7 +320,7 @@ void b2Island::SolveTOI(const b2TimeStep& subStep)
 	// No warm starting needed for TOI events.
 
 	// Solve velocity constraints.
-	for (int32 i = 0; i < subStep.maxIterations; ++i)
+	for (int32_t i = 0; i < subStep.maxIterations; ++i)
 	{
 		contactSolver.SolveVelocityConstraints();
 	}
@@ -329,7 +329,7 @@ void b2Island::SolveTOI(const b2TimeStep& subStep)
 	// because they can be quite large.
 
 	// Integrate positions.
-	for (int32 i = 0; i < m_bodyCount; ++i)
+	for (int32_t i = 0; i < m_bodyCount; ++i)
 	{
 		b2Body* b = m_bodies[i];
 
@@ -352,7 +352,7 @@ void b2Island::SolveTOI(const b2TimeStep& subStep)
 
 	// Solve position constraints.
 	const float32 k_toiBaumgarte = 0.75f;
-	for (int32 i = 0; i < subStep.maxIterations; ++i)
+	for (int32_t i = 0; i < subStep.maxIterations; ++i)
 	{
 		bool contactsOkay = contactSolver.SolvePositionConstraints(k_toiBaumgarte);
 		if (contactsOkay)
@@ -371,7 +371,7 @@ void b2Island::Report(b2ContactConstraint* constraints)
 		return;
 	}
 
-	for (int32 i = 0; i < m_contactCount; ++i)
+	for (int32_t i = 0; i < m_contactCount; ++i)
 	{
 		b2Contact* c = m_contacts[i];
 		b2ContactConstraint* cc = constraints + i;
@@ -379,13 +379,13 @@ void b2Island::Report(b2ContactConstraint* constraints)
 		cp.shape1 = c->GetShape1();
 		cp.shape2 = c->GetShape2();
 		b2Body* b1 = cp.shape1->GetBody();
-		int32 manifoldCount = c->GetManifoldCount();
+		int32_t manifoldCount = c->GetManifoldCount();
 		b2Manifold* manifolds = c->GetManifolds();
-		for (int32 j = 0; j < manifoldCount; ++j)
+		for (int32_t j = 0; j < manifoldCount; ++j)
 		{
 			b2Manifold* manifold = manifolds + j;
 			cp.normal = manifold->normal;
-			for (int32 k = 0; k < manifold->pointCount; ++k)
+			for (int32_t k = 0; k < manifold->pointCount; ++k)
 			{
 				b2ManifoldPoint* point = manifold->points + k;
 				b2ContactConstraintPoint* ccp = cc->points + k;

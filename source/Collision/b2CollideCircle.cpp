@@ -78,10 +78,10 @@ void b2CollidePolygonAndCircle(
 	b2Vec2 cLocal = b2MulT(xf1, c);
 
 	// Find the min separating edge.
-	int32 normalIndex = 0;
+	int32_t normalIndex = 0;
 	float32 separation = -FLOAT32_MAX;
 	const float32 radius = circle->m_radius;
-	for (int32 i = 0; i < polygon->m_vertexCount; ++i)
+	for (int32_t i = 0; i < polygon->m_vertexCount; ++i)
 	{
 		float32 s = b2Dot(polygon->m_normals[i], cLocal - polygon->m_vertices[i]);
 
@@ -103,7 +103,7 @@ void b2CollidePolygonAndCircle(
 	{
 		manifold->pointCount = 1;
 		manifold->normal = b2Mul(xf1.R, polygon->m_normals[normalIndex]);
-		manifold->points[0].id.features.incidentEdge = (uint8)normalIndex;
+		manifold->points[0].id.features.incidentEdge = (uint8_t)normalIndex;
 		manifold->points[0].id.features.incidentVertex = b2_nullFeature;
 		manifold->points[0].id.features.referenceFace = b2_nullFeature;
 		manifold->points[0].id.features.flip = 0;
@@ -115,8 +115,8 @@ void b2CollidePolygonAndCircle(
 	}
 
 	// Project the circle center onto the edge segment.
-	int32 vertIndex1 = normalIndex;
-	int32 vertIndex2 = vertIndex1 + 1 < polygon->m_vertexCount ? vertIndex1 + 1 : 0;
+	int32_t vertIndex1 = normalIndex;
+	int32_t vertIndex2 = vertIndex1 + 1 < polygon->m_vertexCount ? vertIndex1 + 1 : 0;
 	b2Vec2 e = polygon->m_vertices[vertIndex2] - polygon->m_vertices[vertIndex1];
 
 	float32 length = e.Normalize();
@@ -134,7 +134,7 @@ void b2CollidePolygonAndCircle(
 		manifold->pointCount = 1;
 		manifold->normal = b2Mul(xf1.R, d);
 		manifold->points[0].id.features.incidentEdge = b2_nullFeature;
-		manifold->points[0].id.features.incidentVertex = (uint8)vertIndex1;
+		manifold->points[0].id.features.incidentVertex = (uint8_t)vertIndex1;
 		manifold->points[0].id.features.referenceFace = b2_nullFeature;
 		manifold->points[0].id.features.flip = 0;
 		b2Vec2 position = c - radius * manifold->normal;
@@ -154,17 +154,17 @@ void b2CollidePolygonAndCircle(
 	if (u <= 0.0f)
 	{
 		p = polygon->m_vertices[vertIndex1];
-		manifold->points[0].id.features.incidentVertex = (uint8)vertIndex1;
+		manifold->points[0].id.features.incidentVertex = (uint8_t)vertIndex1;
 	}
 	else if (u >= length)
 	{
 		p = polygon->m_vertices[vertIndex2];
-		manifold->points[0].id.features.incidentVertex = (uint8)vertIndex2;
+		manifold->points[0].id.features.incidentVertex = (uint8_t)vertIndex2;
 	}
 	else
 	{
 		p = polygon->m_vertices[vertIndex1] + u * e;
-		manifold->points[0].id.features.incidentEdge = (uint8)vertIndex1;
+		manifold->points[0].id.features.incidentEdge = (uint8_t)vertIndex1;
 	}
 
 	b2Vec2 d = cLocal - p;

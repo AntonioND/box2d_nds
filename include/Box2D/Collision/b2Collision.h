@@ -30,9 +30,9 @@ class b2Shape;
 class b2CircleShape;
 class b2PolygonShape;
 
-const uint8 b2_nullFeature = UCHAR_MAX;
-const uint8 b2_newPoint = 0x02;
-const uint8 b2_oldPoint = 0x04;
+const uint8_t b2_nullFeature = UCHAR_MAX;
+const uint8_t b2_newPoint = 0x02;
+const uint8_t b2_oldPoint = 0x04;
 
 /// Contact ids to facilitate warm starting.
 union b2ContactID
@@ -40,12 +40,12 @@ union b2ContactID
 	/// The features that intersect to form the contact point
 	struct Features
 	{
-		uint8 referenceFace;	///< The edge that defines the contact normal
-		uint8 incidentEdge;		///< The edge most anti-parallel to the reference face
-		uint8 incidentVertex;	///< The vertex (0 or 1) on the incident edge that was clipped
-		uint8 flip;				///< Indicates that the contact normal should be flipped
+		uint8_t referenceFace;	///< The edge that defines the contact normal
+		uint8_t incidentEdge;		///< The edge most anti-parallel to the reference face
+		uint8_t incidentVertex;	///< The vertex (0 or 1) on the incident edge that was clipped
+		uint8_t flip;				///< Indicates that the contact normal should be flipped
 	} features;
-	uint32 key;					///< Used to quickly compare contact ids.
+	uint32_t key;					///< Used to quickly compare contact ids.
 };
 
 /// A manifold point is a contact point belonging to a contact
@@ -68,7 +68,7 @@ struct b2Manifold
 {
 	b2ManifoldPoint points[b2_maxManifoldPoints];	///< the points of contact
 	b2Vec2 normal;	///< the shared unit normal vector
-	int32 pointCount;	///< the number of manifold points
+	int32_t pointCount;	///< the number of manifold points
 };
 
 /// A line segment.

@@ -35,13 +35,13 @@ void b2PolygonDef::SetAsBox(float32 hx, float32 hy, const b2Vec2& center, float3
 	xf.position = center;
 	xf.R.Set(angle);
 
-	for (int32 i = 0; i < vertexCount; ++i)
+	for (int32_t i = 0; i < vertexCount; ++i)
 	{
 		vertices[i] = b2Mul(xf, vertices[i]);
 	}
 }
 
-static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32 count)
+static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32_t count)
 {
 	b2Assert(count >= 3);
 
@@ -53,7 +53,7 @@ static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32 count)
 	b2Vec2 pRef(0.0f, 0.0f);
 #if 0
 	// This code would put the reference point inside the polygon.
-	for (int32 i = 0; i < count; ++i)
+	for (int32_t i = 0; i < count; ++i)
 	{
 		pRef += vs[i];
 	}
@@ -62,7 +62,7 @@ static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32 count)
 
 	const float32 inv3 = 1.0f / 3.0f;
 
-	for (int32 i = 0; i < count; ++i)
+	for (int32_t i = 0; i < count; ++i)
 	{
 		// Triangle vertices.
 		b2Vec2 p1 = pRef;
@@ -88,11 +88,11 @@ static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32 count)
 }
 
 // http://www.geometrictools.com/Documentation/MinimumAreaRectangle.pdf
-static void ComputeOBB(b2OBB* obb, const b2Vec2* vs, int32 count)
+static void ComputeOBB(b2OBB* obb, const b2Vec2* vs, int32_t count)
 {
 	b2Assert(count <= b2_maxPolygonVertices);
 	b2Vec2 p[b2_maxPolygonVertices + 1];
-	for (int32 i = 0; i < count; ++i)
+	for (int32_t i = 0; i < count; ++i)
 	{
 		p[i] = vs[i];
 	}
@@ -100,7 +100,7 @@ static void ComputeOBB(b2OBB* obb, const b2Vec2* vs, int32 count)
 
 	float32 minArea = FLOAT32_MAX;
 	
-	for (int32 i = 1; i <= count; ++i)
+	for (int32_t i = 1; i <= count; ++i)
 	{
 		b2Vec2 root = p[i-1];
 		b2Vec2 ux = p[i] - root;
@@ -110,7 +110,7 @@ static void ComputeOBB(b2OBB* obb, const b2Vec2* vs, int32 count)
 		b2Vec2 lower(FLOAT32_MAX, FLOAT32_MAX);
 		b2Vec2 upper(-FLOAT32_MAX, -FLOAT32_MAX);
 
-		for (int32 j = 0; j < count; ++j)
+		for (int32_t j = 0; j < count; ++j)
 		{
 			b2Vec2 d = p[j] - root;
 			b2Vec2 r;
@@ -147,16 +147,16 @@ b2PolygonShape::b2PolygonShape(const b2ShapeDef* def)
 	b2Assert(3 <= m_vertexCount && m_vertexCount <= b2_maxPolygonVertices);
 
 	// Copy vertices.
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
 		m_vertices[i] = poly->vertices[i];
 	}
 
 	// Compute normals. Ensure the edges have non-zero length.
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
-		int32 i1 = i;
-		int32 i2 = i + 1 < m_vertexCount ? i + 1 : 0;
+		int32_t i1 = i;
+		int32_t i2 = i + 1 < m_vertexCount ? i + 1 : 0;
 		b2Vec2 edge = m_vertices[i2] - m_vertices[i1];
 		b2Assert(edge.LengthSquared() > FLOAT32_EPSILON * FLOAT32_EPSILON);
 		m_normals[i] = b2Cross(edge, 1.0f);
@@ -165,9 +165,9 @@ b2PolygonShape::b2PolygonShape(const b2ShapeDef* def)
 
 #ifdef _DEBUG
 	// Ensure the polygon is convex.
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
-		for (int32 j = 0; j < m_vertexCount; ++j)
+		for (int32_t j = 0; j < m_vertexCount; ++j)
 		{
 			// Don't check vertices on the current edge.
 			if (j == i || j == (i + 1) % m_vertexCount)
@@ -183,7 +183,7 @@ b2PolygonShape::b2PolygonShape(const b2ShapeDef* def)
 	}
 
 	// Ensure the polygon is counter-clockwise.
-	for (int32 i = 1; i < m_vertexCount; ++i)
+	for (int32_t i = 1; i < m_vertexCount; ++i)
 	{
 		float32 cross = b2Cross(m_normals[i-1], m_normals[i]);
 
@@ -204,10 +204,10 @@ b2PolygonShape::b2PolygonShape(const b2ShapeDef* def)
 
 	// Create core polygon shape by shifting edges inward.
 	// Also compute the min/max radius for CCD.
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
-		int32 i1 = i - 1 >= 0 ? i - 1 : m_vertexCount - 1;
-		int32 i2 = i;
+		int32_t i1 = i - 1 >= 0 ? i - 1 : m_vertexCount - 1;
+		int32_t i2 = i;
 
 		b2Vec2 n1 = m_normals[i1];
 		b2Vec2 n2 = m_normals[i2];
@@ -235,7 +235,7 @@ void b2PolygonShape::UpdateSweepRadius(const b2Vec2& center)
 	// Update the sweep radius (maximum radius) as measured from
 	// a local center point.
 	m_sweepRadius = 0.0f;
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
 		b2Vec2 d = m_coreVertices[i] - center;
 		m_sweepRadius = b2Max(m_sweepRadius, d.Length());
@@ -246,7 +246,7 @@ bool b2PolygonShape::TestPoint(const b2XForm& xf, const b2Vec2& p) const
 {
 	b2Vec2 pLocal = b2MulT(xf.R, p - xf.position);
 
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
 		float32 dot = b2Dot(m_normals[i], pLocal - m_vertices[i]);
 		if (dot > 0.0f)
@@ -270,9 +270,9 @@ bool b2PolygonShape::TestSegment(
 	b2Vec2 p1 = b2MulT(xf.R, segment.p1 - xf.position);
 	b2Vec2 p2 = b2MulT(xf.R, segment.p2 - xf.position);
 	b2Vec2 d = p2 - p1;
-	int32 index = -1;
+	int32_t index = -1;
 
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
 		// p = p1 + a * d
 		// dot(normal, p - v) = 0
@@ -368,7 +368,7 @@ void b2PolygonShape::ComputeMass(b2MassData* massData) const
 	b2Vec2 pRef(0.0f, 0.0f);
 #if 0
 	// This code would put the reference point inside the polygon.
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
 		pRef += m_vertices[i];
 	}
@@ -377,7 +377,7 @@ void b2PolygonShape::ComputeMass(b2MassData* massData) const
 
 	const float32 k_inv3 = 1.0f / 3.0f;
 
-	for (int32 i = 0; i < m_vertexCount; ++i)
+	for (int32_t i = 0; i < m_vertexCount; ++i)
 	{
 		// Triangle vertices.
 		b2Vec2 p1 = pRef;
@@ -426,9 +426,9 @@ b2Vec2 b2PolygonShape::Support(const b2XForm& xf, const b2Vec2& d) const
 {
 	b2Vec2 dLocal = b2MulT(xf.R, d);
 
-	int32 bestIndex = 0;
+	int32_t bestIndex = 0;
 	float32 bestValue = b2Dot(m_coreVertices[0], dLocal);
-	for (int32 i = 1; i < m_vertexCount; ++i)
+	for (int32_t i = 1; i < m_vertexCount; ++i)
 	{
 		float32 value = b2Dot(m_coreVertices[i], dLocal);
 		if (value > bestValue)

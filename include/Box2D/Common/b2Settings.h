@@ -25,13 +25,6 @@
 #define B2_NOT_USED(x) x
 #define b2Assert(A) assert(A)
 
-typedef signed char	int8;
-typedef signed short int16;
-typedef signed int int32;
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned int uint32;
-
 #ifdef	TARGET_FLOAT32_IS_FIXED
 
 #include <Box2D/Common/Fixed.h>
@@ -57,10 +50,10 @@ const float32 b2_pi = 3.14159265359f;
 ///
 
 // Collision
-const int32 b2_maxManifoldPoints = 2;
-const int32 b2_maxPolygonVertices = 8;
-const int32 b2_maxProxies = 512;				// this must be a power of two
-const int32 b2_maxPairs = 8 * b2_maxProxies;	// this must be a power of two
+const int32_t b2_maxManifoldPoints = 2;
+const int32_t b2_maxPolygonVertices = 8;
+const int32_t b2_maxProxies = 512;				// this must be a power of two
+const int32_t b2_maxPairs = 8 * b2_maxProxies;	// this must be a power of two
 
 // Dynamics
 
@@ -78,7 +71,7 @@ const float32 b2_angularSlop = 2.0f / 180.0f * b2_pi;			// 2 degrees
 const float32 b2_toiSlop = 8.0f * b2_linearSlop;
 
 /// Maximum number of contacts to be handled to solve a TOI island.
-const int32 b2_maxTOIContactsPerIsland = 32;
+const int32_t b2_maxTOIContactsPerIsland = 32;
 
 /// A velocity threshold for elastic collisions. Any collision with a relative linear
 /// velocity below this threshold will be treated as inelastic.
@@ -125,10 +118,10 @@ const float32 b2_angularSleepTolerance = 2.0f / 180.0f;		// 2 degrees/s
 // Memory Allocation
 
 /// The current number of bytes allocated through b2Alloc.
-extern int32 b2_byteCount;
+extern int32_t b2_byteCount;
 
 /// Implement this function to use your own memory allocator.
-void* b2Alloc(int32 size);
+void* b2Alloc(int32_t size);
 
 /// If you implement b2Alloc, you should also implement this function.
 void b2Free(void* mem);
@@ -137,9 +130,9 @@ void b2Free(void* mem);
 /// See http://en.wikipedia.org/wiki/Software_versioning
 struct b2Version
 {
-	int32 major;		///< significant changes
-	int32 minor;		///< incremental changes
-	int32 revision;		///< bug fixes
+	int32_t major;		///< significant changes
+	int32_t minor;		///< incremental changes
+	int32_t revision;		///< bug fixes
 };
 
 /// Current version.

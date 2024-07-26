@@ -47,7 +47,7 @@ struct b2PolygonDef : public b2ShapeDef
 	b2Vec2 vertices[b2_maxPolygonVertices];
 
 	/// The number of polygon vertices.
-	int32 vertexCount;
+	int32_t vertexCount;
 };
 
 
@@ -83,7 +83,7 @@ public:
 	const b2Vec2& GetCentroid() const;
 
 	/// Get the vertex count.
-	int32 GetVertexCount() const;
+	int32_t GetVertexCount() const;
 
 	/// Get the vertices in local coordinates.
 	const b2Vec2* GetVertices() const;
@@ -111,7 +111,7 @@ public:
 	b2Vec2 m_vertices[b2_maxPolygonVertices];
 	b2Vec2 m_normals[b2_maxPolygonVertices];
 	b2Vec2 m_coreVertices[b2_maxPolygonVertices];
-	int32 m_vertexCount;
+	int32_t m_vertexCount;
 };
 
 inline b2Vec2 b2PolygonShape::GetFirstVertex(const b2XForm& xf) const
@@ -129,7 +129,7 @@ inline const b2Vec2& b2PolygonShape::GetCentroid() const
 	return m_centroid;
 }
 
-inline int32 b2PolygonShape::GetVertexCount() const
+inline int32_t b2PolygonShape::GetVertexCount() const
 {
 	return m_vertexCount;
 }

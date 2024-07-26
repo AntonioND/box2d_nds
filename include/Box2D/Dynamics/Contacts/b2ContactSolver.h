@@ -51,13 +51,13 @@ struct b2ContactConstraint
 	b2Body* body2;
 	float32 friction;
 	float32 restitution;
-	int32 pointCount;
+	int32_t pointCount;
 };
 
 class b2ContactSolver
 {
 public:
-	b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, int32 contactCount, b2StackAllocator* allocator);
+	b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, int32_t contactCount, b2StackAllocator* allocator);
 	~b2ContactSolver();
 
 	void InitVelocityConstraints();

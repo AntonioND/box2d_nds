@@ -39,7 +39,7 @@ struct b2TimeStep
 {
 	float32 dt;			// time step
 	float32 inv_dt;		// inverse time step (0 if dt == 0).
-	int32 maxIterations;
+	int32_t maxIterations;
 };
 
 /// The world class manages all physics entities, dynamic simulation,
@@ -108,7 +108,7 @@ public:
 	/// and constraint solution.
 	/// @param timeStep the amount of time to simulate, this should not vary.
 	/// @param iterations the number of iterations to be used by the constraint solver.
-	void Step(float32 timeStep, int32 iterations);
+	void Step(float32 timeStep, int32_t iterations);
 
 	/// Query the world for all shapes that potentially overlap the
 	/// provided AABB. You provide a shape pointer buffer of specified
@@ -117,7 +117,7 @@ public:
 	/// @param shapes a user allocated shape pointer array of size maxCount (or greater).
 	/// @param maxCount the capacity of the shapes array.
 	/// @return the number of shapes found in aabb.
-	int32 Query(const b2AABB& aabb, b2Shape** shapes, int32 maxCount);
+	int32_t Query(const b2AABB& aabb, b2Shape** shapes, int32_t maxCount);
 
 	/// Get the world body list. With the returned body, use b2Body::GetNext to get
 	/// the next body in the world list. A NULL body indicates the end of the list.
@@ -156,9 +156,9 @@ public:
 	// Do not access
 	b2Contact* m_contactList;
 
-	int32 m_bodyCount;
-	int32 m_contactCount;
-	int32 m_jointCount;
+	int32_t m_bodyCount;
+	int32_t m_contactCount;
+	int32_t m_jointCount;
 
 	b2Vec2 m_gravity;
 	bool m_allowSleep;
@@ -171,16 +171,16 @@ public:
 	b2ContactListener* m_contactListener;
 	b2DebugDraw* m_debugDraw;
 
-	int32 m_positionIterationCount;
+	int32_t m_positionIterationCount;
 
 	// This is for debugging the solver.
-	static int32 s_enablePositionCorrection;
+	static int32_t s_enablePositionCorrection;
 
 	// This is for debugging the solver.
-	static int32 s_enableWarmStarting;
+	static int32_t s_enableWarmStarting;
 
 	// This is for debugging the solver.
-	static int32 s_enableTOI;
+	static int32_t s_enableTOI;
 };
 
 inline b2Body* b2World::GetGroundBody()

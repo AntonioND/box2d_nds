@@ -38,8 +38,8 @@ Bullet (http:/www.bulletphysics.com).
 
 #endif
 
-const uint16 b2_invalid = B2BROADPHASE_MAX;
-const uint16 b2_nullEdge = B2BROADPHASE_MAX;
+const uint16_t b2_invalid = B2BROADPHASE_MAX;
+const uint16_t b2_nullEdge = B2BROADPHASE_MAX;
 struct b2BoundValues;
 
 struct b2Bound
@@ -47,20 +47,20 @@ struct b2Bound
 	bool IsLower() const { return (value & 1) == 0; }
 	bool IsUpper() const { return (value & 1) == 1; }
 
-	uint16 value;
-	uint16 proxyId;
-	uint16 stabbingCount;
+	uint16_t value;
+	uint16_t proxyId;
+	uint16_t stabbingCount;
 };
 
 struct b2Proxy
 {
-	uint16 GetNext() const { return lowerBounds[0]; }
-	void SetNext(uint16 next) { lowerBounds[0] = next; }
+	uint16_t GetNext() const { return lowerBounds[0]; }
+	void SetNext(uint16_t next) { lowerBounds[0] = next; }
 	bool IsValid() const { return overlapCount != b2_invalid; }
 
-	uint16 lowerBounds[2], upperBounds[2];
-	uint16 overlapCount;
-	uint16 timeStamp;
+	uint16_t lowerBounds[2], upperBounds[2];
+	uint16_t overlapCount;
+	uint16_t timeStamp;
 	void* userData;
 };
 
@@ -76,33 +76,33 @@ public:
 	bool InRange(const b2AABB& aabb) const;
 
 	// Create and destroy proxies. These call Flush first.
-	uint16 CreateProxy(const b2AABB& aabb, void* userData);
-	void DestroyProxy(int32 proxyId);
+	uint16_t CreateProxy(const b2AABB& aabb, void* userData);
+	void DestroyProxy(int32_t proxyId);
 
 	// Call MoveProxy as many times as you like, then when you are done
 	// call Commit to finalized the proxy pairs (for your time step).
-	void MoveProxy(int32 proxyId, const b2AABB& aabb);
+	void MoveProxy(int32_t proxyId, const b2AABB& aabb);
 	void Commit();
 
 	// Get a single proxy. Returns NULL if the id is invalid.
-	b2Proxy* GetProxy(int32 proxyId);
+	b2Proxy* GetProxy(int32_t proxyId);
 
 	// Query an AABB for overlapping proxies, returns the user data and
 	// the count, up to the supplied maximum count.
-	int32 Query(const b2AABB& aabb, void** userData, int32 maxCount);
+	int32_t Query(const b2AABB& aabb, void** userData, int32_t maxCount);
 
 	void Validate();
 	void ValidatePairs();
 
 private:
-	void ComputeBounds(uint16* lowerValues, uint16* upperValues, const b2AABB& aabb);
+	void ComputeBounds(uint16_t* lowerValues, uint16_t* upperValues, const b2AABB& aabb);
 
 	bool TestOverlap(b2Proxy* p1, b2Proxy* p2);
 	bool TestOverlap(const b2BoundValues& b, b2Proxy* p);
 
-	void Query(int32* lowerIndex, int32* upperIndex, uint16 lowerValue, uint16 upperValue,
-				b2Bound* bounds, int32 boundCount, int32 axis);
-	void IncrementOverlapCount(int32 proxyId);
+	void Query(int32_t* lowerIndex, int32_t* upperIndex, uint16_t lowerValue, uint16_t upperValue,
+				b2Bound* bounds, int32_t boundCount, int32_t axis);
+	void IncrementOverlapCount(int32_t proxyId);
 	void IncrementTimeStamp();
 
 public:
@@ -111,17 +111,17 @@ public:
 	b2PairManager m_pairManager;
 
 	b2Proxy m_proxyPool[b2_maxProxies];
-	uint16 m_freeProxy;
+	uint16_t m_freeProxy;
 
 	b2Bound m_bounds[2][2*b2_maxProxies];
 
-	uint16 m_queryResults[b2_maxProxies];
-	int32 m_queryResultCount;
+	uint16_t m_queryResults[b2_maxProxies];
+	int32_t m_queryResultCount;
 
 	b2AABB m_worldAABB;
 	b2Vec2 m_quantizationFactor;
-	int32 m_proxyCount;
-	uint16 m_timeStamp;
+	int32_t m_proxyCount;
+	uint16_t m_timeStamp;
 
 	static bool s_validate;
 };
@@ -133,7 +133,7 @@ inline bool b2BroadPhase::InRange(const b2AABB& aabb) const
 	return b2Max(d.x, d.y) < 0.0f;
 }
 
-inline b2Proxy* b2BroadPhase::GetProxy(int32 proxyId)
+inline b2Proxy* b2BroadPhase::GetProxy(int32_t proxyId)
 {
 	if (proxyId == b2_nullProxy || m_proxyPool[proxyId].IsValid() == false)
 	{

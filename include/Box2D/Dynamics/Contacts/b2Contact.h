@@ -79,7 +79,7 @@ public:
 	/// Get the number of manifolds. This is 0 or 1 between convex shapes.
 	/// This may be greater than 1 for convex-vs-concave shapes. Each
 	/// manifold holds up to two contact points with a shared contact normal.
-	int32 GetManifoldCount() const;
+	int32_t GetManifoldCount() const;
 
 	/// Is this contact solid?
 	/// @return true if this contact should generate a response.
@@ -121,8 +121,8 @@ public:
 	static b2ContactRegister s_registers[e_shapeTypeCount][e_shapeTypeCount];
 	static bool s_initialized;
 
-	uint32 m_flags;
-	int32 m_manifoldCount;
+	uint32_t m_flags;
+	int32_t m_manifoldCount;
 
 	// World pool and list pointers.
 	b2Contact* m_prev;
@@ -142,7 +142,7 @@ public:
 	float32 m_toi;
 };
 
-inline int32 b2Contact::GetManifoldCount() const
+inline int32_t b2Contact::GetManifoldCount() const
 {
 	return m_manifoldCount;
 }

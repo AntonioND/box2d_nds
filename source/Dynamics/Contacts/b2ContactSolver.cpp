@@ -22,13 +22,13 @@
 #include <Box2D/Dynamics/b2World.h>
 #include <Box2D/Common/b2StackAllocator.h>
 
-b2ContactSolver::b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, int32 contactCount, b2StackAllocator* allocator)
+b2ContactSolver::b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, int32_t contactCount, b2StackAllocator* allocator)
 {
 	m_step = step;
 	m_allocator = allocator;
 
 	m_constraintCount = 0;
-	for (int32 i = 0; i < contactCount; ++i)
+	for (int32_t i = 0; i < contactCount; ++i)
 	{
 		b2Assert(contacts[i]->IsSolid());
 		m_constraintCount += contacts[i]->GetManifoldCount();
@@ -36,14 +36,14 @@ b2ContactSolver::b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, i
 
 	m_constraints = (b2ContactConstraint*)m_allocator->Allocate(m_constraintCount * sizeof(b2ContactConstraint));
 
-	int32 count = 0;
-	for (int32 i = 0; i < contactCount; ++i)
+	int32_t count = 0;
+	for (int32_t i = 0; i < contactCount; ++i)
 	{
 		b2Contact* contact = contacts[i];
 
 		b2Body* b1 = contact->m_shape1->m_body;
 		b2Body* b2 = contact->m_shape2->m_body;
-		int32 manifoldCount = contact->GetManifoldCount();
+		int32_t manifoldCount = contact->GetManifoldCount();
 		b2Manifold* manifolds = contact->GetManifolds();
 		float32 friction = contact->m_friction;
 		float32 restitution = contact->m_restitution;
@@ -53,7 +53,7 @@ b2ContactSolver::b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, i
 		float32 w1 = b1->m_angularVelocity;
 		float32 w2 = b2->m_angularVelocity;
 
-		for (int32 j = 0; j < manifoldCount; ++j)
+		for (int32_t j = 0; j < manifoldCount; ++j)
 		{
 			b2Manifold* manifold = manifolds + j;
 
@@ -71,7 +71,7 @@ b2ContactSolver::b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, i
 			c->friction = friction;
 			c->restitution = restitution;
 
-			for (int32 k = 0; k < c->pointCount; ++k)
+			for (int32_t k = 0; k < c->pointCount; ++k)
 			{
 				b2ManifoldPoint* cp = manifold->points + k;
 				b2ContactConstraintPoint* ccp = c->points + k;
@@ -183,7 +183,7 @@ b2ContactSolver::~b2ContactSolver()
 void b2ContactSolver::InitVelocityConstraints()
 {
 	// Warm start.
-	for (int32 i = 0; i < m_constraintCount; ++i)
+	for (int32_t i = 0; i < m_constraintCount; ++i)
 	{
 		b2ContactConstraint* c = m_constraints + i;
 
@@ -198,7 +198,7 @@ void b2ContactSolver::InitVelocityConstraints()
 
 		if (b2World::s_enableWarmStarting)
 		{
-			for (int32 j = 0; j < c->pointCount; ++j)
+			for (int32_t j = 0; j < c->pointCount; ++j)
 			{
 				b2ContactConstraintPoint* ccp = c->points + j;
 				b2Vec2 P = m_step.dt * (ccp->normalForce * normal + ccp->tangentForce * tangent);
@@ -212,7 +212,7 @@ void b2ContactSolver::InitVelocityConstraints()
 		}
 		else
 		{
-			for (int32 j = 0; j < c->pointCount; ++j)
+			for (int32_t j = 0; j < c->pointCount; ++j)
 			{
 				b2ContactConstraintPoint* ccp = c->points + j;
 				ccp->normalForce = 0.0f;
@@ -224,7 +224,7 @@ void b2ContactSolver::InitVelocityConstraints()
 
 void b2ContactSolver::SolveVelocityConstraints()
 {
-	for (int32 i = 0; i < m_constraintCount; ++i)
+	for (int32_t i = 0; i < m_constraintCount; ++i)
 	{
 		b2ContactConstraint* c = m_constraints + i;
 		b2Body* b1 = c->body1;
@@ -237,7 +237,7 @@ void b2ContactSolver::SolveVelocityConstraints()
 		b2Vec2 tangent = b2Cross(normal, 1.0f);
 
 		// Solve normal constraints
-		for (int32 j = 0; j < c->pointCount; ++j)
+		for (int32_t j = 0; j < c->pointCount; ++j)
 		{
 			b2ContactConstraintPoint* ccp = c->points + j;
 
@@ -268,7 +268,7 @@ void b2ContactSolver::SolveVelocityConstraints()
 		}
 
 		// Solve tangent constraints
-		for (int32 j = 0; j < c->pointCount; ++j)
+		for (int32_t j = 0; j < c->pointCount; ++j)
 		{
 			b2ContactConstraintPoint* ccp = c->points + j;
 
@@ -303,12 +303,12 @@ void b2ContactSolver::SolveVelocityConstraints()
 
 void b2ContactSolver::FinalizeVelocityConstraints()
 {
-	for (int32 i = 0; i < m_constraintCount; ++i)
+	for (int32_t i = 0; i < m_constraintCount; ++i)
 	{
 		b2ContactConstraint* c = m_constraints + i;
 		b2Manifold* m = c->manifold;
 
-		for (int32 j = 0; j < c->pointCount; ++j)
+		for (int32_t j = 0; j < c->pointCount; ++j)
 		{
 			m->points[j].normalForce = c->points[j].normalForce;
 			m->points[j].tangentForce = c->points[j].tangentForce;
@@ -320,7 +320,7 @@ bool b2ContactSolver::SolvePositionConstraints(float32 baumgarte)
 {
 	float32 minSeparation = 0.0f;
 
-	for (int32 i = 0; i < m_constraintCount; ++i)
+	for (int32_t i = 0; i < m_constraintCount; ++i)
 	{
 		b2ContactConstraint* c = m_constraints + i;
 		b2Body* b1 = c->body1;
@@ -333,7 +333,7 @@ bool b2ContactSolver::SolvePositionConstraints(float32 baumgarte)
 		b2Vec2 normal = c->normal;
 
 		// Solver normal constraints
-		for (int32 j = 0; j < c->pointCount; ++j)
+		for (int32_t j = 0; j < c->pointCount; ++j)
 		{
 			b2ContactConstraintPoint* ccp = c->points + j;
 

@@ -272,7 +272,7 @@ public:
 		e_maxTypes,
 	};
 
-	b2Body(const b2BodyDef* bd, uint16 type, b2World* world);
+	b2Body(const b2BodyDef* bd, uint16_t type, b2World* world);
 	~b2Body();
 
 	void ComputeMass();
@@ -287,8 +287,8 @@ public:
 
 	void Advance(float32 t);
 
-	uint16 m_flags;
-	uint16 m_type;
+	uint16_t m_flags;
+	uint16_t m_type;
 
 	b2XForm m_xf;		// the body origin transform
 
@@ -305,7 +305,7 @@ public:
 	b2Body* m_next;
 
 	b2Shape* m_shapeList;
-	int32 m_shapeCount;
+	int32_t m_shapeCount;
 
 	b2JointEdge* m_jointList;
 	b2ContactEdge* m_contactList;

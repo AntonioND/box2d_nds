@@ -20,14 +20,14 @@
 #include <Box2D/Collision/Shapes/b2CircleShape.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 
-int32 g_GJK_Iterations = 0;
+int32_t g_GJK_Iterations = 0;
 
 // GJK using Voronoi regions (Christer Ericson) and region selection
 // optimizations (Casey Muratori).
 
 // The origin is either in the region of points[1] or in the edge region. The origin is
 // not in region of points[0] because that is the old point.
-static int32 ProcessTwo(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Vec2* points)
+static int32_t ProcessTwo(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Vec2* points)
 {
 	// If in point[1] region
 	b2Vec2 r = -points[1];
@@ -57,7 +57,7 @@ static int32 ProcessTwo(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Vec2
 // - edge points[0]-points[2]
 // - edge points[1]-points[2]
 // - inside the triangle
-static int32 ProcessThree(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Vec2* points)
+static int32_t ProcessThree(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Vec2* points)
 {
 	b2Vec2 a = points[0];
 	b2Vec2 b = points[1];
@@ -145,10 +145,10 @@ printf("a=%f %f, b=%f %f, c=%f %f n=%f\n",
 	return 3;
 }
 
-static bool InPoints(const b2Vec2& w, const b2Vec2* points, int32 pointCount)
+static bool InPoints(const b2Vec2& w, const b2Vec2* points, int32_t pointCount)
 {
 	const float32 k_tolerance = 100.0f * FLOAT32_EPSILON;
-	for (int32 i = 0; i < pointCount; ++i)
+	for (int32_t i = 0; i < pointCount; ++i)
 	{
 		b2Vec2 d = b2Abs(w - points[i]);
 		b2Vec2 m = b2Max(b2Abs(w), b2Abs(points[i]));
@@ -170,14 +170,14 @@ float32 DistanceGeneric(b2Vec2* x1, b2Vec2* x2,
 {
 	b2Vec2 p1s[3], p2s[3];
 	b2Vec2 points[3];
-	int32 pointCount = 0;
+	int32_t pointCount = 0;
 
 	*x1 = shape1->GetFirstVertex(xf1);
 	*x2 = shape2->GetFirstVertex(xf2);
 
 	float32 vSqr = 0.0f;
-	const int32 maxIterations = 20;
-	for (int32 iter = 0; iter < maxIterations; ++iter)
+	const int32_t maxIterations = 20;
+	for (int32_t iter = 0; iter < maxIterations; ++iter)
 	{
 		b2Vec2 v = *x2 - *x1;
 		b2Vec2 w1 = shape1->Support(xf1, v);
@@ -231,7 +231,7 @@ float32 DistanceGeneric(b2Vec2* x1, b2Vec2* x2,
 		}
 
 		float32 maxSqr = -FLOAT32_MAX;
-		for (int32 i = 0; i < pointCount; ++i)
+		for (int32_t i = 0; i < pointCount; ++i)
 		{
 			maxSqr = b2Max(maxSqr, b2Dot(points[i], points[i]));
 		}

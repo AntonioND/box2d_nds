@@ -132,7 +132,7 @@ void b2ContactManager::Destroy(b2Contact* c)
 	b2Shape* shape2 = c->GetShape2();
 
 	// Inform the user that this contact is ending.
-	int32 manifoldCount = c->GetManifoldCount();
+	int32_t manifoldCount = c->GetManifoldCount();
 	if (manifoldCount > 0 && m_world->m_contactListener)
 	{
 		b2ContactPoint cp;
@@ -140,11 +140,11 @@ void b2ContactManager::Destroy(b2Contact* c)
 		cp.shape2 = c->GetShape2();
 		b2Body* b1 = cp.shape1->GetBody();
 		b2Manifold* manifolds = c->GetManifolds();
-		for (int32 i = 0; i < manifoldCount; ++i)
+		for (int32_t i = 0; i < manifoldCount; ++i)
 		{
 			b2Manifold* manifold = manifolds + i;
 			cp.normal = manifold->normal;
-			for (int32 j = 0; j < manifold->pointCount; ++j)
+			for (int32_t j = 0; j < manifold->pointCount; ++j)
 			{
 				b2ManifoldPoint* point = manifold->points + j;
 				cp.position = b2Mul(b1->GetXForm(), point->localPoint1);
@@ -242,13 +242,13 @@ void b2ContactManager::Collide()
 			cp.tangentForce = 0.0f;
 
 			b2Body* b1 = cp.shape1->GetBody();
-			int32 manifoldCount = c->GetManifoldCount();
+			int32_t manifoldCount = c->GetManifoldCount();
 			b2Manifold* manifolds = c->GetManifolds();
-			for (int32 i = 0; i < manifoldCount; ++i)
+			for (int32_t i = 0; i < manifoldCount; ++i)
 			{
 				b2Manifold* manifold = manifolds + i;
 				cp.normal = manifold->normal;
-				for (int32 j = 0; j < manifold->pointCount; ++j)
+				for (int32_t j = 0; j < manifold->pointCount; ++j)
 				{
 					b2ManifoldPoint* point = manifold->points + j;
 					cp.position = b2Mul(b1->GetXForm(), point->localPoint1);

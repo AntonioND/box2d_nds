@@ -27,9 +27,9 @@
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <new>
 
-int32 b2World::s_enablePositionCorrection = 1;
-int32 b2World::s_enableWarmStarting = 1;
-int32 b2World::s_enableTOI = 1;
+int32_t b2World::s_enablePositionCorrection = 1;
+int32_t b2World::s_enableWarmStarting = 1;
+int32_t b2World::s_enableTOI = 1;
 
 b2World::b2World(const b2AABB& worldAABB, const b2Vec2& gravity, bool doSleep)
 {
@@ -355,7 +355,7 @@ void b2World::Solve(const b2TimeStep& step)
 	}
 
 	// Build and simulate all awake islands.
-	int32 stackSize = m_bodyCount;
+	int32_t stackSize = m_bodyCount;
 	b2Body** stack = (b2Body**)m_stackAllocator.Allocate(stackSize * sizeof(b2Body*));
 	for (b2Body* seed = m_bodyList; seed; seed = seed->m_next)
 	{
@@ -371,7 +371,7 @@ void b2World::Solve(const b2TimeStep& step)
 
 		// Reset island and stack.
 		island.Clear();
-		int32 stackCount = 0;
+		int32_t stackCount = 0;
 		stack[stackCount++] = seed;
 		seed->m_flags |= b2Body::e_islandFlag;
 
@@ -450,7 +450,7 @@ void b2World::Solve(const b2TimeStep& step)
 		m_positionIterationCount = b2Max(m_positionIterationCount, island.m_positionIterationCount);
 
 		// Post solve cleanup.
-		for (int32 i = 0; i < island.m_bodyCount; ++i)
+		for (int32_t i = 0; i < island.m_bodyCount; ++i)
 		{
 			// Allow static bodies to participate in other islands.
 			b2Body* b = island.m_bodies[i];
@@ -498,7 +498,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 {
 	// Reserve an island and a stack for TOI island solution.
 	b2Island island(m_bodyCount, b2_maxTOIContactsPerIsland, 0, &m_stackAllocator, m_contactListener);
-	int32 stackSize = m_bodyCount;
+	int32_t stackSize = m_bodyCount;
 	b2Body** stack = (b2Body**)m_stackAllocator.Allocate(stackSize * sizeof(b2Body*));
 
 	for (b2Body* b = m_bodyList; b; b = b->m_next)
@@ -620,7 +620,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 
 		// Reset island and stack.
 		island.Clear();
-		int32 stackCount = 0;
+		int32_t stackCount = 0;
 		stack[stackCount++] = seed;
 		seed->m_flags |= b2Body::e_islandFlag;
 
@@ -696,7 +696,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 		island.SolveTOI(subStep);
 
 		// Post solve cleanup.
-		for (int32 i = 0; i < island.m_bodyCount; ++i)
+		for (int32_t i = 0; i < island.m_bodyCount; ++i)
 		{
 			// Allow bodies to participate in future TOI islands.
 			b2Body* b = island.m_bodies[i];
@@ -731,7 +731,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 			}
 		}
 
-		for (int32 i = 0; i < island.m_contactCount; ++i)
+		for (int32_t i = 0; i < island.m_contactCount; ++i)
 		{
 			// Allow contacts to participate in future TOI islands.
 			b2Contact* c = island.m_contacts[i];
@@ -746,7 +746,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 	m_stackAllocator.Free(stack);
 }
 
-void b2World::Step(float32 dt, int32 iterations)
+void b2World::Step(float32 dt, int32_t iterations)
 {
 	m_lock = true;
 
@@ -783,13 +783,13 @@ void b2World::Step(float32 dt, int32 iterations)
 	m_lock = false;
 }
 
-int32 b2World::Query(const b2AABB& aabb, b2Shape** shapes, int32 maxCount)
+int32_t b2World::Query(const b2AABB& aabb, b2Shape** shapes, int32_t maxCount)
 {
 	void** results = (void**)m_stackAllocator.Allocate(maxCount * sizeof(void*));
 
-	int32 count = m_broadPhase->Query(aabb, results, maxCount);
+	int32_t count = m_broadPhase->Query(aabb, results, maxCount);
 
-	for (int32 i = 0; i < count; ++i)
+	for (int32_t i = 0; i < count; ++i)
 	{
 		shapes[i] = (b2Shape*)results[i];
 	}
@@ -824,13 +824,13 @@ void b2World::DrawShape(b2Shape* shape, const b2XForm& xf, const b2Color& color,
 	case e_polygonShape:
 		{
 			b2PolygonShape* poly = (b2PolygonShape*)shape;
-			int32 vertexCount = poly->GetVertexCount();
+			int32_t vertexCount = poly->GetVertexCount();
 			const b2Vec2* localVertices = poly->GetVertices();
 
 			b2Assert(vertexCount <= b2_maxPolygonVertices);
 			b2Vec2 vertices[b2_maxPolygonVertices];
 
-			for (int32 i = 0; i < vertexCount; ++i)
+			for (int32_t i = 0; i < vertexCount; ++i)
 			{
 				vertices[i] = b2Mul(xf, localVertices[i]);
 			}
@@ -840,7 +840,7 @@ void b2World::DrawShape(b2Shape* shape, const b2XForm& xf, const b2Color& color,
 			if (core)
 			{
 				const b2Vec2* localCoreVertices = poly->GetCoreVertices();
-				for (int32 i = 0; i < vertexCount; ++i)
+				for (int32_t i = 0; i < vertexCount; ++i)
 				{
 					vertices[i] = b2Mul(xf, localCoreVertices[i]);
 				}
@@ -899,7 +899,7 @@ void b2World::DrawDebugData()
 		return;
 	}
 
-	uint32 flags = m_debugDraw->GetFlags();
+	uint32_t flags = m_debugDraw->GetFlags();
 
 	if (flags & b2DebugDraw::e_shapeBit)
 	{
@@ -944,9 +944,9 @@ void b2World::DrawDebugData()
 		invQ.Set(1.0f / bp->m_quantizationFactor.x, 1.0f / bp->m_quantizationFactor.y);
 		b2Color color(0.9f, 0.9f, 0.3f);
 
-		for (int32 i = 0; i < b2_tableCapacity; ++i)
+		for (int32_t i = 0; i < b2_tableCapacity; ++i)
 		{
-			uint16 index = bp->m_pairManager.m_hashTable[i];
+			uint16_t index = bp->m_pairManager.m_hashTable[i];
 			while (index != b2_nullPair)
 			{
 				b2Pair* pair = bp->m_pairManager.m_pairs + index;
@@ -982,7 +982,7 @@ void b2World::DrawDebugData()
 		b2Vec2 invQ;
 		invQ.Set(1.0f / bp->m_quantizationFactor.x, 1.0f / bp->m_quantizationFactor.y);
 		b2Color color(0.9f, 0.3f, 0.9f);
-		for (int32 i = 0; i < b2_maxProxies; ++i)
+		for (int32_t i = 0; i < b2_maxProxies; ++i)
 		{
 			b2Proxy* p = bp->m_proxyPool + i;
 			if (p->IsValid() == false)
@@ -1036,7 +1036,7 @@ void b2World::DrawDebugData()
 				vs[2].Set( h.x,  h.y);
 				vs[3].Set(-h.x,  h.y);
 
-				for (int32 i = 0; i < 4; ++i)
+				for (int32_t i = 0; i < 4; ++i)
 				{
 					vs[i] = obb.center + b2Mul(obb.R, vs[i]);
 					vs[i] = b2Mul(xf, vs[i]);

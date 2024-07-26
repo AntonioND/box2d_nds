@@ -70,7 +70,7 @@ inline float32 b2InvSqrt(float32 x)
 	union
 	{
 		float32 x;
-		int32 i;
+		int32_t i;
 	} convert;
 
 	convert.x = x;
@@ -617,7 +617,7 @@ inline float32 b2Random(float32 lo, float32 hi)
 /// that recursively "folds" the upper bits into the lower bits. This process yields a bit vector with
 /// the same most significant 1 as x, but all 1's below it. Adding 1 to that value yields the next
 /// largest power of 2. For a 32-bit value:"
-inline uint32 b2NextPowerOfTwo(uint32 x)
+inline uint32_t b2NextPowerOfTwo(uint32_t x)
 {
 	x |= (x >> 1);
 	x |= (x >> 2);
@@ -627,7 +627,7 @@ inline uint32 b2NextPowerOfTwo(uint32 x)
 	return x + 1;
 }
 
-inline bool b2IsPowerOfTwo(uint32 x)
+inline bool b2IsPowerOfTwo(uint32_t x)
 {
 	bool result = x > 0 && (x & (x - 1)) == 0;
 	return result;

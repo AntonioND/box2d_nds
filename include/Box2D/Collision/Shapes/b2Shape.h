@@ -84,16 +84,16 @@ struct b2ShapeDef
 	float32 density;
 
 	/// The collision category bits. Normally you would just set one bit.
-	uint16 categoryBits;
+	uint16_t categoryBits;
 
 	/// The collision mask bits. This states the categories that this
 	/// shape would accept for collision.
-	uint16 maskBits;
+	uint16_t maskBits;
 
 	/// Collision groups allow a certain group of objects to never collide (negative)
 	/// or always collide (positive). Zero means no collision group. Non-zero group
 	/// filtering always wins against the mask bits.
-	int16 groupIndex;
+	int16_t groupIndex;
 
 	/// A sensor shape collects contact information but never generates a collision
 	/// response.
@@ -194,10 +194,10 @@ public:
 	float32 m_friction;
 	float32 m_restitution;
 
-	uint16 m_proxyId;
-	uint16 m_categoryBits;
-	uint16 m_maskBits;
-	int16 m_groupIndex;
+	uint16_t m_proxyId;
+	uint16_t m_categoryBits;
+	uint16_t m_maskBits;
+	int16_t m_groupIndex;
 
 	bool m_isSensor;
 

@@ -40,8 +40,8 @@ float32 b2TimeOfImpact(const b2Shape* shape1, const b2Sweep& sweep1,
 	float32 alpha = 0.0f;
 
 	b2Vec2 p1, p2;
-	const int32 k_maxIterations = 20;	// TODO_ERIN b2Settings
-	int32 iter = 0;
+	const int32_t k_maxIterations = 20;	// TODO_ERIN b2Settings
+	int32_t iter = 0;
 	b2Vec2 normal = b2Vec2_zero;
 	float32 distance = 0.0f;
 	float32 targetDistance = 0.0f;

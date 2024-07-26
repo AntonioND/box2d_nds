@@ -23,9 +23,9 @@
 
 // Thomas Wang's hash, see: http://www.concentric.net/~Ttwang/tech/inthash.htm
 // This assumes proxyId1 and proxyId2 are 16-bit.
-inline uint32 Hash(uint32 proxyId1, uint32 proxyId2)
+inline uint32_t Hash(uint32_t proxyId1, uint32_t proxyId2)
 {
-	uint32 key = (proxyId2 << 16) | proxyId1;
+	uint32_t key = (proxyId2 << 16) | proxyId1;
 	key = ~key + (key << 15);
 	key = key ^ (key >> 12);
 	key = key + (key << 2);
@@ -35,7 +35,7 @@ inline uint32 Hash(uint32 proxyId1, uint32 proxyId2)
 	return key;
 }
 
-inline bool Equals(const b2Pair& pair, int32 proxyId1, int32 proxyId2)
+inline bool Equals(const b2Pair& pair, int32_t proxyId1, int32_t proxyId2)
 {
 	return pair.proxyId1 == proxyId1 && pair.proxyId2 == proxyId2;
 }
@@ -66,18 +66,18 @@ b2PairManager::b2PairManager()
 {
 	b2Assert(b2IsPowerOfTwo(b2_tableCapacity) == true);
 	b2Assert(b2_tableCapacity >= b2_maxPairs);
-	for (int32 i = 0; i < b2_tableCapacity; ++i)
+	for (int32_t i = 0; i < b2_tableCapacity; ++i)
 	{
 		m_hashTable[i] = b2_nullPair;
 	}
 	m_freePair = 0;
-	for (int32 i = 0; i < b2_maxPairs; ++i)
+	for (int32_t i = 0; i < b2_maxPairs; ++i)
 	{
 		m_pairs[i].proxyId1 = b2_nullProxy;
 		m_pairs[i].proxyId2 = b2_nullProxy;
 		m_pairs[i].userData = NULL;
 		m_pairs[i].status = 0;
-		m_pairs[i].next = uint16(i + 1);
+		m_pairs[i].next = uint16_t(i + 1);
 	}
 	m_pairs[b2_maxPairs-1].next = b2_nullPair;
 	m_pairCount = 0;
@@ -90,9 +90,9 @@ void b2PairManager::Initialize(b2BroadPhase* broadPhase, b2PairCallback* callbac
 	m_callback = callback;
 }
 
-b2Pair* b2PairManager::Find(int32 proxyId1, int32 proxyId2, uint32 hash)
+b2Pair* b2PairManager::Find(int32_t proxyId1, int32_t proxyId2, uint32_t hash)
 {
-	int32 index = m_hashTable[hash];
+	int32_t index = m_hashTable[hash];
 
 	while (index != b2_nullPair && Equals(m_pairs[index], proxyId1, proxyId2) == false)
 	{
@@ -109,21 +109,21 @@ b2Pair* b2PairManager::Find(int32 proxyId1, int32 proxyId2, uint32 hash)
 	return m_pairs + index;
 }
 
-b2Pair* b2PairManager::Find(int32 proxyId1, int32 proxyId2)
+b2Pair* b2PairManager::Find(int32_t proxyId1, int32_t proxyId2)
 {
 	if (proxyId1 > proxyId2) b2Swap(proxyId1, proxyId2);
 
-	int32 hash = Hash(proxyId1, proxyId2) & b2_tableMask;
+	int32_t hash = Hash(proxyId1, proxyId2) & b2_tableMask;
 
 	return Find(proxyId1, proxyId2, hash);
 }
 
 // Returns existing pair or creates a new one.
-b2Pair* b2PairManager::AddPair(int32 proxyId1, int32 proxyId2)
+b2Pair* b2PairManager::AddPair(int32_t proxyId1, int32_t proxyId2)
 {
 	if (proxyId1 > proxyId2) b2Swap(proxyId1, proxyId2);
 
-	int32 hash = Hash(proxyId1, proxyId2) & b2_tableMask;
+	int32_t hash = Hash(proxyId1, proxyId2) & b2_tableMask;
 
 	b2Pair* pair = Find(proxyId1, proxyId2, hash);
 	if (pair != NULL)
@@ -133,12 +133,12 @@ b2Pair* b2PairManager::AddPair(int32 proxyId1, int32 proxyId2)
 
 	b2Assert(m_pairCount < b2_maxPairs && m_freePair != b2_nullPair);
 
-	uint16 pairIndex = m_freePair;
+	uint16_t pairIndex = m_freePair;
 	pair = m_pairs + pairIndex;
 	m_freePair = pair->next;
 
-	pair->proxyId1 = (uint16)proxyId1;
-	pair->proxyId2 = (uint16)proxyId2;
+	pair->proxyId1 = (uint16_t)proxyId1;
+	pair->proxyId2 = (uint16_t)proxyId2;
 	pair->status = 0;
 	pair->userData = NULL;
 	pair->next = m_hashTable[hash];
@@ -151,20 +151,20 @@ b2Pair* b2PairManager::AddPair(int32 proxyId1, int32 proxyId2)
 }
 
 // Removes a pair. The pair must exist.
-void* b2PairManager::RemovePair(int32 proxyId1, int32 proxyId2)
+void* b2PairManager::RemovePair(int32_t proxyId1, int32_t proxyId2)
 {
 	b2Assert(m_pairCount > 0);
 
 	if (proxyId1 > proxyId2) b2Swap(proxyId1, proxyId2);
 
-	int32 hash = Hash(proxyId1, proxyId2) & b2_tableMask;
+	int32_t hash = Hash(proxyId1, proxyId2) & b2_tableMask;
 
-	uint16* node = &m_hashTable[hash];
+	uint16_t* node = &m_hashTable[hash];
 	while (*node != b2_nullPair)
 	{
 		if (Equals(m_pairs[*node], proxyId1, proxyId2))
 		{
-			uint16 index = *node;
+			uint16_t index = *node;
 			*node = m_pairs[*node].next;
 			
 			b2Pair* pair = m_pairs + index;
@@ -207,7 +207,7 @@ We may add a pair that is not in the pair manager or pair buffer.
 We may add a pair that is already in the pair manager and pair buffer.
 If the added pair is not a new pair, then it must be in the pair buffer (because RemovePair was called).
 */
-void b2PairManager::AddBufferedPair(int32 id1, int32 id2)
+void b2PairManager::AddBufferedPair(int32_t id1, int32_t id2)
 {
 	b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
 	b2Assert(m_pairBufferCount < b2_maxPairs);
@@ -239,7 +239,7 @@ void b2PairManager::AddBufferedPair(int32 id1, int32 id2)
 }
 
 // Buffer a pair for removal.
-void b2PairManager::RemoveBufferedPair(int32 id1, int32 id2)
+void b2PairManager::RemoveBufferedPair(int32_t id1, int32_t id2)
 {
 	b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
 	b2Assert(m_pairBufferCount < b2_maxPairs);
@@ -276,11 +276,11 @@ void b2PairManager::RemoveBufferedPair(int32 id1, int32 id2)
 
 void b2PairManager::Commit()
 {
-	int32 removeCount = 0;
+	int32_t removeCount = 0;
 
 	b2Proxy* proxies = m_broadPhase->m_proxyPool;
 
-	for (int32 i = 0; i < m_pairBufferCount; ++i)
+	for (int32_t i = 0; i < m_pairBufferCount; ++i)
 	{
 		b2Pair* pair = Find(m_pairBuffer[i].proxyId1, m_pairBuffer[i].proxyId2);
 		b2Assert(pair->IsBuffered());
@@ -321,7 +321,7 @@ void b2PairManager::Commit()
 		}
 	}
 
-	for (int32 i = 0; i < removeCount; ++i)
+	for (int32_t i = 0; i < removeCount; ++i)
 	{
 		RemovePair(m_pairBuffer[i].proxyId1, m_pairBuffer[i].proxyId2);
 	}
@@ -341,7 +341,7 @@ void b2PairManager::ValidateBuffer()
 
 	std::sort(m_pairBuffer, m_pairBuffer + m_pairBufferCount);
 
-	for (int32 i = 0; i < m_pairBufferCount; ++i)
+	for (int32_t i = 0; i < m_pairBufferCount; ++i)
 	{
 		if (i > 0)
 		{
@@ -367,9 +367,9 @@ void b2PairManager::ValidateBuffer()
 void b2PairManager::ValidateTable()
 {
 #ifdef _DEBUG
-	for (int32 i = 0; i < b2_tableCapacity; ++i)
+	for (int32_t i = 0; i < b2_tableCapacity; ++i)
 	{
-		uint16 index = m_hashTable[i];
+		uint16_t index = m_hashTable[i];
 		while (index != b2_nullPair)
 		{
 			b2Pair* pair = m_pairs + index;

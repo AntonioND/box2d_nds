@@ -39,22 +39,22 @@ b2DebugDraw::b2DebugDraw()
 	m_drawFlags = 0;
 }
 
-void b2DebugDraw::SetFlags(uint32 flags)
+void b2DebugDraw::SetFlags(uint32_t flags)
 {
 	m_drawFlags = flags;
 }
 
-uint32 b2DebugDraw::GetFlags() const
+uint32_t b2DebugDraw::GetFlags() const
 {
 	return m_drawFlags;
 }
 
-void b2DebugDraw::AppendFlags(uint32 flags)
+void b2DebugDraw::AppendFlags(uint32_t flags)
 {
 	m_drawFlags |= flags;
 }
 
-void b2DebugDraw::ClearFlags(uint32 flags)
+void b2DebugDraw::ClearFlags(uint32_t flags)
 {
 	m_drawFlags &= ~flags;
 }

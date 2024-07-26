@@ -48,7 +48,7 @@ b2Triangle::~b2Triangle(){
 }
 
 void b2Triangle::Set(const b2Triangle& toMe) {
-	for (int32 i=0; i<3; ++i) {
+	for (int32_t i=0; i<3; ++i) {
 		x[i] = toMe.x[i];
 		y[i] = toMe.y[i];
 	}
