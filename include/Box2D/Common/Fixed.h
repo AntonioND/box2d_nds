@@ -30,7 +30,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 #ifdef TARGET_IS_NDS
 
-#include "nds.h"
+#include <nds.h>
 
 #endif
 

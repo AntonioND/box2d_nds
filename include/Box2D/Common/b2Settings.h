@@ -25,12 +25,12 @@
 #define b2Assert(A) assert(A)
 
 
-				// need to include NDS jtypes.h instead of 
-				// usual typedefs because NDS jtypes defines
+				// need to include NDS ndstypes.h instead of 
+				// usual typedefs because NDS ndstypes defines
 				// them slightly differently, oh well.
 #ifdef TARGET_IS_NDS
 
-#include "jtypes.h"
+#include <nds/ndstypes.h>
 
 #else
 
