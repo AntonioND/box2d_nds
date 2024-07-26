@@ -30,7 +30,45 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 #ifdef TARGET_IS_NDS
 
-#include <nds.h>
+#define B2_REG_DIVCNT          (*(volatile uint16_t *)(0x04000280))
+#define B2_REG_DIV_NUMER       (*(volatile int64_t *)(0x04000290))
+#define B2_REG_DIV_DENOM       (*(volatile int64_t *)(0x04000298))
+#define B2_REG_DIV_DENOM_L     (*(volatile int32_t *)(0x04000298))
+#define B2_REG_DIV_RESULT_L    (*(volatile int32_t *)(0x040002A0))
+
+#define B2_REG_SQRTCNT         (*(volatile uint16_t *)(0x040002B0))
+#define B2_REG_SQRT_PARAM      (*(volatile int64_t *)(0x040002B8))
+#define B2_REG_SQRT_RESULT     (*(volatile uint32_t *)(0x040002B4))
+
+// Math coprocessor modes
+
+#define B2_DIV_64_64           2
+#define B2_DIV_64_32           1
+#define B2_DIV_BUSY            (1 << 15)
+#define B2_DIV_MODE_MASK       3
+
+#define B2_SQRT_64             1
+#define B2_SQRT_BUSY           (1 << 15)
+
+#ifndef LIBNDS_NDS_ARM9_TRIG_LUT_H__
+/// Fixed point sine.
+///
+/// @param angle Angle (-32768 to 32767).
+/// @return 4.12 fixed point number with the range [-1, 1].
+extern "C" int16_t sinLerp(int16_t angle);
+
+/// Fixed point cosine.
+///
+/// @param angle Angle (-32768 to 32767).
+/// @return 4.12 fixed point number with the range [-1, 1].
+extern "C" int16_t cosLerp(int16_t angle);
+
+/// Fixed point tangent.
+///
+/// @param angle Angle (-32768 to 32767).
+/// @return 20.12 fixed point number with the range [-81.483, 524287.999].
+extern "C" int32_t tanLerp(int16_t angle);
+#endif // LIBNDS_NDS_ARM9_TRIG_LUT_H__
 
 #endif
 
@@ -220,7 +258,15 @@ inline Fixed Fixed::operator *(const Fixed a) const { return Fixed(RAW, (g>>BPha
 inline Fixed Fixed::operator /(const Fixed a) const
 {
 	//printf("%d %d\n", (long long)g << BP, a.g);
-	return Fixed(RAW, int( div64((long long)g << BP, a.g) ) );
+	B2_REG_DIV_NUMER = (long long)g << BP;
+	B2_REG_DIV_DENOM_L =  a.g;
+	if ((B2_REG_DIVCNT & B2_DIV_MODE_MASK) != B2_DIV_64_32)
+	{
+		B2_REG_DIVCNT = B2_DIV_64_32;
+	}
+	while (B2_REG_DIVCNT & B2_DIV_BUSY);
+
+	return Fixed(RAW, int(B2_REG_DIV_RESULT_L));
 }
 #else
 inline Fixed Fixed::operator /(const Fixed a) const
@@ -384,23 +430,23 @@ inline Fixed atan2(Fixed y, Fixed x)
 
 static inline long nds_sqrt64(long long a)
 {
-	SQRT_CR = SQRT_64;
-	while(SQRT_CR & SQRT_BUSY);
-	SQRT_PARAM64 = a;
-	while(SQRT_CR & SQRT_BUSY);
+	B2_REG_SQRTCNT = B2_SQRT_64;
+	while(B2_REG_SQRTCNT & B2_SQRT_BUSY);
+	B2_REG_SQRT_PARAM = a;
+	while(B2_REG_SQRTCNT & B2_SQRT_BUSY);
 
-	return SQRT_RESULT32;
+	return B2_REG_SQRT_RESULT;
 }
 
-static inline int32 div6464(int64 num, int64 den)
+static inline int32_t div6464(int64_t num, int64_t den)
 {
-	DIV_CR = DIV_64_64;
-	while(DIV_CR & DIV_BUSY);
-	DIV_NUMERATOR64 = num;
-	DIV_DENOMINATOR64 = den;
-	while(DIV_CR & DIV_BUSY);
+	B2_REG_DIVCNT = B2_DIV_64_64;
+	while(B2_REG_DIVCNT & B2_DIV_BUSY);
+	B2_REG_DIV_NUMER = num;
+	B2_REG_DIV_DENOM = den;
+	while(B2_REG_DIVCNT & B2_DIV_BUSY);
 
-	return (DIV_RESULT32);
+	return (B2_REG_DIV_RESULT_L);
 }
 
 inline Fixed Fixed::sqrt()
@@ -432,21 +478,21 @@ inline Fixed Fixed::cosf() {
 	int idx = (((long long)g*(long long)G_1_DIV_PI)>>24)%512;
 	if(idx < 0)
 		idx += 512;
-	return Fixed(RAW, COS_bin[idx] << 4);
+	return Fixed(RAW, cosLerp(64 * idx) << 4);
 }
 inline Fixed cosf(Fixed x) { return x.cosf(); }
 inline Fixed Fixed::sinf() {
 	int idx = (((long long)g*(long long)G_1_DIV_PI)>>24)%512;
 	if(idx < 0)
 			idx += 512;
-	return Fixed(RAW, SIN_bin[idx] << 4);
+	return Fixed(RAW, sinLerp(64 * idx) << 4);
 }
 inline Fixed sinf(Fixed x) { return x.sinf(); }
 inline Fixed Fixed::tanf() {
 	int idx = (((long long)g*(long long)G_1_DIV_PI)>>24)%512;
 	if(idx < 0)
 				idx += 512;
-	return Fixed(RAW, TAN_bin[idx] << 4);
+	return Fixed(RAW, tanLerp(64 * idx) << 4);
 }
 inline Fixed tanf(Fixed x) { return x.tanf(); }
 

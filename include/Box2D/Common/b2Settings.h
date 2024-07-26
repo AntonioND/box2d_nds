@@ -20,19 +20,10 @@
 #define B2_SETTINGS_H
 
 #include <cassert>
+#include <cstdint>
 
 #define B2_NOT_USED(x) x
 #define b2Assert(A) assert(A)
-
-
-				// need to include NDS ndstypes.h instead of 
-				// usual typedefs because NDS ndstypes defines
-				// them slightly differently, oh well.
-#ifdef TARGET_IS_NDS
-
-#include <nds/ndstypes.h>
-
-#else
 
 typedef signed char	int8;
 typedef signed short int16;
@@ -40,8 +31,6 @@ typedef signed int int32;
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;
-
-#endif
 
 #ifdef	TARGET_FLOAT32_IS_FIXED
 

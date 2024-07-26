@@ -22,6 +22,7 @@
 #include <Box2D/Common/b2Math.h>
 #include <Box2D/Contrib/b2Triangle.h>
 #include <Box2D/Dynamics/b2World.h>
+#include <cstring>
 
 class b2Polygon;
 

@@ -18,6 +18,7 @@
 
 #include <Box2D/Collision/b2BroadPhase.h>
 #include <algorithm>
+#include <cstring>
 
 // Notes:
 // - we use bound arrays instead of linked lists for cache coherence.

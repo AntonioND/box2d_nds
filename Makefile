@@ -135,7 +135,7 @@ install: all
 	@echo "  INSTALL $(BLOCKSDSEXT)/$(INSTALLNAME)/"
 	$(V)$(RM) $(BLOCKSDSEXT)/$(INSTALLNAME)/
 	$(V)$(INSTALL) -d $(BLOCKSDSEXT)/$(INSTALLNAME)/
-	$(V)$(CP) -r include lib LICENSE.txt $(BLOCKSDSEXT)/$(INSTALLNAME)/
+	$(V)$(CP) -r include lib License.txt $(BLOCKSDSEXT)/$(INSTALLNAME)/
 
 # Rules
 # -----
