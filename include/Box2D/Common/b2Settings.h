@@ -22,7 +22,7 @@
 #include <cassert>
 #include <cstdint>
 
-#define B2_NOT_USED(x) x
+#define B2_NOT_USED(x) (void)x
 #define b2Assert(A) assert(A)
 
 #ifdef	TARGET_FLOAT32_IS_FIXED
