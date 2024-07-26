@@ -286,7 +286,7 @@ void b2Body::SetMassFromShapes()
 	}
 }
 
-bool b2Body::SetXForm(const b2Vec2& position, float angle)
+bool b2Body::SetXForm(const b2Vec2& position, float32 angle)
 {
 	b2Assert(m_world->m_lock == false);
 	if (m_world->m_lock == true)

@@ -170,6 +170,7 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 			b->m_linearVelocity *= b2_maxLinearVelocity;
 		}
 
+#ifndef TARGET_FLOAT32_IS_FIXED
 		if (b->m_angularVelocity * b->m_angularVelocity > b2_maxAngularVelocitySquared)
 		{
 			if (b->m_angularVelocity < 0.0f)
@@ -181,6 +182,11 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 				b->m_angularVelocity = b2_maxAngularVelocity;
 			}
 		}
+#else
+		b->m_angularVelocity = b2Clamp(b->m_angularVelocity, 
+			-b2_maxAngularVelocity, b2_maxAngularVelocity);
+#endif
+
 	}
 
 	b2ContactSolver contactSolver(step, m_contacts, m_contactCount, m_allocator);
@@ -261,7 +267,7 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool correct
 
 	if (allowSleep)
 	{
-		float32 minSleepTime = FLT_MAX;
+		float32 minSleepTime = FLOAT32_MAX;
 
 		const float32 linTolSqr = b2_linearSleepTolerance * b2_linearSleepTolerance;
 		const float32 angTolSqr = b2_angularSleepTolerance * b2_angularSleepTolerance;

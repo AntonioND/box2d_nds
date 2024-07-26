@@ -34,7 +34,7 @@ static int32 ProcessTwo(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Vec2
 	b2Vec2 d = points[0] - points[1];
 	float32 length = d.Normalize();
 	float32 lambda = b2Dot(r, d);
-	if (lambda <= 0.0f || length < FLT_EPSILON)
+	if (lambda <= 0.0f || length < FLOAT32_EPSILON)
 	{
 		// The simplex is reduced to a point.
 		*x1 = p1s[1];
@@ -91,13 +91,17 @@ static int32 ProcessThree(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Ve
 
 	float32 n = b2Cross(ab, ac);
 
+#ifdef TARGET_FLOAT32_IS_FIXED
+	n = (n < 0.0)? -1.0 : ((n > 0.0)? 1.0 : 0.0);
+#endif
+
 	// Should not be in edge ab region.
 	float32 vc = n * b2Cross(a, b);
 	b2Assert(vc > 0.0f || sn > 0.0f || sd > 0.0f);
 
 	// In edge bc region?
 	float32 va = n * b2Cross(b, c);
-	if (va <= 0.0f && un >= 0.0f && ud >= 0.0f)
+	if (va <= 0.0f && un >= 0.0f && ud >= 0.0f && (un+ud) > 0.0f)
 	{
 		b2Assert(un + ud > 0.0f);
 		float32 lambda = un / (un + ud);
@@ -111,7 +115,7 @@ static int32 ProcessThree(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Ve
 
 	// In edge ac region?
 	float32 vb = n * b2Cross(c, a);
-	if (vb <= 0.0f && tn >= 0.0f && td >= 0.0f)
+	if (vb <= 0.0f && tn >= 0.0f && td >= 0.0f && (tn+td > 0.f))
 	{
 		b2Assert(tn + td > 0.0f);
 		float32 lambda = tn / (tn + td);
@@ -125,6 +129,12 @@ static int32 ProcessThree(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Ve
 
 	// Inside the triangle, compute barycentric coordinates
 	float32 denom = va + vb + vc;
+#ifdef TARGET_FLOAT32_IS_FIXED
+if(denom <= 0.0f) {
+printf("a=%f %f, b=%f %f, c=%f %f n=%f\n", 
+(float)a.x, (float)a.y, (float)b.x, (float)b.y, (float)c.x, (float)c.y);
+}
+#endif
 	b2Assert(denom > 0.0f);
 	denom = 1.0f / denom;
 	float32 u = va * denom;
@@ -137,7 +147,7 @@ static int32 ProcessThree(b2Vec2* x1, b2Vec2* x2, b2Vec2* p1s, b2Vec2* p2s, b2Ve
 
 static bool InPoints(const b2Vec2& w, const b2Vec2* points, int32 pointCount)
 {
-	const float32 k_tolerance = 100.0f * FLT_EPSILON;
+	const float32 k_tolerance = 100.0f * FLOAT32_EPSILON;
 	for (int32 i = 0; i < pointCount; ++i)
 	{
 		b2Vec2 d = b2Abs(w - points[i]);
@@ -184,7 +194,7 @@ float32 DistanceGeneric(b2Vec2* x1, b2Vec2* x2,
 				*x2 = w2;
 			}
 			g_GJK_Iterations = iter;
-			return sqrtf(vSqr);
+			return b2Sqrt(vSqr);
 		}
 
 		switch (pointCount)
@@ -220,24 +230,27 @@ float32 DistanceGeneric(b2Vec2* x1, b2Vec2* x2,
 			return 0.0f;
 		}
 
-		float32 maxSqr = -FLT_MAX;
+		float32 maxSqr = -FLOAT32_MAX;
 		for (int32 i = 0; i < pointCount; ++i)
 		{
 			maxSqr = b2Max(maxSqr, b2Dot(points[i], points[i]));
 		}
 
-		if (pointCount == 3 || vSqr <= 100.0f * FLT_EPSILON * maxSqr)
+#ifdef TARGET_FLOAT32_IS_FIXED
+		if (pointCount == 3 || vSqr <= 5.0*FLOAT32_EPSILON * maxSqr)
+#else
+		if (pointCount == 3 || vSqr <= 100.0f * FLOAT32_EPSILON * maxSqr)
+#endif
 		{
 			g_GJK_Iterations = iter;
 			v = *x2 - *x1;
 			vSqr = b2Dot(v, v);
-
-			return sqrtf(vSqr);
+			return b2Sqrt(vSqr);
 		}
 	}
 
 	g_GJK_Iterations = maxIterations;
-	return sqrtf(vSqr);
+	return b2Sqrt(vSqr);
 }
 
 static float32 DistanceCC(
@@ -261,7 +274,7 @@ static float32 DistanceCC(
 		*x2 = p2 - r2 * d;
 		return distance;
 	}
-	else if (dSqr > FLT_EPSILON * FLT_EPSILON)
+	else if (dSqr > FLOAT32_EPSILON * FLOAT32_EPSILON)
 	{
 		d.Normalize();
 		*x1 = p1 + r1 * d;

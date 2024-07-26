@@ -133,7 +133,7 @@ float32 b2TimeOfImpact(const b2Shape* shape1, const b2Sweep& sweep1,
 inline bool b2AABB::IsValid() const
 {
 	b2Vec2 d = upperBound - lowerBound;
-	bool valid = d.x >= 0.0f && d.y >= 0;
+	bool valid = d.x >= 0.0f && d.y >= 0.0f;
 	valid = valid && lowerBound.IsValid() && upperBound.IsValid();
 	return valid;
 }

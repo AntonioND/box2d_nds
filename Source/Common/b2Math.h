@@ -24,17 +24,45 @@
 #include <cfloat>
 #include <cstdlib>
 
+#include <stdio.h>
+
+#ifdef TARGET_FLOAT32_IS_FIXED
+
+inline Fixed b2Min(const Fixed& a, const Fixed& b)
+{
+  return a < b ? a : b;
+}
+
+inline Fixed b2Max(const Fixed& a, const Fixed& b)
+{
+  return a > b ? a : b;
+}
+
+inline Fixed b2Clamp(Fixed a, Fixed low, Fixed high)
+{
+	return b2Max(low, b2Min(a, high));
+}
+
+inline bool b2IsValid(Fixed x)
+{
+	return true;
+}
+
+#define	b2Sqrt(x)	sqrt(x)
+#define	b2Atan2(y, x)	atan2(y, x)
+
+#else
+
 /// This function is used to ensure that a floating point number is
 /// not a NaN or infinity.
-inline bool b2IsValid(float x)
+inline bool b2IsValid(float32 x)
 {
-#if defined( WIN32 ) || defined (_WIN32_WCE)
+#ifdef _MSC_VER
 	return _finite(x) != 0;
 #else
 	return finite(x) != 0;
 #endif
 }
-
 
 /// This is a approximate yet fast inverse square-root.
 inline float32 b2InvSqrt(float32 x)
@@ -53,7 +81,18 @@ inline float32 b2InvSqrt(float32 x)
 	return x;
 }
 
+#define	b2Sqrt(x)	sqrtf(x)
+#define	b2Atan2(y, x)	atan2f(y, x)
+
+#endif
+
+inline float32 b2Abs(float32 a)
+{
+	return a > 0.0f ? a : -a;
+}
+
 /// A 2D column vector.
+
 struct b2Vec2
 {
 	/// Default constructor does nothing (for performance).
@@ -92,7 +131,20 @@ struct b2Vec2
 	/// Get the length of this vector (the norm).
 	float32 Length() const
 	{
-		return sqrtf(x * x + y * y);
+#ifdef TARGET_FLOAT32_IS_FIXED
+		float est = b2Abs(x) + b2Abs(y);
+		if(est == 0.0f) {
+			return 0.0;
+		} else if(est < 0.1) {
+			return (1.0/256.0) * b2Vec2(x<<8, y<<8).Length();
+		} else if(est < 180.0f) {
+			return b2Sqrt(x * x + y * y);
+		} else {
+			return 256.0 * (b2Vec2(x>>8, y>>8).Length());
+		}
+#else
+		return b2Sqrt(x * x + y * y);
+#endif 
 	}
 
 	/// Get the length squared. For performance, use this instead of
@@ -103,10 +155,38 @@ struct b2Vec2
 	}
 
 	/// Convert this vector into a unit vector. Returns the length.
+#ifdef TARGET_FLOAT32_IS_FIXED
 	float32 Normalize()
 	{
 		float32 length = Length();
-		if (length < FLT_EPSILON)
+		if (length < FLOAT32_EPSILON)
+		{
+			return 0.0f;
+		} 
+#ifdef NORMALIZE_BY_INVERT_MULTIPLY
+		if (length < (1.0/16.0)) {
+			x = x << 4;
+			y = y << 4;
+			return (1.0/16.0)*Normalize();
+		} else if(length > 16.0) {
+			x = x >> 4;
+			y = y >> 4;
+			return 16.0*Normalize();
+		}
+		float32 invLength = 1.0f / length;
+		x *= invLength;
+		y *= invLength;
+#else
+		x /= length;
+		y /= length;
+#endif
+		return length;
+	}
+#else
+	float32 Normalize()
+	{
+		float32 length = Length();
+		if (length < FLOAT32_EPSILON)
 		{
 			return 0.0f;
 		}
@@ -116,6 +196,7 @@ struct b2Vec2
 
 		return length;
 	}
+#endif
 
 	/// Does this vector contain finite coordinates?
 	bool IsValid() const
@@ -189,17 +270,82 @@ struct b2Mat22
 	/// a rotation matrix).
 	float32 GetAngle() const
 	{
-		return atan2f(col1.y, col1.x);
+		return b2Atan2(col1.y, col1.x);
 	}
 
+#ifdef TARGET_FLOAT32_IS_FIXED
+
 	/// Compute the inverse of this matrix, such that inv(A) * A = identity.
+	b2Mat22 Invert() const
+	{
+		float32 a = col1.x, b = col2.x, c = col1.y, d = col2.y;
+		float32 det = a * d - b * c;
+		b2Mat22 B;
+		int n = 0;
+
+		if(b2Abs(det) <= (FLOAT32_EPSILON<<8))
+		{
+			n = 3;
+			a = a<<n; b = b<<n; 
+			c = c<<n; d = d<<n;
+			det = a * d - b * c;
+			b2Assert(det != 0.0f);
+			det = float32(1) / det;
+			B.col1.x = ( det * d) << n;	B.col2.x = (-det * b) << n;
+			B.col1.y = (-det * c) << n;	B.col2.y = ( det * a) << n;
+		} 
+		else
+		{
+			n = (b2Abs(det) >= 16.0)? 4 : 0;
+			b2Assert(det != 0.0f);
+			det = float32(1<<n) / det;
+			B.col1.x = ( det * d) >> n;	B.col2.x = (-det * b) >> n;
+			B.col1.y = (-det * c) >> n;	B.col2.y = ( det * a) >> n;
+		}
+		
+		return B;
+	}
+
+	// Solve A * x = b
+	b2Vec2 Solve(const b2Vec2& b) const
+	{
+		float32 a11 = col1.x, a12 = col2.x, a21 = col1.y, a22 = col2.y;
+		float32 det = a11 * a22 - a12 * a21;
+		int n = 0;
+		b2Vec2 x;
+
+		
+		if(b2Abs(det) <= (FLOAT32_EPSILON<<8))
+		{
+			n = 3;
+			a11 = col1.x<<n; a12 = col2.x<<n;
+			a21 = col1.y<<n; a22 = col2.y<<n;
+			det = a11 * a22 - a12 * a21;
+			b2Assert(det != 0.0f);
+			det = float32(1) / det;
+			x.x = (det * (a22 * b.x - a12 * b.y)) << n;
+			x.y = (det * (a11 * b.y - a21 * b.x)) << n;
+		} 
+		else 
+		{
+			n = (b2Abs(det) >= 16.0) ? 4 : 0;
+			b2Assert(det != 0.0f);
+			det = float32(1<<n) / det;
+			x.x = (det * (a22 * b.x - a12 * b.y)) >> n;
+			x.y = (det * (a11 * b.y - a21 * b.x)) >> n;
+		}
+
+		return x;
+	}
+
+#else
 	b2Mat22 Invert() const
 	{
 		float32 a = col1.x, b = col2.x, c = col1.y, d = col2.y;
 		b2Mat22 B;
 		float32 det = a * d - b * c;
 		b2Assert(det != 0.0f);
-		det = 1.0f / det;
+		det = float32(1.0f) / det;
 		B.col1.x =  det * d;	B.col2.x = -det * b;
 		B.col1.y = -det * c;	B.col2.y =  det * a;
 		return B;
@@ -218,6 +364,7 @@ struct b2Mat22
 		x.y = det * (a11 * b.y - a21 * b.x);
 		return x;
 	}
+#endif
 
 	b2Vec2 col1, col2;
 };
@@ -386,14 +533,9 @@ inline b2Vec2 b2MulT(const b2XForm& T, const b2Vec2& v)
 	return b2MulT(T.R, v - T.position);
 }
 
-inline float32 b2Abs(float32 a)
-{
-	return a > 0.0f ? a : -a;
-}
-
 inline b2Vec2 b2Abs(const b2Vec2& a)
 {
-	b2Vec2 b; b.Set(fabsf(a.x), fabsf(a.y));
+	b2Vec2 b; b.Set(b2Abs(a.x), b2Abs(a.y));
 	return b;
 }
 
@@ -450,11 +592,13 @@ template<typename T> inline void b2Swap(T& a, T& b)
 	b = tmp;
 }
 
-/// Random number in range [-1,1]
+#define	RAND_LIMIT	32767
+
+// Random number in range [-1,1]
 inline float32 b2Random()
 {
-	float32 r = (float32)rand();
-	r /= RAND_MAX;
+	float32 r = (float32)(rand() & (RAND_LIMIT));
+	r /= RAND_LIMIT;
 	r = 2.0f * r - 1.0f;
 	return r;
 }
@@ -462,8 +606,8 @@ inline float32 b2Random()
 /// Random floating point number in range [lo, hi]
 inline float32 b2Random(float32 lo, float32 hi)
 {
-	float32 r = (float32)rand();
-	r /= RAND_MAX;
+	float32 r = (float32)(rand() & (RAND_LIMIT));
+	r /= RAND_LIMIT;
 	r = (hi - lo) * r + lo;
 	return r;
 }

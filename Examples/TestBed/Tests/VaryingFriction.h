@@ -27,7 +27,7 @@ public:
 	{
 		{
 			b2PolygonDef sd;
-			sd.SetAsBox(100.0f, 20.0f);
+			sd.SetAsBox(50.0f, 20.0f);
 
 			b2BodyDef bd;
 			bd.position.Set(0.0f, -20.0f);

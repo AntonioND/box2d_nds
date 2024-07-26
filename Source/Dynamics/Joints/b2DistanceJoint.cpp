@@ -72,7 +72,7 @@ void b2DistanceJoint::InitVelocityConstraints(const b2TimeStep& step)
 	float32 cr1u = b2Cross(r1, m_u);
 	float32 cr2u = b2Cross(r2, m_u);
 	m_mass = b1->m_invMass + b1->m_invI * cr1u * cr1u + b2->m_invMass + b2->m_invI * cr2u * cr2u;
-	b2Assert(m_mass > FLT_EPSILON);
+	b2Assert(m_mass > FLOAT32_EPSILON);
 	m_mass = 1.0f / m_mass;
 
 	if (b2World::s_enableWarmStarting)

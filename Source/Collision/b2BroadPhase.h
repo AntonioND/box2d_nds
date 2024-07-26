@@ -31,8 +31,15 @@ Bullet (http:/www.bulletphysics.com).
 #include "b2PairManager.h"
 #include <climits>
 
-const uint16 b2_invalid = USHRT_MAX;
-const uint16 b2_nullEdge = USHRT_MAX;
+#ifdef TARGET_FLOAT32_IS_FIXED
+#define	B2BROADPHASE_MAX	(USHRT_MAX/2)
+#else
+#define	B2BROADPHASE_MAX	USHRT_MAX
+
+#endif
+
+const uint16 b2_invalid = B2BROADPHASE_MAX;
+const uint16 b2_nullEdge = B2BROADPHASE_MAX;
 struct b2BoundValues;
 
 struct b2Bound

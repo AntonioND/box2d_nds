@@ -578,7 +578,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 				c->m_flags |= b2Contact::e_toiFlag;
 			}
 
-			if (FLT_EPSILON < toi && toi < minTOI)
+			if (FLOAT32_EPSILON < toi && toi < minTOI)
 			{
 				// This is the minimum TOI found so far.
 				minContact = c;
@@ -586,7 +586,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 			}
 		}
 
-		if (minContact == NULL || 1.0f - 100.0f * FLT_EPSILON < minTOI)
+		if (minContact == NULL || 1.0f - 100.0f * FLOAT32_EPSILON < minTOI)
 		{
 			// No more TOI events. Done!
 			break;
@@ -689,7 +689,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 
 		b2TimeStep subStep;
 		subStep.dt = (1.0f - minTOI) * step.dt;
-		b2Assert(subStep.dt > FLT_EPSILON);
+		b2Assert(subStep.dt > FLOAT32_EPSILON);
 		subStep.inv_dt = 1.0f / subStep.dt;
 		subStep.maxIterations = step.maxIterations;
 

@@ -72,8 +72,8 @@ b2BroadPhase::b2BroadPhase(const b2AABB& worldAABB, b2PairCallback* callback)
 	m_proxyCount = 0;
 
 	b2Vec2 d = worldAABB.upperBound - worldAABB.lowerBound;
-	m_quantizationFactor.x = USHRT_MAX / d.x;
-	m_quantizationFactor.y = USHRT_MAX / d.y;
+	m_quantizationFactor.x = float32(B2BROADPHASE_MAX) / d.x;
+	m_quantizationFactor.y = float32(B2BROADPHASE_MAX) / d.y;
 
 	for (uint16 i = 0; i < b2_maxProxies - 1; ++i)
 	{
@@ -148,16 +148,16 @@ void b2BroadPhase::ComputeBounds(uint16* lowerValues, uint16* upperValues, const
 	// Bump lower bounds downs and upper bounds up. This ensures correct sorting of
 	// lower/upper bounds that would have equal values.
 	// TODO_ERIN implement fast float to uint16 conversion.
-	lowerValues[0] = (uint16)(m_quantizationFactor.x * (minVertex.x - m_worldAABB.lowerBound.x)) & (USHRT_MAX - 1);
+	lowerValues[0] = (uint16)(m_quantizationFactor.x * (minVertex.x - m_worldAABB.lowerBound.x)) & (B2BROADPHASE_MAX - 1);
 	upperValues[0] = (uint16)(m_quantizationFactor.x * (maxVertex.x - m_worldAABB.lowerBound.x)) | 1;
 
-	lowerValues[1] = (uint16)(m_quantizationFactor.y * (minVertex.y - m_worldAABB.lowerBound.y)) & (USHRT_MAX - 1);
+	lowerValues[1] = (uint16)(m_quantizationFactor.y * (minVertex.y - m_worldAABB.lowerBound.y)) & (B2BROADPHASE_MAX - 1);
 	upperValues[1] = (uint16)(m_quantizationFactor.y * (maxVertex.y - m_worldAABB.lowerBound.y)) | 1;
 }
 
 void b2BroadPhase::IncrementTimeStamp()
 {
-	if (m_timeStamp == USHRT_MAX)
+	if (m_timeStamp == B2BROADPHASE_MAX)
 	{
 		for (uint16 i = 0; i < b2_maxProxies; ++i)
 		{

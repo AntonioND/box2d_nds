@@ -24,13 +24,42 @@
 #define B2_NOT_USED(x) x
 #define b2Assert(A) assert(A)
 
+
+				// need to include NDS jtypes.h instead of 
+				// usual typedefs because NDS jtypes defines
+				// them slightly differently, oh well.
+#ifdef TARGET_IS_NDS
+
+#include "jtypes.h"
+
+#else
+
 typedef signed char	int8;
 typedef signed short int16;
 typedef signed int int32;
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;
+
+#endif
+
+#ifdef	TARGET_FLOAT32_IS_FIXED
+
+#include "Fixed.h"
+
+typedef Fixed float32;
+#define	FLOAT32_MAX	FIXED_MAX
+#define	FLOAT32_MIN	FIXED_MIN
+#define	FLOAT32_EPSILON	FIXED_EPSILON
+
+#else
+
 typedef float float32;
+#define	FLOAT32_MAX	FLT_MAX
+#define	FLOAT32_MIN	FLT_MIN
+#define	FLOAT32_EPSILON	FLT_EPSILON
+
+#endif
 
 const float32 b2_pi = 3.14159265359f;
 
@@ -76,7 +105,11 @@ const float32 b2_maxAngularCorrection = 8.0f / 180.0f * b2_pi;			// 8 degrees
 
 /// The maximum linear velocity of a body. This limit is very large and is used
 /// to prevent numerical problems. You shouldn't need to adjust this.
+#ifdef TARGET_FLOAT32_IS_FIXED
+const float32 b2_maxLinearVelocity = 100.0f;
+#else
 const float32 b2_maxLinearVelocity = 200.0f;
+#endif
 const float32 b2_maxLinearVelocitySquared = b2_maxLinearVelocity * b2_maxLinearVelocity;
 
 /// The maximum angular velocity of a body. This limit is very large and is used

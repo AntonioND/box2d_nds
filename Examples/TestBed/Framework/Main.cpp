@@ -18,7 +18,7 @@
 
 #include <cstdio>
 
-#include "glui/gl/glui.h"
+#include "glui/GL/glui.h"
 
 #include "Render.h"
 #include "Test.h"
@@ -67,10 +67,10 @@ void Resize(int32 w, int32 h)
 
 b2Vec2 ConvertScreenToWorld(int32 x, int32 y)
 {
-	float32 u = x / float32(tw);
-	float32 v = (th - y) / float32(th);
+	float u = x / float(tw);
+	float v = (th - y) / float(th);
 
-	float32 ratio = float32(tw) / float32(th);
+	float ratio = float32(tw) / float32(th);
 	b2Vec2 extents(ratio * 25.0f, 25.0f);
 	extents *= viewZoom;
 
@@ -304,8 +304,9 @@ int main(int argc, char** argv)
 		glui->add_spinner("Iterations", GLUI_SPINNER_INT, &settings.iterationCount);
 	iterationSpinner->set_int_limits(1, 100);
 
+	float hz = settings.hz;
 	GLUI_Spinner* hertzSpinner =
-		glui->add_spinner("Hertz", GLUI_SPINNER_FLOAT, &settings.hz);
+		glui->add_spinner("Hertz", GLUI_SPINNER_FLOAT, &hz);
 	hertzSpinner->set_float_limits(5.0f, 200.0f);
 
 	glui->add_checkbox("Position Correction", &settings.enablePositionCorrection);

@@ -129,6 +129,8 @@ public:
 	/// @return the head of the world joint list.
 	b2Joint* GetJointList();
 
+	void SetGravity(b2Vec2 g) { m_gravity = g; }
+
 public:
 	//--------------- Internals Below -------------------
 	// Internal yet public to make life easier.

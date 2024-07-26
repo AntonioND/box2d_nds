@@ -39,14 +39,14 @@ void b2CollideCircles(
 	}
 
 	float32 separation;
-	if (distSqr < FLT_EPSILON)
+	if (distSqr < FLOAT32_EPSILON)
 	{
 		separation = -radiusSum;
 		manifold->normal.Set(0.0f, 1.0f);
 	}
 	else
 	{
-		float32 dist = sqrtf(distSqr);
+		float32 dist = b2Sqrt(distSqr);
 		separation = dist - radiusSum;
 		float32 a = 1.0f / dist;
 		manifold->normal.x = a * d.x;
@@ -79,11 +79,12 @@ void b2CollidePolygonAndCircle(
 
 	// Find the min separating edge.
 	int32 normalIndex = 0;
-	float32 separation = -FLT_MAX;
+	float32 separation = -FLOAT32_MAX;
 	const float32 radius = circle->m_radius;
 	for (int32 i = 0; i < polygon->m_vertexCount; ++i)
 	{
 		float32 s = b2Dot(polygon->m_normals[i], cLocal - polygon->m_vertices[i]);
+
 		if (s > radius)
 		{
 			// Early out.
@@ -98,7 +99,7 @@ void b2CollidePolygonAndCircle(
 	}
 
 	// If the center is inside the polygon ...
-	if (separation < FLT_EPSILON)
+	if (separation < FLOAT32_EPSILON)
 	{
 		manifold->pointCount = 1;
 		manifold->normal = b2Mul(xf1.R, polygon->m_normals[normalIndex]);
@@ -117,10 +118,11 @@ void b2CollidePolygonAndCircle(
 	int32 vertIndex1 = normalIndex;
 	int32 vertIndex2 = vertIndex1 + 1 < polygon->m_vertexCount ? vertIndex1 + 1 : 0;
 	b2Vec2 e = polygon->m_vertices[vertIndex2] - polygon->m_vertices[vertIndex1];
+
 	float32 length = e.Normalize();
 
 	// If the edge length is zero ...
-	if (length < FLT_EPSILON)
+	if (length < FLOAT32_EPSILON)
 	{
 		b2Vec2 d = cLocal - polygon->m_vertices[vertIndex1];
 		float32 dist = d.Normalize();

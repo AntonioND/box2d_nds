@@ -84,7 +84,7 @@ public:
 
 		float32 toi = b2TimeOfImpact(m_shape1, sweep1, m_shape2, sweep2);
 
-		DrawString(5, m_textLine, "toi = %g", toi);
+		DrawString(5, m_textLine, "toi = %g", (float) toi);
 		m_textLine += 15;
 
 		b2XForm xf2;

@@ -123,7 +123,7 @@ public:
 		DrawString(5, m_textLine, "Keys: (f) toggle friction, (m) toggle motor");
 		m_textLine += 15;
 		float32 torque = m_joint1->GetMotorTorque();
-		DrawString(5, m_textLine, "Motor Torque = %5.0f", torque);
+		DrawString(5, m_textLine, "Motor Torque = %5.0f", (float) torque);
 		m_textLine += 15;
 	}
 

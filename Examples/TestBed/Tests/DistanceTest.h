@@ -102,7 +102,7 @@ public:
 		b2Vec2 x1, x2;
 		float32 distance = b2Distance(&x1, &x2, m_shape1, m_body1->GetXForm(), m_shape2, m_body2->GetXForm());
 
-		DrawString(5, m_textLine, "distance = %g", distance);
+		DrawString(5, m_textLine, "distance = %g", (float) distance);
 		m_textLine += 15;
 
 		extern int32 g_GJK_Iterations;

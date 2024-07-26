@@ -94,13 +94,42 @@ b2ContactSolver::b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, i
 
 				float32 kNormal = b1->m_invMass + b2->m_invMass;
 				kNormal += b1->m_invI * (r1Sqr - rn1 * rn1) + b2->m_invI * (r2Sqr - rn2 * rn2);
-				b2Assert(kNormal > FLT_EPSILON);
+
+#ifdef TARGET_FLOAT32_IS_FIXED
+				b2Assert(b2Abs(kNormal) > 0);
+				if(kNormal <= FLOAT32_EPSILON)
+				{
+					kNormal *= 64;
+					ccp->normalMass = (1.0f / kNormal) * 64;
+				}
+				else
+				{
+					ccp->normalMass = 1.0f / kNormal;
+				}
+#else
+				b2Assert(kNormal > FLOAT32_EPSILON);
 				ccp->normalMass = 1.0f / kNormal;
+#endif
 
 				float32 kEqualized = b1->m_mass * b1->m_invMass + b2->m_mass * b2->m_invMass;
 				kEqualized += b1->m_mass * b1->m_invI * (r1Sqr - rn1 * rn1) + b2->m_mass * b2->m_invI * (r2Sqr - rn2 * rn2);
-				b2Assert(kEqualized > FLT_EPSILON);
+
+#ifdef TARGET_FLOAT32_IS_FIXED
+				b2Assert(b2Abs(kEqualized) > 0);
+				if(kEqualized < FLOAT32_EPSILON)
+				{
+					kEqualized *= 64;
+					ccp->equalizedMass = (1.0f / kEqualized) * 64;
+				}
+				else
+				{
+					ccp->equalizedMass = 1.0f / kEqualized;
+				}
+				
+#else
+				b2Assert(kEqualized > FLOAT32_EPSILON);
 				ccp->equalizedMass = 1.0f / kEqualized;
+#endif
 
 				b2Vec2 tangent = b2Cross(normal, 1.0f);
 
@@ -108,8 +137,22 @@ b2ContactSolver::b2ContactSolver(const b2TimeStep& step, b2Contact** contacts, i
 				float32 rt2 = b2Dot(r2, tangent);
 				float32 kTangent = b1->m_invMass + b2->m_invMass;
 				kTangent += b1->m_invI * (r1Sqr - rt1 * rt1) + b2->m_invI * (r2Sqr - rt2 * rt2);
-				b2Assert(kTangent > FLT_EPSILON);
+
+#ifdef TARGET_FLOAT32_IS_FIXED
+				b2Assert(b2Abs(kTangent) > 0);
+				if(kTangent < FLOAT32_EPSILON)
+				{
+					kTangent *= 64;
+					ccp->tangentMass = (1.0f /  kTangent) * 64;
+				}
+				else
+				{
+					ccp->tangentMass = 1.0f /  kTangent;
+				}
+#else
+				b2Assert(kTangent > FLOAT32_EPSILON);
 				ccp->tangentMass = 1.0f /  kTangent;
+#endif
 
 				// Setup a velocity bias for restitution.
 				ccp->velocityBias = 0.0f;

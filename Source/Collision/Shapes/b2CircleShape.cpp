@@ -71,13 +71,13 @@ bool b2CircleShape::TestSegment(const b2XForm& transform,
 	float32 sigma = c * c - rr * b;
 
 	// Check for negative discriminant and short segment.
-	if (sigma < 0.0f || rr < FLT_EPSILON)
+	if (sigma < 0.0f || rr < FLOAT32_EPSILON)
 	{
 		return false;
 	}
 
 	// Find the point of intersection of the line with the circle.
-	float32 a = -(c + sqrtf(sigma));
+	float32 a = -(c + b2Sqrt(sigma));
 
 	// Is the intersection point on the segment?
 	if (0.0f <= a && a <= maxLambda * rr)

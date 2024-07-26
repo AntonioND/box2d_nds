@@ -23,7 +23,7 @@
 #include <GLUT/glut.h>
 #define APIENTRY
 #else
-#include "freeglut/gl/glut.h"
+#include "freeglut/GL/glut.h"
 #endif
 
 #include <cstdio>
@@ -222,7 +222,7 @@ void Test::LaunchBomb()
 
 void Test::Step(Settings* settings)
 {
-	float32 timeStep = settings->hz > 0.0f ? 1.0f / settings->hz : 0.0f;
+	float32 timeStep = settings->hz > 0.0f ? 1.0f / settings->hz : float32(0.0f);
 
 	if (settings->pause)
 	{
