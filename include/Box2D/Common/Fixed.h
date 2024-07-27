@@ -433,28 +433,27 @@ inline Fixed sqrtf(Fixed a) { return a.sqrt(); }
 #endif
 
 #ifdef TARGET_IS_NDS
-// Use the libnds lookup tables for trigonometry functions
+
+// Use the libnds trigonometry functions
 inline Fixed Fixed::cosf() {
-	int idx = (((long long)g*(long long)G_1_DIV_PI)>>24)%512;
-	if(idx < 0)
-		idx += 512;
+	int idx = ((long long)g * (long long)G_1_DIV_PI) >> 24;
 	return Fixed(RAW, cosLerp(64 * idx) << 4);
 }
+
 inline Fixed cosf(Fixed x) { return x.cosf(); }
+
 inline Fixed Fixed::sinf() {
-	int idx = (((long long)g*(long long)G_1_DIV_PI)>>24)%512;
-	if(idx < 0)
-			idx += 512;
+	int idx = ((long long)g * (long long)G_1_DIV_PI) >> 24;
 	return Fixed(RAW, sinLerp(64 * idx) << 4);
 }
+
 inline Fixed sinf(Fixed x) { return x.sinf(); }
+
 inline Fixed Fixed::tanf() {
-	int idx = (((long long)g*(long long)G_1_DIV_PI)>>24)%512;
-	if(idx < 0)
-				idx += 512;
+	int idx = ((long long)g * (long long)G_1_DIV_PI) >> 24;
 	return Fixed(RAW, tanLerp(64 * idx) << 4);
 }
-inline Fixed tanf(Fixed x) { return x.tanf(); }
 
+inline Fixed tanf(Fixed x) { return x.tanf(); }
 
 #endif
