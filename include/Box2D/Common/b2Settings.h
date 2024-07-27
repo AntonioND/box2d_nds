@@ -23,9 +23,19 @@
 #include <cstdint>
 
 #define B2_NOT_USED(x) (void)x
+
+#ifdef TARGET_IS_NDS
+
+#include <nds.h>
+#define b2Assert(A) sassert(A, " ")
+
+#else
+
 #define b2Assert(A) assert(A)
 
-#ifdef	TARGET_FLOAT32_IS_FIXED
+#endif // TARGET_IS_NDS
+
+#ifdef TARGET_FLOAT32_IS_FIXED
 
 #include <Box2D/Common/Fixed.h>
 
@@ -41,7 +51,7 @@ typedef float b2float32;
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON
 
-#endif
+#endif // TARGET_FLOAT32_IS_FIXED
 
 const b2float32 b2_pi = 3.14159265359f;
 
