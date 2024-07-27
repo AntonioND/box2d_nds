@@ -220,10 +220,10 @@ inline Fixed Fixed::operator /(const Fixed a) const
 	//printf("%d %d\n", (long long)g << BP, a.g);
 	REG_DIV_NUMER = (long long)g << BP;
 	REG_DIV_DENOM_L =  a.g;
+
 	if ((REG_DIVCNT & DIV_MODE_MASK) != DIV_64_32)
-	{
 		REG_DIVCNT = DIV_64_32;
-	}
+
 	while (REG_DIVCNT & DIV_BUSY);
 
 	return Fixed(RAW, int(REG_DIV_RESULT_L));
@@ -390,30 +390,36 @@ inline Fixed atan2(Fixed y, Fixed x)
 
 static inline long nds_sqrt64(long long a)
 {
-	REG_SQRTCNT = SQRT_64;
-	while(REG_SQRTCNT & SQRT_BUSY);
 	REG_SQRT_PARAM = a;
-	while(REG_SQRTCNT & SQRT_BUSY);
+
+	if ((REG_SQRTCNT & SQRT_MODE_MASK) != SQRT_64)
+		REG_SQRTCNT = SQRT_64;
+
+	while (REG_SQRTCNT & SQRT_BUSY);
 
 	return REG_SQRT_RESULT;
 }
 
 static inline int32_t div6464(int64_t num, int64_t den)
 {
-	REG_DIVCNT = DIV_64_64;
-	while(REG_DIVCNT & DIV_BUSY);
 	REG_DIV_NUMER = num;
 	REG_DIV_DENOM = den;
-	while(REG_DIVCNT & DIV_BUSY);
 
-	return (REG_DIV_RESULT_L);
+	if ((REG_DIVCNT & DIV_MODE_MASK) != DIV_64_64)
+		REG_DIVCNT = DIV_64_64;
+
+	while (REG_DIVCNT & DIV_BUSY);
+
+	return REG_DIV_RESULT_L;
 }
 
 inline Fixed Fixed::sqrt()
 {
 	return Fixed(RAW, nds_sqrt64(((long long)(g))<<BP));
 }
+
 #else
+
 inline Fixed Fixed::sqrt()
 {
 	long long m, root = 0, left = (long long)g<<FIXED_BP;
@@ -425,6 +431,7 @@ inline Fixed Fixed::sqrt()
 	}
 	return Fixed(RAW, root);
 }
+
 #endif
 
 inline Fixed sqrt(Fixed a) { return a.sqrt(); }
