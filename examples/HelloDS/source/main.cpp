@@ -184,8 +184,8 @@ int main(int argc, char** argv)
 
                 int w = Wall[i].w * scale;
                 int h = Wall[i].h * scale;
-                int xc = scale * float(position.x) + w / 2;
-                int yc = scale * float(position.y) + h / 2;
+                int xc = scale * float(position.x);
+                int yc = scale * float(position.y);
 
                 glTranslate3f32(xc, screen_height - yc, 0);
 
@@ -206,12 +206,12 @@ int main(int argc, char** argv)
 
                 int w = Box[i].w * scale;
                 int h = Box[i].h * scale;
-                int xc = scale * float(position.x) + w / 2;
-                int yc = scale * float(position.y) + h / 2;
+                int xc = scale * float(position.x);
+                int yc = scale * float(position.y);
 
                 glTranslate3f32(xc, screen_height - yc, 0);
 
-                glRotateZ(float(angle) * (360.0 / (2.0 * M_PI)));
+                glRotateZ(-float(angle) * -(360.0 / (2.0 * M_PI)));
 
                 glBoxFilled(-w, -h, w, h, RGB15((i + 1) * 10, 0, 0));
                 glBoxFilled(-1, -1, 1, 1, RGB15(31, 31, 31));
