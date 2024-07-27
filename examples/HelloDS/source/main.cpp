@@ -35,12 +35,13 @@ typedef struct {
     b2PolygonDef shapeDef;
 } WallInfo;
 
-WallInfo NewWall(float x, float y, float w, float h, b2World &world)
+WallInfo NewWall(float x, float y, float w, float h, float angle, b2World &world)
 {
     WallInfo Wall = { 0 };
 
     // Define the ground body.
     Wall.bodyDef.position.Set(x, y);
+    Wall.bodyDef.angle = angle;
 
     // Call the body factory which allocates memory for the ground body
     // from a pool and creates the ground box shape (also from a pool).
@@ -141,21 +142,27 @@ int main(int argc, char** argv)
     // Construct a world object, which will hold and simulate the rigid bodies.
     b2World world(worldAABB, gravity, doSleep);
 
-    int numWalls = 4;
+    int numWalls = 3;
     WallInfo Wall[numWalls];
-    Wall[0] = NewWall(20.0, -4.0, 40.0, 4.0, world);
-    Wall[1] = NewWall(13.0, 10.0, 8.0, 3.0, world);
-    Wall[2] = NewWall(42.0, 20.0, 4.0, 20.0, world);
-    Wall[3] = NewWall(-2.0, 20.0, 4.0, 20.0, world);
+    Wall[0] = NewWall(40.0, -2.0, 40.0, 4.0, 0, world);
+    Wall[1] = NewWall(80.0, 20.0, 4.0, 30.0, 0, world);
+    Wall[2] = NewWall(29.0, 17.0, 12.0, 3.0, M_PI * 1 / 4, world);
+    //Wall[3] = NewWall(-2.0, 20.0, 4.0, 30.0, 0, world); // Left wall
 
-    int numBoxes = 6;
+    int numBoxesX = 4;
+    int numBoxesY = 4;
+    int numBoxes = numBoxesX * numBoxesY;
     BoxInfo Box[numBoxes];
-    Box[0] = NewBox(15.0, 25.0, 2.0, 3.0, 20.0, world);
-    Box[1] = NewBox(25.0, 40.0, 2.0, 4.0, 10.0, world);
-    Box[2] = NewBox(20.0, 60.0, 5.0, 2.0, -10.0, world);
-    Box[3] = NewBox(10.0, 40.0, 3.0, 2.0, -20.0, world);
-    Box[4] = NewBox(20.0, 20.0, 3.0, 3.0, -5.0, world);
-    Box[5] = NewBox(25.0, 10.0, 2.0, 2.0, 5.0, world);
+    for (int j = 0; j < numBoxesY; j++)
+    {
+        for (int i = 0; i < numBoxesX; i++)
+        {
+            int index = i + j * numBoxesX;
+            float x = i * 9.0 + 15.0 + j * 2.0;
+            float y = j * 9.0 + 35.0;
+            Box[index] = NewBox(x, y, i / 2 + 1, 4 - j / 2, index - 8, world);
+        }
+    }
 
     // Prepare for simulation. Typically we use a time step of 1/60 of a
     // second (60Hz) and 10 iterations. This provides a high quality simulation
@@ -181,6 +188,7 @@ int main(int argc, char** argv)
             {
                 // Now print the position and angle of the body.
                 b2Vec2 position = Wall[i].body->GetPosition();
+                b2float32 angle = Wall[i].body->GetAngle();
 
                 int w = Wall[i].w * scale;
                 int h = Wall[i].h * scale;
@@ -189,9 +197,10 @@ int main(int argc, char** argv)
 
                 glTranslate3f32(xc, screen_height - yc, 0);
 
+                glRotateZ(float(angle) * -(360.0 / (2.0 * M_PI)));
+
                 glBoxFilled(-w, -h, w, h, RGB15(0, 0, (i + 1) * 10));
                 glBoxFilled(-1, -1, 1, 1, RGB15(31, 31, 31));
-
             }
             glPopMatrix(1);
         }
